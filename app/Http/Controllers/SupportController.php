@@ -48,6 +48,8 @@ class SupportController extends Controller
             'name' => $data['name'],
             'created_by' => Auth::user()->id,
             'created_at' => now(),
+            'updated_by' => Auth::user()->id,
+            'updated_at' => now(),
         ]);
 
         foreach ($request->users as $userId) {

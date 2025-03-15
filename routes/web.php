@@ -13,7 +13,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ReportsController;
-
+use App\Http\Controllers\NavController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +28,9 @@ Route::get('/dashboard', function () {
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
+
+    Route::get('layout/navbar/notification', [NavController::class, 'notification'])->name('navbar.notification');
+
     Route::resource('tickets', TicketController::class)->except(['destroy']);
     Route::resource('categories', CategoryController::class)->except(['destroy']);
     Route::resource('users', UserController::class)->except(['destroy']);

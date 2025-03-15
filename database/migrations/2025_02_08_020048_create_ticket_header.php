@@ -17,11 +17,11 @@ return new class extends Migration {
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
 
-            $table->unum('priority', ['Low', 'Medium', 'High']);
+            $table->enum('priority', ['Low', 'Medium', 'High']);
 
             $table->unsignedBigInteger('type');
             $table->foreign('type')->references('id')->on('support_type');
-            $table->enum('status',['Open', 'Pending', 'In Progress', 'Closed', 'Cancelled']);
+            $table->enum('status', ['Open', 'Pending', 'In Progress', 'Closed', 'Cancelled']);
             $table->dateTime('date_created');
             $table->dateTime('date_closed')->nullable();
             $table->timestamps();

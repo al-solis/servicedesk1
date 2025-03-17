@@ -1,0 +1,5 @@
+<?php
+
+return [
+    'csp' => "default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none'"
+];

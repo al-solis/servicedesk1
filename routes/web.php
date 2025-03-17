@@ -14,6 +14,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\NavController;
+use App\Http\Middleware\ContentSecurityPolicy;
 
 Route::get('/', function () {
     return view('welcome');

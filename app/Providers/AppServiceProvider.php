@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 use App\Http\ViewComposers\NavbarComposer;
+use Illuminate\Foundation\Console\Kernel;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -28,7 +29,8 @@ class AppServiceProvider extends ServiceProvider
         // View::composer('*', function($view)
         // {
         //     $view->with('authUser', Auth:user());
-        // });
+        // });        
+
         View::composer('layouts.navbar', NavbarComposer::class);
     }
 

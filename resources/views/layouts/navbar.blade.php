@@ -1361,3 +1361,22 @@
         @yield('navbar-content')
     </main>
   </div>
+  <script>
+    let inactivityTime = 30000; // 30 seconds
+    let timeout;
+
+    function resetTimer() {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            location.reload();
+        }, inactivityTime);
+    }
+
+    document.addEventListener("mousemove", resetTimer);
+    document.addEventListener("keypress", resetTimer);
+    document.addEventListener("click", resetTimer);
+    document.addEventListener("touchstart", resetTimer);
+
+    resetTimer(); // Start the timer initially
+</script>
+

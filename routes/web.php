@@ -15,6 +15,7 @@ use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\NavController;
 use App\Http\Middleware\ContentSecurityPolicy;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -69,6 +70,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('reports/index-summary', [ReportsController::class, 'indexSummary'])->name('reports.index-summary');
     Route::get('reports/index-export', [ReportsController::class, 'indexExport'])->name('reports.index-export');
 
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     // Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
     // Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
     // Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');

@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="{{ asset('/assets/admin/css/style.css') }}">
+
 <div class="antialiased bg-gray-50 dark:bg-gray-900">
     <nav class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
       <div class="flex flex-wrap justify-between items-center">
@@ -109,8 +111,8 @@
                       
                     @else
                     <span 
-                      class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold"
-                      style="background-color: {{ $userColor }};">
+                      class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold
+                      user-color" style="--user-color: {{ $userColor }};">
                       {{ strtoupper(substr($ticket->user->fname, 0, 1)) }}{{ strtoupper(substr($ticket->user->lname, 0, 1)) }}
                     </span>
                     @endif 

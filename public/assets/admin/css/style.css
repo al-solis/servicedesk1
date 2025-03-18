@@ -232,3 +232,7 @@ table.datatable-table:focus {
 	outline: solid 1px black;
     outline-offset: -1px;
 }
+
+.user-color {
+	background-color: var(--user-color);
+}

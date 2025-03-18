@@ -1,32 +1,33 @@
 <IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Header set Content-Security-Policy "default-src 'self'; script-src 'self' https://trusted.cdn.com; style-src 'self' https://trusted.cdn.com; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none';"
-        Header set X-Content-Type-Options "nosniff"
-        Header set X-Frame-Options "DENY"
-        Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-        Options -MultiViews -Indexes
-    </IfModule>
+Options -MultiViews -Indexes
+RewriteEngine On
 
-    RewriteEngine On
-    
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# Redirect to HTTPS
+RewriteCond % { HTTPS } off
+RewriteRule ^(.*)$ https://% { HTTP_HOST }% { REQUEST_URI } [L, R=301]
 
-    # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+# Handle Authorization Header
+RewriteCond % { HTTP:Authorization } .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:% { HTTP:Authorization }]
 
-    # Handle X-XSRF-Token Header
-    RewriteCond %{HTTP:x-xsrf-token} .
-    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+# Handle X-XSRF-Token Header
+RewriteCond % { HTTP:X-XSRF-TOKEN } .
+RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:% { HTTP:X-XSRF-TOKEN }]
 
-    # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
+# Redirect Trailing Slashes If Not A Folder...
+RewriteCond % { REQUEST_FILENAME } !-d
+RewriteCond % { REQUEST_URI } (.+)/$
+RewriteRule ^ %1 [L, R=301]
 
-    # Send Requests To Front Controller...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+# Send Requests To Front Controller...
+RewriteCond % { REQUEST_FILENAME } !-d
+RewriteCond % { REQUEST_FILENAME } !-f
+RewriteRule ^ index.php [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+Header set Content-Security-Policy "default-src 'self'; script-src 'self' https://trusted.cdn.com; style-src 'self' https://trusted.cdn.com; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none';"
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "DENY"
+Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 </IfModule>

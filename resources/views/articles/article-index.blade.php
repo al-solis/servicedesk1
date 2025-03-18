@@ -1,5 +1,7 @@
 @vite(['resources/css/app.css','resources/js/app.js'])
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+<link rel="stylesheet" href="{{ asset('/assets/admin/css/style.css') }}">
+
 @extends('layouts.navbar')
 @section('navbar-content')
 <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16 ml-0 md:ml-16 lg:ml-32">
@@ -46,8 +48,8 @@
                                   src="{{ Storage::url($article->user->profile_picture) }}" 
                                   alt="{{ $article->user->lname }}">
                           @else
-                              <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold" 
-                                  style="background-color: {{ $userColor }};">
+                              <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold
+                                  user-color" style="--user-color: {{ $userColor }};">
                                   {{ strtoupper(substr($article->user->fname, 0, 1)) }}{{ strtoupper(substr($article->user->lname, 0, 1)) }}
                               </span>
                           @endif

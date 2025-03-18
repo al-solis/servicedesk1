@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="{{ asset('/assets/admin/css/style.css') }}">
 @extends('layouts.app')
 @section('navbar-content')    
     <section class="bg-white dark:bg-gray-900">
@@ -17,8 +18,8 @@
                                     src="{{ Storage::url($articles->user->profile_picture) }}" 
                                     alt="{{ $articles->user->lname }}">
                             @else
-                                <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold" 
-                                    style="background-color: {{ $userColor }};">
+                                <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold 
+                                    user-color"style="--user-color: {{ $userColor }};">
                                     {{ strtoupper(substr($articles->user->fname, 0, 1)) }}{{ strtoupper(substr($articles->user->lname, 0, 1)) }}
                                 </span>
                             @endif

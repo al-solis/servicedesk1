@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 @import('flowbite');
 @vite(['resources/css/app.css','resources/js/app.js'])
+
+<link rel="stylesheet" href="{{ asset('/assets/admin/css/style.css') }}">
+
 {{-- <script src= "{{ asset('/resources/css/flowbite.min.css') }}"></script>
 <script src= "{{ asset('/resources/css/app.css') }}"></script>
 <script src= "{{ asset('/resources/css/app.js') }}"></script> --}}
@@ -175,8 +178,8 @@
                                   <div class="flex items-center justify-between">
                                   <div class="flex items-center min-w-0">
                                       @if($login->profile_picture == null)
-                                      <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold" 
-                                          style="background-color: {{ $userColor }};">
+                                      <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold
+                                          user-color" style="--user-color: {{ $userColor }};">
                                           {{ strtoupper(substr($login->fname, 0, 1)) }}{{ strtoupper(substr($login->lname, 0, 1)) }}
                                       </span>
                                       @else
@@ -210,8 +213,8 @@
                             <div class="flex items-center justify-between">
                             <div class="flex items-center min-w-0">
                                 @if($lastCreatedUsers->profile_picture == null)
-                                <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold" 
-                                    style="background-color: {{ $userColor }};">
+                                <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold 
+                                    user-color" style="--user-color: {{ $userColor }};">
                                     {{ strtoupper(substr($lastCreatedUsers->fname, 0, 1)) }}{{ strtoupper(substr($lastCreatedUsers->lname, 0, 1)) }}
                                 </span>
                                 @else

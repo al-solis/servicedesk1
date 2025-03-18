@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="{{ asset('/assets/admin/css/style.css') }}">
+
 @extends('layouts.app')
 @section('navbar-content')    
     <section class="bg-white dark:bg-gray-900">
@@ -72,8 +74,8 @@
                                                 src="{{ $user->profile_picture ? Storage::url($user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}" 
                                                 alt="{{ $user->id }}">
                                         @else
-                                            <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold mr-2" 
-                                                style="background-color: {{ $userColor }};">
+                                            <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold mr-2
+                                                user-color" style="--user-color: {{ $userColor }};">
                                                 {{ strtoupper(substr($user->fname, 0, 1)) }}{{ strtoupper(substr($user->lname, 0, 1)) }}
                                             </span>
                                         @endif    
@@ -110,8 +112,8 @@
                                     src="{{ optional($detail->user)->profile_picture ? Storage::url($detail->user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}" 
                                     alt="User Image">
                                 @else
-                                    <span class="w-8 h-8 flex justify-center items-center rounded-full text-white font-bold" 
-                                        style="background-color: {{ $userColor }};">
+                                    <span class="w-8 h-8 flex justify-center items-center rounded-full text-white font-bold 
+                                        user-color" style="--user-color: {{ $userColor }};">
                                         {{ strtoupper(substr(optional($detail->user)->fname, 0, 1)) }}{{ strtoupper(substr(optional($detail->user)->lname, 0, 1)) }}
                                     </span>
                                 @endif

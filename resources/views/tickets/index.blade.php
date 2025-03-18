@@ -1,6 +1,8 @@
 @vite(['resources/css/app.css','resources/js/app.js'])
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
+<link rel="stylesheet" href="{{ asset('/assets/admin/css/style.css') }}">
+
 @extends('layouts.navbar')
 
 @section('navbar-content')
@@ -121,8 +123,8 @@
                                         alt="{{ $ticket->user->lname }}">
                                 @else
                                     <!-- Display the user's initials in a colored circle if no profile picture -->
-                                    <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold mr-2" 
-                                        style="background-color: {{ $userColor }};">
+                                    <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold mr-2 
+                                        user-color" style="--user-color: {{ $userColor }};">
                                         {{ strtoupper(substr($ticket->user->fname, 0, 1)) }}{{ strtoupper(substr($ticket->user->lname, 0, 1)) }}
                                     </span>
                                 @endif

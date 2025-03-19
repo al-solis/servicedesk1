@@ -10,7 +10,7 @@
                     {{ session('success') }}
                 </div>
             @endif
-            <form action="{{ route('tickets.update', $ticket->id) }}" method="POST">
+            <form action="{{ route('tickets.update', $ticket->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
@@ -122,6 +122,13 @@
                             <textarea id="message" name="message" rows="4" 
                                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ old('message', $userMessage ? $userMessage->message : '') }}
                             </textarea>
+
+                            <!-- Image Upload -->
+                            <div class="sm:col-span-2">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload Images</label>
+                                <input type="file" name="images[]" multiple accept="image/*"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
                         </div>
                     @endif                  
                     
@@ -132,10 +139,23 @@
                             @foreach($ticket->details as $detail)
                             <div class="flex items-start gap-2.5">
                                 <!-- Profile Image (Replace with dynamic image if available) -->
-                                <img class="w-8 h-8 rounded-full" 
+                                {{-- <img class="w-8 h-8 rounded-full" 
                                 src="{{ optional($detail->user)->profile_picture ? Storage::url($detail->user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}" 
-                                alt="User Image">
-                                
+                                alt="User Image"> --}}
+                                @php
+                                    $userColor = '#' . substr(md5($detail->user->id), 0, 6);
+                                @endphp
+                                @if ($detail->user->profile_picture)
+                                    <img class="w-8 h-8 rounded-full" 
+                                    src="{{ optional($detail->user)->profile_picture ? Storage::url($detail->user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}" 
+                                    alt="User Image">
+                                @else
+                                    <span class="w-8 h-8 flex justify-center items-center rounded-full text-white font-bold 
+                                        user-color" style="--user-color: {{ $userColor }};">
+                                        {{ strtoupper(substr(optional($detail->user)->fname, 0, 1)) }}{{ strtoupper(substr(optional($detail->user)->lname, 0, 1)) }}
+                                    </span>
+                                @endif
+
                                 <!-- Chat Bubble -->
                                 <div class="flex flex-col w-full max-w-[320px] leading-1.5 bg-gray-50 dark:bg-gray-700 rounded-xl p-4 shadow-md">
                                     <div class="flex items-center space-x-2 rtl:space-x-reverse">
@@ -151,6 +171,20 @@
                                     <p class="text-sm font-normal text-gray-900 dark:text-white">
                                         {{ $detail->message }}
                                     </p>
+                                    @foreach ($ticketImage as $images)
+                                        @if ($images->user_id == $detail->user_id)
+                                            <div class="relative group mt-2 w-32 h-32">
+                                                <img src="{{ asset('storage/' . $images->img_path) }}" 
+                                                    class="w-32 h-32 object-cover rounded-lg border cursor-pointer transition-transform duration-200 hover:scale-105"
+                                                    onclick="enlargeImage('{{ asset('storage/' . $images->img_path) }}')"
+                                                    alt="Uploaded Image">
+                                                <!-- Tooltip -->
+                                                <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded-lg px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    Enlarge
+                                                </span>
+                                            </div>
+                                        @endif
+                                    @endforeach
                                 </div>
                             </div>
                             @endforeach
@@ -162,6 +196,13 @@
                         <div class="sm:col-span-2">
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Message</label>
                             <textarea id="message" name="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write support message here."></textarea>
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div class="sm:col-span-2">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload Images</label>
+                            <input type="file" name="images[]" multiple accept="image/*"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                     @endif
                     
@@ -191,6 +232,12 @@
             </form>
         </div>        
       </section>
+    
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex justify-center items-center hidden z-50">
+        <img id="modalImage" class="max-w-full max-h-full rounded-lg">
+        <button class="absolute top-5 right-5 text-white text-2xl font-bold" onclick="closeModal()">✕</button>
+    </div>
 
     <script>
         // Search Functionality
@@ -223,7 +270,36 @@
                 alert('Please select a Support Team and Support Member before updating the ticket.');
             }
         });
-    });
+    });    
+
+    function deleteImage(imageId) {
+        if (confirm('Are you sure you want to delete this image?')) {
+            fetch(`/ticket-images/${imageId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Failed to delete image');
+                }
+            });
+        }
+    }
+
+    function enlargeImage(src) {
+        document.getElementById('modalImage').src = src;
+        document.getElementById('imageModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('imageModal').classList.add('hidden');
+    }
+
     </script>
 @else
 <p>Please <a href="{{ route('login') }}">login</a> to access tickets.</p>

@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Models\AssignedTicket;
 use App\Models\SupportTeam;
 use App\Models\SupportMember;
+use App\Models\TicketImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
@@ -110,7 +112,7 @@ class TicketController extends Controller
                     });
                 })
                 ->orderBy('date_created', 'desc')
-                ->paginate(10);            
+                ->paginate(10);
 
         } elseif ($user->usertype == 'User') {
             $tickets = TicketHeader::with(['details', 'user'])
@@ -174,6 +176,7 @@ class TicketController extends Controller
         $user = Auth::user();
         $ticket = TicketHeader::with(['details.user'])->findOrFail($id);
         $supportTypes = TicketType::all();
+        $ticketImage = TicketImage::where('ticket_id', $id)->get();
 
         // Get assigned team IDs from AssignedTicket
         $assignedTeamIds = AssignedTicket::where('ticket_id', $id)
@@ -198,7 +201,8 @@ class TicketController extends Controller
             'users',
             'teams',
             'assignedTeamIds',
-            'assignedUserIds'
+            'assignedUserIds',
+            'ticketImage'
         ));
     }
 
@@ -214,7 +218,8 @@ class TicketController extends Controller
             'subject' => 'required',
             'description' => 'required',
             'priority' => 'required',
-            'support_type_id' => 'required'
+            'support_type_id' => 'required',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048' // Validate images
 
         ]);
 
@@ -245,6 +250,17 @@ class TicketController extends Controller
             ]);
         }
 
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('ticket_images', 'public');
+
+                TicketImage::create([
+                    'ticket_id' => $ticket->id,
+                    'user_id' => Auth::user()->id,
+                    'img_path' => $path,
+                ]);
+            }
+        }
         return redirect()->route('tickets.index')->with('success', 'Ticket created successfully.');
     }
 
@@ -256,6 +272,7 @@ class TicketController extends Controller
         $user = Auth::user();
         $supportTypes = TicketType::all();
         $ticket = TicketHeader::with('details.user')->findOrFail($id);
+        $ticketImage = TicketImage::where('ticket_id', $id)->get();
 
         // Get assigned team IDs from AssignedTicket
         $assignedTeamIds = AssignedTicket::where('ticket_id', $id)
@@ -273,7 +290,7 @@ class TicketController extends Controller
         // Fetch available users (all users for dropdown)
         $users = User::where('usertype', 'Support Team')->get();
 
-        return view('tickets.show', compact('ticket', 'supportTypes', 'user', 'assignedTeamIds', 'assignedUsers', 'teams', 'users'));
+        return view('tickets.show', compact('ticket', 'supportTypes', 'user', 'assignedTeamIds', 'assignedUsers', 'teams', 'users', 'ticketImage'));
     }
 
 
@@ -292,12 +309,6 @@ class TicketController extends Controller
 
         $ticket = TicketHeader::findOrFail($id);
         $currentUser = Auth::user();
-
-        // if($request->status != 'Open') {
-        //     if ($request->team_id == '' || empty($request->users)) {
-        //         return redirect()->back()->withErrors(['team_id' => 'Select support team or users to change the status']);
-        //     }
-        // }
 
         if ($ticket->user_id != $currentUser->id || in_array($currentUser->usertype, ['Administrator', 'Support Team'])) {
             if (!empty($request->message)) {
@@ -372,7 +383,31 @@ class TicketController extends Controller
                 ->delete();
         }
 
+        if (!empty($request->message)) {
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('ticket_images', 'public');
+
+                    TicketImage::create([
+                        'ticket_id' => $ticket->id,
+                        'user_id' => $currentUser->id,
+                        'img_path' => $path,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('tickets.index')->with('success', 'Ticket updated successfully.');
+    }
+
+    public function deleteImage(TicketImage $image)
+    {
+        // Delete image file from storage
+        Storage::disk('public')->delete($image->image_path);
+
+        // Remove image record from database
+        $image->delete();
+
+        return response()->json(['success' => true, 'message' => 'Image deleted successfully.']);
     }
 }

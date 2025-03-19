@@ -65,5 +65,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Department::class, 'dept_id', 'id');
     }
+
+    public function ticket_image()
+    {
+        return $this->belongsTo(TicketImage::class, 'user_id', 'id');
+    }
 }
 

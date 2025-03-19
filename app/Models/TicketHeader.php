@@ -38,4 +38,8 @@ class TicketHeader extends Model
         return $this->belongsToMany(User::class, 'assigned_ticket', 'ticket_id', 'user_id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(TicketImage::class);
+    }
 }

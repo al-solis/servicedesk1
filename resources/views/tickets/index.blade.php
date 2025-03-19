@@ -94,8 +94,8 @@
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-4 py-3 w-[100px]">ID</th>
-                            <th scope="col" class="px-4 py-3 w-[200px]">Requested By</th>
+                            <th scope="col" class="px-4 py-3 w-[50px]">ID</th>
+                            <th scope="col" class="px-4 py-3 w-[250px]">Requested By</th>
                             <th scope="col" class="px-4 py-3 w-[300px]">Subject</th>
                             <th scope="col" class="px-4 py-3 w-[100px]">Priority</th>
                             <th scope="col" class="px-4 py-3 w-[200px]">Assigned to</th>
@@ -111,8 +111,8 @@
                 <tbody class="min-h-[200px]">
                     @foreach($tickets as $ticket)
                         <tr class="border-b dark:border-gray-700">
-                            <td class="px-4 py-3 w-[100px]">{{ $ticket->id }}</td>
-                            <td class="px-4 py-3 w-[200px] flex items-center">
+                            <td class="px-4 py-3 w-[50px]">{{ $ticket->id }}</td>
+                            <td class="px-4 py-3 w-[250px] flex items-center">
                                 @php
                                     $userColor = '#' . substr(md5($ticket->user->id), 0, 6);
                                 @endphp
@@ -130,8 +130,8 @@
                                 @endif
 
                                 <!-- Display the user's full name -->
-                                <span class="text-gray-900 dark:text-white">
-                                    &nbsp; {{ $ticket->user->lname }}, {{ $ticket->user->fname }} {{ strtoupper(substr($ticket->user->mname, 0, 1)) }}.
+                                <span class="ml-2 text-gray-900 dark:text-white">
+                                    {{ $ticket->user->lname }}, {{ $ticket->user->fname }} {{ strtoupper(substr($ticket->user->mname, 0, 1)) }}.
                                 </span>
                             </td>
                             <td class="px-4 py-3 w-[300px]">{{ $ticket->description }}</td>
@@ -153,7 +153,7 @@
                                         <div class="relative group">
                                             @php
                                                 // Generate unique color for initials
-                                                $assignedColor = '#' . substr(md5($assignedUser->id), 0, 6);
+                                                $userColor = '#' . substr(md5($assignedUser->id), 0, 6);
                                             @endphp
                                 
                                             <div class="flex items-center space-x-2">
@@ -164,8 +164,8 @@
                                                         alt="{{ $assignedUser->lname }}">
                                                 @else
                                                     <!-- Display initials in colored circle -->
-                                                    <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold mr-2"
-                                                        style="background-color: {{ $assignedColor }};">
+                                                    <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold 
+                                                        user-color" style="--user-color: {{ $userColor }};">
                                                         {{ strtoupper(substr($assignedUser->fname, 0, 1)) }}{{ strtoupper(substr($assignedUser->lname, 0, 1)) }}
                                                     </span>
                                                 @endif
@@ -312,7 +312,7 @@
                 </button>
             </div>
                 <!-- Modal body -->
-                <form action="{{ route('tickets.store') }}" method="POST">
+                <form action="{{ route('tickets.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf                    
                     <div class="grid gap-4 mb-4 sm:grid-cols-2">
                         <div>
@@ -322,6 +322,13 @@
                         <div class="sm:col-span-2">
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
                             <textarea id="description" name="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Elaborate support here" required></textarea>                    
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div class="sm:col-span-2">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload Images</label>
+                            <input type="file" name="images[]" multiple accept="image/*"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
 
                         <!-- Support Type -->

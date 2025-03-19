@@ -131,7 +131,21 @@
                                     </div>
                                     <p class="text-sm font-normal text-gray-900 dark:text-white">
                                         {{ $detail->message }}
-                                    </p>
+                                    </p>                                        
+                                    @foreach ($ticketImage as $images)
+                                        @if ($images->user_id == $detail->user_id)
+                                            <div class="relative group mt-2 w-32 h-32">
+                                                <img src="{{ asset('storage/' . $images->img_path) }}" 
+                                                    class="w-32 h-32 object-cover rounded-lg border cursor-pointer transition-transform duration-200 hover:scale-105"
+                                                    onclick="enlargeImage('{{ asset('storage/' . $images->img_path) }}')"
+                                                    alt="Uploaded Image">
+                                                <!-- Tooltip -->
+                                                <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded-lg px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    Enlarge
+                                                </span>
+                                            </div>
+                                        @endif
+                                    @endforeach
                                 </div>
                             </div>
                             @endforeach
@@ -147,6 +161,25 @@
             </form>
         </div>
       </section>
+
+<!-- Image Modal -->
+<div id="imageModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex justify-center items-center hidden z-50">
+    <img id="modalImage" class="max-w-full max-h-full rounded-lg">
+    <button class="absolute top-5 right-5 text-white text-2xl font-bold" onclick="closeModal()">✕</button>
+</div>
+
+<script>
+    function enlargeImage(src) {
+        document.getElementById('modalImage').src = src;
+        document.getElementById('imageModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('imageModal').classList.add('hidden');
+    }
+</script>
+
+
 @endsection
 
 

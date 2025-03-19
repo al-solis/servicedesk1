@@ -34,6 +34,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('layout/navbar/notification', [NavController::class, 'notification'])->name('navbar.notification');
 
     Route::resource('tickets', TicketController::class)->except(['destroy']);
+    Route::delete('/ticket-images/{image}', [TicketController::class, 'deleteImage'])->name('ticket-images.destroy');
+
     Route::resource('categories', CategoryController::class)->except(['destroy']);
     Route::resource('users', UserController::class)->except(['destroy']);
     Route::post('/users/upload-profile/{id}', [UserController::class, 'uploadPicture'])->name('users.uploadPicture');

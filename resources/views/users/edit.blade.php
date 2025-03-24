@@ -122,7 +122,8 @@
                     <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save all</button>
                 </div>
             </div>
-            <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+
+            {{-- <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <div class="flow-root">
                     <h3 class="text-xl font-semibold dark:text-white">Social accounts</h3>
                     <ul class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -203,8 +204,9 @@
                         <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save all</button>
                     </div>
                 </div>
-            </div>
-            <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+            </div> --}}
+
+            {{-- <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <div class="flow-root">
                     <h3 class="text-xl font-semibold dark:text-white">Other accounts</h3>
                     <ul class="mb-6 divide-y divide-gray-200 dark:divide-gray-700">
@@ -305,7 +307,7 @@
                         <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save all</button>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
         
         <div class="col-span-2">
@@ -481,7 +483,8 @@
                     </div>
                 </form>
             </div>
-            <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+
+            {{-- <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <div class="flow-root">
                     <h3 class="text-xl font-semibold dark:text-white">Sessions</h3>
                     <ul class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -526,11 +529,12 @@
                         <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">See more</button>
                     </div>
                 </div>
-            </div>
+            </div> --}}
+
         </div>
         
     </div>
-    <div class="grid grid-cols-1 px-4 xl:grid-cols-2 xl:gap-4">
+    {{-- <div class="grid grid-cols-1 px-4 xl:grid-cols-2 xl:gap-4">
         <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800 xl:mb-0">
             <div class="flow-root">
                 <h3 class="text-xl font-semibold dark:text-white">Alerts & Notifications</h3>
@@ -641,6 +645,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
+
 </section>
 @endsection

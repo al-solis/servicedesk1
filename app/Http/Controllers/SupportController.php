@@ -52,13 +52,15 @@ class SupportController extends Controller
             'updated_at' => now(),
         ]);
 
-        foreach ($request->users as $userId) {
-            SupportMember::create([
-                'team_id' => $supportTeam->id,
-                'user_id' => $userId,
-                'created_by' => Auth::user()->id,
-                'created_at' => now(),
-            ]);
+        if ($request->users) {
+            foreach ($request->users as $userId) {
+                SupportMember::create([
+                    'team_id' => $supportTeam->id,
+                    'user_id' => $userId,
+                    'created_by' => Auth::user()->id,
+                    'created_at' => now(),
+                ]);
+            }
         }
 
         return redirect()->route('support.index')->with('success', 'Support Team successfully created.');

@@ -162,9 +162,9 @@
                                 <div id="dropdown-menu-{{ $userm->id }}" 
                                     class="hidden absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg divide-y divide-gray-100 dark:bg-gray-700 dark:divide-gray-600 z-50">
                                     <ul class="py-1 text-sm text-gray-700 dark:text-gray-200">
-                                        <li>
+                                        {{-- <li>
                                             <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Show</a>
-                                        </li>
+                                        </li> --}}
                                         <li>
                                             <a href="{{ route('users.edit', $userm->id) }}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
                                         </li>

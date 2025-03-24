@@ -14,7 +14,7 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $users = User::whereBetween('created_at', [Carbon::now()->subDays(15), Carbon::now()])->get();
+        $users = User::whereBetween('created_at', [Carbon::now()->subDays(15), Carbon::now()])->orderBy('created_at', 'desc')->get();
         $allUsers = DB::table('sessions')
             ->join('users', 'sessions.user_id', '=', 'users.id')
             ->select('users.id', 'sessions.last_activity', 'users.lname', 'users.fname', 'users.lname', 'users.mname', 'users.email', 'users.usertype', 'users.profile_picture')

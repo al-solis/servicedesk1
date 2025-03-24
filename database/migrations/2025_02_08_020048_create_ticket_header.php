@@ -21,7 +21,7 @@ return new class extends Migration {
 
             $table->unsignedBigInteger('type');
             $table->foreign('type')->references('id')->on('support_type');
-            $table->enum('status', ['Open', 'Pending', 'In Progress', 'Closed', 'Cancelled']);
+            $table->enum('status', ['Open', 'Pending', 'In Progress', 'On-hold', 'Closed', 'Cancelled']);
             $table->dateTime('date_created');
             $table->dateTime('date_closed')->nullable();
             $table->timestamps();

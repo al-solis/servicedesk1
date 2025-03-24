@@ -36,7 +36,7 @@
                     </div>        
                         <a href="{{ route('articles.article-show', $article->id)}}" class="text-xl font-semibold text-gray-900 hover:underline dark:text-white">“{{ $article->title }}”</a>
                     </div>
-                    <p class="text-base font-normal text-gray-500 dark:text-gray-400">{{ substr($article->content,0,150)}} ...</p>
+                    <p class="text-base font-normal text-gray-500 dark:text-gray-400">{{ strip_tags(substr($article->content,0,150))}} ...</p>
                     <div class="flex items-center justify-between text-sm font-medium text-gray-500 dark:text-gray-400">
                       <div class="flex items-center space-x-2">
                           @php

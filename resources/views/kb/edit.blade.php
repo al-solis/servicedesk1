@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
+<script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
+
 @extends('layouts.app')
 @section('navbar-content')    
 <section class="bg-white dark:bg-gray-900">    
@@ -41,13 +44,20 @@
                 </div>
             </div> --}}
 
-            <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+            {{-- <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                 <div class="sm:col-span-2">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
                     <textarea type="text" name="content" id="content" rows='5' 
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                         placeholder="Type content" required>{{ old('content', $article->content) }}
                     </textarea>
+                </div>
+            </div> --}}
+            <div class="grid gap-4 sm:gap-6 mt-2">
+                <div class="sm:col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
+                    <input id="article" type="hidden" name="article" value="{{ $article->content }}">
+                    <trix-editor input="article"></trix-editor>
                 </div>
             </div>
             
@@ -77,4 +87,25 @@
         </form>
     </div>
   </section> 
+  <script>   
+        document.addEventListener("trix-attachment-add", function(event) {
+            let attachment = event.attachment;
+            if (attachment.file) {
+                let formData = new FormData();
+                formData.append("file", attachment.file);
+                
+                fetch("{{ route('kb.upload') }}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    attachment.setAttributes({ url: data.url, href: data.url });
+                });
+            }
+        });
+        </script>
 @endsection

@@ -1,4 +1,28 @@
 <link rel="stylesheet" href="{{ asset('/assets/admin/css/style.css') }}">
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
+<script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
+
+<style>
+    /* Remove border and styling from Trix editor */
+    trix-editor {
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        background-color: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        min-height: auto !important;
+        font-family: inherit !important;
+        font-size: inherit !important;
+        color: inherit !important;
+    }
+
+    /* Hide the toolbar */
+    trix-toolbar {
+        display: none !important;
+    }
+</style>
+
 @extends('layouts.app')
 @section('navbar-content')    
     <section class="bg-white dark:bg-gray-900">
@@ -27,12 +51,19 @@
                         {{-- <a href="#" class="text-gray-900 hover:underline dark:text-white">Bonnie Green</a> --}}
                     </p>
                 </div>
-                <div class="grid gap-5 sm:grid-cols-2 sm:gap-6">
+                {{-- <div class="grid gap-5 sm:grid-cols-2 sm:gap-6">
                     <div class="sm:col-span-2">                    
                         <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                             {!! nl2br(e($articles->content)) !!}
                         </p>
                     </div>  
+                </div> --}}
+                <div class="grid gap-4 sm:gap-6 mt-2">
+                    <div class="sm:col-span-2">
+                        {{-- <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label> --}}
+                        <input id="article" type="hidden" name="article">
+                        <trix-editor input="article" contenteditable="false">{!! $articles->content !!}</trix-editor>
+                    </div>
                 </div>
                 <div class="flex justify-end mt-6">
                     <a href="{{ route('articles.article-index') }}"  class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -42,4 +73,11 @@
             </form>
         </div>
       </section>
+      
+    <script>
+      document.addEventListener("trix-attachment-remove", function(event) {
+        event.preventDefault(); // Prevent the image from being removed
+        alert("Image removal is disabled."); // Optional: Show a message to the user
+    });
+    </script>
 @endsection

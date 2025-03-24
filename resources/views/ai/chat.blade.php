@@ -38,13 +38,13 @@
         padding: 10px;
         border-radius: 10px;
         max-width: 80%;
+        display: flex;
+        align-items: flex-start;
     }
 
     .message.user {
-        /* image: url("{{ Storage::url($user->profile_picture) }}"); */
         text-align: right;
         font-size: small;
-        /* background-color: #BCD2E8; */
         background-color: #f1f1f1;
         margin-left: auto;
     }
@@ -52,8 +52,45 @@
     .message.bot {
         text-align: left;
         font-size: small;
-        /* background-color: #f1f1f1; */
+        background-color: #e5e7eb;
         margin-right: auto;
+    }
+
+    .message .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .message .content {
+        flex: 1;
+    }
+
+    .message .content h3 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .message .content p {
+        margin-bottom: 10px;
+    }
+
+    .message .content ul {
+        list-style-type: disc;
+        margin-left: 20px;
+        margin-bottom: 10px;
+    }
+
+    .message .content strong {
+        font-weight: bold;
+    }
+
+    .message .timestamp {
+        font-size: 0.75rem;
+        color: #666;
+        margin-top: 5px;
     }
 </style>
 
@@ -64,7 +101,14 @@
 
             // Add user's message to the chat box
             const chatBox = document.getElementById('chat-box');
-            chatBox.innerHTML += `<div class="message user text-sm-right">${userInput}</div>`;
+            const timestamp = new Date().toLocaleTimeString();
+            chatBox.innerHTML += `
+                <div class="message user">
+                    <div class="content">
+                        <div>${userInput}</div>
+                        <div class="timestamp">${timestamp}</div>
+                    </div>
+                </div>`;
 
             // Clear the input field
             document.getElementById('user-input').value = '';
@@ -84,19 +128,68 @@
 
                 // Handle errors or display the bot's response
                 if (data.error) {
-                    chatBox.innerHTML += `<div class="message bot">${data.error}</div>`;
+                    chatBox.innerHTML += `
+                        <div class="message bot">
+                            <div class="content">
+                                <div>${data.error}</div>
+                                <div class="timestamp">${timestamp}</div>
+                            </div>
+                        </div>`;
                 } else if (data.response) {
-                    chatBox.innerHTML += `<div class="message bot">${data.response}</div>`;
+                    // Format the AI's response
+                    const formattedResponse = formatAIResponse(data.response);
+                    chatBox.innerHTML += `
+                        <div class="message bot">
+                            <div class="content">
+                                ${formattedResponse}
+                                <div class="timestamp">${timestamp}</div>
+                            </div>
+                        </div>`;
                 } else {
-                    chatBox.innerHTML += `<div class="message bot">Sorry, I couldn't process your request.</div>`;
+                    chatBox.innerHTML += `
+                        <div class="message bot">
+                            <div class="content">
+                                <div>Sorry, I couldn't process your request.</div>
+                                <div class="timestamp">${timestamp}</div>
+                            </div>
+                        </div>`;
                 }
 
                 // Scroll to the bottom of the chat box
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (error) {
                 console.error('Error:', error);
-                chatBox.innerHTML += `<div class="message bot">ChatBot: An error occurred. Please try again.</div>`;
+                chatBox.innerHTML += `
+                    <div class="message bot">
+                        <div class="content">
+                            <div>ChatBot: An error occurred. Please try again.</div>
+                            <div class="timestamp">${timestamp}</div>
+                        </div>
+                    </div>`;
             }
+        }
+
+        // Function to format the AI's response
+        function formatAIResponse(response) {
+            // Replace **text** with <strong>text</strong>
+            response = response.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+            // Replace * with <li> for lists
+            response = response.replace(/\n\*(.*?)\n/g, '<li>$1</li>');
+
+            // Wrap lists in <ul> tags
+            response = response.replace(/<li>(.*?)<\/li>/g, '<ul><li>$1</li></ul>');
+
+            // Add headings for numbered sections
+            response = response.replace(/\n(\d+\.\s.*?)\n/g, '<h3>$1</h3>');
+
+            // Replace newlines with <p> tags for paragraphs
+            response = response.replace(/\n\n/g, '</p><p>');
+
+            // Wrap the entire response in <p> tags
+            response = `<p>${response}</p>`;
+
+            return response;
         }
 
         // Allow pressing "Enter" to send the message
@@ -106,3 +199,4 @@
             }
         });
     </script>
+@endsection

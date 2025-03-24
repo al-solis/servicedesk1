@@ -46,6 +46,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('support', SupportController::class)->except(['destroy']);
 
     Route::resource('kb', KnowledgeBaseArticleController::class)->except(['destroy']);
+    Route::post('kb/upload', [KnowledgeBaseArticleController::class, 'upload'])->name('kb.upload');
 
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.article-index');
     Route::get('/articles/article-show/{id}', [ArticleController::class, 'show'])->name('articles.article-show');

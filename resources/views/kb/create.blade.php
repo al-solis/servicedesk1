@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
+<script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
+
 @extends('layouts.app')
 @section('navbar-content')    
 <section class="bg-white dark:bg-gray-900">    
@@ -31,17 +34,19 @@
                     </select>
                 </div>
             </div>
-            {{-- <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+
+            {{-- <div class="grid gap-4 sm:gap-6 mt-2">
                 <div class="sm:col-span-2">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
-                    <textarea type="text" name="content" id="content" rows='5' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Type content" required></textarea>
-                </div>
+                    <textarea type="text" name="xxcontent" id="xxcontent" rows='5' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Type content" required></textarea>
+                </div>                
             </div> --}}
 
-            <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+            <div class="grid gap-4 sm:gap-6 mt-2">
                 <div class="sm:col-span-2">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
-                    <textarea type="text" name="content" id="content" rows='5' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Type content" required></textarea>
+                    <input id="article" type="hidden" name="article">
+                    <trix-editor input="article"></trix-editor>
                 </div>
             </div>
             
@@ -72,4 +77,45 @@
         </form>
     </div>
   </section> 
+  <script>
+//    document.addEventListener("DOMContentLoaded", function() {
+//     let form = document.querySelector("form");
+//     let trixEditor = document.querySelector("trix-editor");
+//     let hiddenInput = document.getElementById("article");
+
+//     form.addEventListener("submit", function(event) {
+//         event.preventDefault();
+
+//         // Debugging: Log the content to the console
+//         console.log("Trix Editor Content:", trixEditor.editor.getDocument().toString());
+
+//         hiddenInput.value = trixEditor.editor.getDocument().toString();
+
+//         // Debugging: Log the hidden input value to the console
+//         console.log("Hidden Input Value:", hiddenInput.value);
+
+//         form.submit();
+//     });
+// });
+
+    document.addEventListener("trix-attachment-add", function(event) {
+        let attachment = event.attachment;
+        if (attachment.file) {
+            let formData = new FormData();
+            formData.append("file", attachment.file);
+            
+            fetch("{{ route('kb.upload') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                attachment.setAttributes({ url: data.url, href: data.url });
+            });
+        }
+    });
+    </script>
 @endsection

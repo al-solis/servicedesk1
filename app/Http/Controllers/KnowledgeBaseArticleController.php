@@ -5,6 +5,7 @@ use App\Models\TicketType;
 use App\Models\KnowledgeBaseArticle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class KnowledgeBaseArticleController extends Controller
 {
@@ -43,19 +44,21 @@ class KnowledgeBaseArticleController extends Controller
 
         $data = request()->validate([
             'title' => 'required',
-            'content' => 'required',
+            'article' => 'required',
             'support_type_id' => 'required',
             'status' => 'required',
         ]);
 
         KnowledgeBaseArticle::create([
             'title' => $data['title'],
-            'content' => $data['content'],
+            'content' => $data['article'],
             'category_id' => $data['support_type_id'],
             'status' => $data['status'],
             'created_by' => Auth::id(),
             'created_at' => now(),
         ]);
+
+        //dd($data);
 
         return redirect()->route('kb.index')->with('success', 'Article created successfully');
     }
@@ -72,7 +75,7 @@ class KnowledgeBaseArticleController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'article' => 'required|string',
             'support_type_id' => 'required',
             'status' => 'required',
         ]);
@@ -80,11 +83,19 @@ class KnowledgeBaseArticleController extends Controller
         $article = KnowledgeBaseArticle::findOrFail($id);
         $article->update([
             'title' => $request->title,
-            'content' => $request->content,
+            'content' => $request->article,
             'status' => $request->status,
             'category_id' => $request->support_type_id,
         ]);
 
         return redirect()->route('kb.index');
+    }
+
+    public function upload(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('uploads', 'public');
+            return response()->json(['url' => asset("storage/$path")]);
+        }
     }
 }

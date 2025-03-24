@@ -74,10 +74,10 @@
         </div>
       </section>
       
-    <script>
+    {{-- <script>
       document.addEventListener("trix-attachment-remove", function(event) {
         event.preventDefault(); // Prevent the image from being removed
         alert("Image removal is disabled."); // Optional: Show a message to the user
     });
-    </script>
+    </script> --}}
 @endsection

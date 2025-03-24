@@ -35,7 +35,7 @@
           </button>
           <a href="#" class="flex items-center justify-between mr-4">
             <img
-              src="{{ asset('assets/admin/img/wctc.png')}}"
+              src="{{ asset('assets/admin/img/wctc1.png')}}"
               class="mr-3 h-8"
               alt="Logo"
             />

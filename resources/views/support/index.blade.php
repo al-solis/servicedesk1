@@ -208,6 +208,9 @@
                                         <a class="flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800" href="#">
                                             +{{ $team->supportMembers->count() - 4 }}
                                         </a>
+                                        {{-- <div class="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white dark:border-gray-800" style="background-color: {{ $userColor }};">
+                                            <span class="text-xs font-bold text-white">+{{ $team->supportMembers->count() - 4 }}</span>
+                                        </div> --}}
                                     @endif
                                 @endif
                             </div>

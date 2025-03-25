@@ -71,6 +71,7 @@ class SupportController extends Controller
         $supportTeam = SupportTeam::findOrFail($id);
         $users = User::where('usertype', 'Support Team')
             ->where('status', 'Active')
+            ->orderByRaw("CONCAT_WS(' ', lname, fname, mname) ASC")
             ->get();
         $teamMembers = SupportMember::where('team_id', $id)->pluck('user_id')->toArray();
 

@@ -1364,7 +1364,7 @@
     </main>
   </div>
   <script>
-    let inactivityTime = 30000; // 30 seconds
+    let inactivityTime = 60000; // 60 seconds
     let timeout;
 
     function resetTimer() {

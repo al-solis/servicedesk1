@@ -34,7 +34,7 @@ class RegisteredUserController extends Controller
             'empid' => ['required', 'integer'],
             'lname' => ['required', 'string', 'max:255'],
             'fname' => ['required', 'string', 'max:255'],
-            'mname' => ['required', 'string', 'max:255'],
+            'mname' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);

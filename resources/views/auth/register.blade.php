@@ -23,7 +23,7 @@
         <!-- Middle Name -->
         <div>
             <x-input-label for="mname" :value="__('Middle Name')" />
-            <x-text-input id="mname" class="block mt-1 w-full" type="text" name="mname" :value="old('mname')" required autofocus autocomplete="mname" />
+            <x-text-input id="mname" class="block mt-1 w-full" type="text" name="mname" :value="old('mname')" autofocus autocomplete="mname" />
             <x-input-error :messages="$errors->get('mname')" class="mt-2" />
 
         <!-- Email Address -->

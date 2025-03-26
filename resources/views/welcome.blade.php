@@ -3,9 +3,15 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#D4D4D4">
+        <meta name="description" content="Online IT Service Desk">
+        <meta name="author" content="Alfie B. Solis">
+        {{-- <meta name="robots" content="noindex, nofollow"> --}}
+        {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 
         <title>Online IT Service Desk</title>
 
+        <link rel="icon" href="{{ asset('assets/admin/img/wctc1.png') }}" type="image/x-icon" />
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />

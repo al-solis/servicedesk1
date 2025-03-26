@@ -1,4 +1,5 @@
 {{-- <x-auth-session-status class="mb-4" :status="session('status')" /> --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 @extends('layouts.app')
 @section('navbar-content')
 @if(auth()->check())
@@ -129,6 +130,14 @@
                                 <input type="file" name="images[]" multiple accept="image/*"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             </div>
+
+                            <!-- File Upload (PDF, Excel, etc.) -->
+                            <div class="sm:col-span-2">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload Files</label>
+                                <input type="file" name="files[]" multiple 
+                                    accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.zip,.rar"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
                         </div>
                     @endif                  
                     
@@ -157,7 +166,7 @@
                                 @endif
 
                                 <!-- Chat Bubble -->
-                                <div class="flex flex-col w-full max-w-[320px] leading-1.5 bg-gray-50 dark:bg-gray-700 rounded-xl p-4 shadow-md">
+                                <div class="flex flex-col w-full max-w-[450px] leading-1.5 bg-gray-50 dark:bg-gray-700 rounded-xl p-4 shadow-md">
                                     <div class="flex items-center space-x-2 rtl:space-x-reverse">
                                         <span class="text-sm font-semibold text-gray-900 dark:text-white">
                                             {{ optional($detail->user)->lname ?? 'System' }},
@@ -171,7 +180,7 @@
                                     <p class="text-sm font-normal text-gray-900 dark:text-white">
                                         {{ $detail->message }}
                                     </p>
-                                    @foreach ($ticketImage as $images)
+                                    {{-- @foreach ($ticketImage as $images)
                                         @if ($images->user_id == $detail->user_id)
                                             <div class="relative group mt-2 w-32 h-32">
                                                 <img src="{{ asset('storage/' . $images->img_path) }}" 
@@ -184,7 +193,53 @@
                                                 </span>
                                             </div>
                                         @endif
-                                    @endforeach
+                                    @endforeach --}}
+                                    
+                                    <!-- Display Uploaded Images -->
+                                    <div class="flex flex-wrap gap-2 mt-2">
+                                        @foreach ($ticketFile as $images)
+                                            @if ($images->user_id == $detail->user_id && $images->file_type == 'image')
+                                                <div class="relative group w-24 h-24">
+                                                    <img src="{{ asset('storage/' . $images->file_path) }}" 
+                                                        class="w-24 h-24 object-cover rounded-lg border cursor-pointer transition-transform duration-200 hover:scale-105"
+                                                        onclick="enlargeImage('{{ asset('storage/' . $images->file_path) }}')"
+                                                        alt="Uploaded Image">
+                                                    <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded-lg px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        Enlarge
+                                                    </span>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+
+                                     <!-- Display Uploaded Files with Icons -->
+                                    <div class="mt-2">
+                                        @foreach ($ticketFile as $file)
+                                            @if ($file->user_id == $detail->user_id && $file->file_type == 'document')
+                                                <div class="flex items-center gap-2 p-2 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-sm">
+                                                    @php
+                                                        $fileExtension = pathinfo($file->file_path, PATHINFO_EXTENSION);
+                                                        $icon = match ($fileExtension) {
+                                                            'pdf' => 'fa-file-pdf text-red-500',
+                                                            'doc', 'docx' => 'fa-file-word text-blue-500',
+                                                            'xls', 'xlsx' => 'fa-file-excel text-green-500',
+                                                            'ppt', 'pptx' => 'fa-file-powerpoint text-orange-500',
+                                                            'txt' => 'fa-file-alt text-gray-500',
+                                                            default => 'fa-file text-gray-400',
+                                                        };
+                                                    @endphp
+
+                                                    <i class="fas {{ $icon }} text-xl"></i>
+                                                    <a href="{{ asset('storage/' . $file->file_path) }}" target="_blank" 
+                                                    class="text-blue-600 dark:text-blue-400 hover:underline">
+                                                        {{-- {{ pathinfo($file->file_path, PATHINFO_BASENAME) }} --}}
+                                                        {{ $file->file_name }}
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+
                                 </div>
                             </div>
                             @endforeach
@@ -202,6 +257,14 @@
                         <div class="sm:col-span-2">
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload Images</label>
                             <input type="file" name="images[]" multiple accept="image/*"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+
+                        <!-- File Upload (PDF, Excel, etc.) -->
+                        <div class="sm:col-span-2">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload Files</label>
+                            <input type="file" name="files[]" multiple 
+                                accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.zip,.rar"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                     @endif

@@ -59,13 +59,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('department', DepartmentController::class)->except(['destroy']);
 
-    // // Define the route for the chat interface
-    // Route::get('ai/chat', [ChatbotController::class, 'showChat'])->name('ai.chat');
-
-    // // Define the route for sending messages to the chatbot
-    // Route::post('ai/chat', [ChatbotController::class, 'chat'])->name('ai.chat');
-
-
     Route::get('ai/chat', [ChatbotController::class, 'showChat'])->name('ai.chat');
     Route::post('ai/chat', [ChatbotController::class, 'chat'])->name('ai.chat');
 

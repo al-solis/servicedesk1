@@ -44,7 +44,7 @@
 
         <div>
             <x-input-label for="mname" :value="__('Middle Name')" />
-            <x-text-input id="mname" name="mname" type="text" class="mt-1 block w-full" :value="old('mname', $user->mname)" required autofocus autocomplete="mname" />
+            <x-text-input id="mname" name="mname" type="text" class="mt-1 block w-full" :value="old('mname', $user->mname)" autofocus autocomplete="mname" />
             <x-input-error class="mt-2" :messages="$errors->get('mname')" />
         </div>
         

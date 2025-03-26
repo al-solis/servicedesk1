@@ -126,7 +126,9 @@
                             @endif
 
                             <span class="text-gray-900 dark:text-white">
-                                {{ $userm->lname }}, {{ $userm->fname }} {{ substr($userm->mname, 0, 1) }}.
+                                {{ $userm->lname }}, {{ $userm->fname }} 
+                                {{-- {{ substr($userm->mname, 0, 1) }}  --}}
+                                {{-- @if ($userm->mname != "") .  @endif --}}
                             </span>
                         </td>
                         <td class="px-4 py-3 w-[200px]">{{ $userm->designation }}</td>

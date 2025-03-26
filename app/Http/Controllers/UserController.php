@@ -55,7 +55,7 @@ class UserController extends Controller
             'empid' => 'required',
             'lname' => 'required',
             'fname' => 'required',
-            'mname' => 'required',
+            'mname' => 'nullable',
             'email' => 'required',
             'usertype' => 'required',
             'status' => 'required',

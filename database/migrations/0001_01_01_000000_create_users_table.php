@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('empid')->unique();
             $table->string('lname');
             $table->string('fname');
-            $table->string('mname');
+            $table->string('mname')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

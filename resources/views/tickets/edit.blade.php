@@ -106,7 +106,8 @@
                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                     {{ in_array($user->id, $assignedUserIds) ? 'checked' : '' }}>
                                 <label for="user-{{ $user->id }}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 flex-grow">
-                                    {{ $user->lname }}, {{ $user->fname }} {{ substr($user->mname, 0, 1) }}
+                                    {{ $user->lname }}, {{ $user->fname }} 
+                                    {{-- {{ substr($user->mname, 0, 1) }} --}}
                                 </label>
                             </li>
                             @endforeach
@@ -171,7 +172,7 @@
                                         <span class="text-sm font-semibold text-gray-900 dark:text-white">
                                             {{ optional($detail->user)->lname ?? 'System' }},
                                             {{ optional($detail->user)->fname ?? '' }}
-                                            {{ optional($detail->user)->mname ? substr(optional($detail->user)->mname, 0, 1) . '.' : '' }}
+                                            {{-- {{ optional($detail->user)->mname ? substr(optional($detail->user)->mname, 0, 1) . '.' : '' }} --}}
                                         </span>
                                         <span class="text-xs text-gray-500 dark:text-gray-400">
                                             {{ $detail->date_created }}

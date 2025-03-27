@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-@import('flowbite');
+{{-- @import('flowbite'); --}}
 @vite(['resources/css/app.css','resources/js/app.js'])
-
 <link rel="stylesheet" href="{{ asset('/assets/admin/css/style.css') }}">
 
 {{-- <script src= "{{ asset('/resources/css/flowbite.min.css') }}"></script>
@@ -9,9 +8,7 @@
 <script src= "{{ asset('/resources/css/app.js') }}"></script> --}}
 
 @extends('layouts.navbar')
-
 @section('navbar-content')
-
 @if(auth()->check())
 <section>
     <div class="px-4 pt-6 2xl:px-0">

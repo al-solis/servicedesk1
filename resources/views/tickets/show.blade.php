@@ -83,7 +83,8 @@
 
                                         <!-- Popover -->
                                         <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block w-auto px-3 py-2 text-sm text-white bg-gray-500 rounded-lg shadow-lg whitespace-nowrap">
-                                            {{ $user->lname }}, {{ $user->fname}} {{substr($user->mname, 0,1)}}
+                                            {{ $user->lname }}, {{ $user->fname}} 
+                                            {{-- {{substr($user->mname, 0,1)}} --}}
                                             <div class="absolute left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-500 rotate-45 bottom-[-4px]"></div>
                                         </div>
                                     </div>
@@ -124,7 +125,7 @@
                                         <span class="text-sm font-semibold text-gray-900 dark:text-white">
                                             {{ optional($detail->user)->lname ?? 'System' }},
                                             {{ optional($detail->user)->fname ?? '' }}
-                                            {{ optional($detail->user)->mname ? substr(optional($detail->user)->mname, 0, 1) . '.' : '' }}
+                                            {{-- {{ optional($detail->user)->mname ? substr(optional($detail->user)->mname, 0, 1) . '.' : '' }} --}}
                                         </span>
                                         <span class="text-xs text-gray-500 dark:text-gray-400">
                                             {{ $detail->date_created }}

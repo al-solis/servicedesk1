@@ -131,7 +131,8 @@
 
                                 <!-- Display the user's full name -->
                                 <span class="ml-2 text-gray-900 dark:text-white">
-                                    {{ $ticket->user->lname }}, {{ $ticket->user->fname }} {{ strtoupper(substr($ticket->user->mname, 0, 1)) }}.
+                                    {{ $ticket->user->lname }}, {{ $ticket->user->fname }}
+                                    {{-- {{ strtoupper(substr($ticket->user->mname, 0, 1)) }}. --}}
                                 </span>
                             </td>
                             <td class="px-4 py-3 w-[300px]">{{ $ticket->description }}</td>
@@ -166,7 +167,7 @@
                                                     <!-- Display initials in colored circle -->
                                                     <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold 
                                                         user-color" style="--user-color: {{ $userColor }};">
-                                                        {{ strtoupper(substr($assignedUser->fname, 0, 1)) }}{{ strtoupper(substr($assignedUser->lname, 0, 1)) }}
+                                                        {{ strtoupper(substr($assignedUser->fname, 0, 1)) }} {{ strtoupper(substr($assignedUser->lname, 0, 1)) }}
                                                     </span>
                                                 @endif
                                 
@@ -176,7 +177,8 @@
                                                 </span> --}}
                                                 <!-- Popover -->
                                                 <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block w-auto px-3 py-2 text-sm text-white bg-gray-500 rounded-lg shadow-lg whitespace-nowrap">
-                                                    {{ $assignedUser->lname }}, {{ $assignedUser->fname}} {{substr($assignedUser->mname, 0,1)}}
+                                                    {{ $assignedUser->lname }}, {{ $assignedUser->fname}} 
+                                                    {{-- {{substr($assignedUser->mname, 0,1)}} --}}
                                                     <div class="absolute left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-500 rotate-45 bottom-[-4px]"></div>
                                                 </div>
                                             </div>
@@ -338,7 +340,7 @@
                                 accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.zip,.rar"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
-                        
+
                         <!-- Support Type -->
                         <div class="flex-1 min-w-[90px] md:min-w-[90px]">
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Support Type</label>

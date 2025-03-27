@@ -808,7 +808,19 @@
                 </svg>                  
                   <span class="flex-1 ml-3 whitespace-nowrap">Tickets</span>                  
                 </a>
-               
+
+                @if (Auth::user()->usertype != 'User')
+                  {{-- Team Queue --}}
+                  <a
+                    href="{{ route('teams.index') }}"
+                    class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
+                    </svg>                  
+                    <span class="flex-1 ml-3 whitespace-nowrap">Team Queue</span>                  
+                  </a>
+                @endif
+
               @if (Auth::user()->usertype == 'Administrator')
                   {{-- Users --}}
                   <a

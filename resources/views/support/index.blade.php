@@ -1,11 +1,8 @@
 @vite(['resources/css/app.css','resources/js/app.js'])
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 <link rel="stylesheet" href="{{ asset('/assets/admin/css/style.css') }}">
-
 @extends('layouts.navbar')
-
 @section('navbar-content')
-
 @if(auth()->check())
 <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
     <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
@@ -192,12 +189,13 @@
                                                 {{-- src="{{ $member->user->profile_picture ? Storage::url($member->user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}"  --}}
                                                 <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold mr-2
                                                     user-color" style="--user-color: {{ $userColor }};">
-                                                    {{ strtoupper(substr($member->user->fname, 0, 1)) }}{{ strtoupper(substr($member->user->lname, 0, 1)) }}
+                                                    {{ strtoupper(substr($member->user->fname, 0, 1)) }} {{ strtoupper(substr($member->user->lname, 0, 1)) }}
                                                 </span>
                                             @endif
                                             <!-- Popover -->
                                             <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block w-auto px-3 py-2 text-sm text-white bg-gray-500 rounded-lg shadow-lg whitespace-nowrap">
-                                                {{ $member->user->lname }}, {{ $member->user->fname}} {{substr($member->user->mname, 0,1)}}
+                                                {{ $member->user->lname }}, {{ $member->user->fname}} 
+                                                {{-- {{substr($member->user->mname, 0,1)}} --}}
                                                 <div class="absolute left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-500 rotate-45 bottom-[-4px]"></div>
                                             </div>
                                         @endif   

@@ -16,6 +16,7 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\NavController;
 use App\Http\Middleware\ContentSecurityPolicy;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TeamController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -67,6 +68,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('reports/index-export', [ReportsController::class, 'indexExport'])->name('reports.index-export');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::resource('teams', TeamController::class)->except(['destroy']);
     // Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
     // Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
     // Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');

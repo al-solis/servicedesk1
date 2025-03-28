@@ -28,19 +28,19 @@
 @if(auth()->check())
 <section>
     <h2 class="text-2xl font-bold">{{optional($teams->first())->name}}</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 h-fill">
     
         @php
             $statuses = [
-                'Open' => 'bg-blue-500',
-                'In Progress' => 'bg-orange-600',
-                'On-hold' => 'bg-purple-600',
-                'Others' => 'bg-gray-500'
+                'Open' => 'bg-blue-400',
+                'In Progress' => 'bg-orange-400',
+                'On-hold' => 'bg-purple-400',
+                'Others' => 'bg-gray-400'
             ];
         @endphp
 
         @foreach ($statuses as $status => $bgColor)
-            <div class="bg-white border border-gray-200 rounded-lg shadow">
+            <div class="bg-white border border-gray-200 rounded-lg shadow h-fill flex flex-col">
                 <div class="{{ $bgColor }} text-white p-4 rounded-t-lg flex justify-between">
                     <h5 class="font-bold">{{ $status }}</h5>
                     <span class="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded">
@@ -50,7 +50,7 @@
                         }}
                     </span>
                 </div>
-                <div class="p-4 overflow-y-auto max-h-72">
+                <div class="p-4 overflow-y-auto flex-grow">
                     @foreach ($status == 'Others' 
                         ? $tickets->whereNotIn('status', ['Open', 'In Progress', 'On-hold', 'Closed', 'Cancelled']) 
                         : $tickets->where('status', $status) 

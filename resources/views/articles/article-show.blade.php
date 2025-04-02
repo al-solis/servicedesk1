@@ -47,7 +47,7 @@
                                     {{ strtoupper(substr($articles->user->fname, 0, 1)) }}{{ strtoupper(substr($articles->user->lname, 0, 1)) }}
                                 </span>
                             @endif
-                        &nbsp; Added by {{ $articles->user->lname }}, {{ $articles->user->fname }} {{ substr($articles->user->mname,0,1) }}. on <time datetime="2021-01-06">{{ $articles->created_at->format('M d, Y') }} {{ $articles->created_at->format('h:i:sa') }}</time>
+                        &nbsp; Added by {{ $articles->user->lname }}, {{ $articles->user->fname }} {{ substr($articles->user->mname,0,1) }}. on &nbsp; <time datetime="2021-01-06">{{ $articles->created_at->format('M d, Y') }} {{ $articles->created_at->format('h:i:sa') }}</time>
                         {{-- <a href="#" class="text-gray-900 hover:underline dark:text-white">Bonnie Green</a> --}}
                     </p>
                 </div>

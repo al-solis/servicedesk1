@@ -73,15 +73,17 @@ class ReportsController extends Controller
     public function indexSummary(Request $request)
     {
         $user = Auth::user(); // Get logged-in user
+
         if ($user->usertype == 'User') {
-            $query = TicketHeader::where('ticket_header.user_id', $user->id)->selectRaw("
-            DATE_FORMAT(ticket_header.date_created, '%m/%d/%Y') AS formatted_date_created,
-            SUM(CASE WHEN ticket_header.status = 'Open' THEN 1 ELSE 0 END) as open_count,
-            SUM(CASE WHEN ticket_header.status = 'In Progress' THEN 1 ELSE 0 END) as in_progress_count,
-            SUM(CASE WHEN ticket_header.status = 'On-hold' THEN 1 ELSE 0 END) as on_hold_count,
-            SUM(CASE WHEN ticket_header.status = 'Closed' THEN 1 ELSE 0 END) as closed_count,
-            SUM(CASE WHEN ticket_header.status = 'Cancelled' THEN 1 ELSE 0 END) as cancelled_count,
-            COUNT(ticket_header.id) as total_count
+            $query = TicketHeader::where('ticket_header.user_id', $user->id)
+                ->selectRaw("
+                DATE_FORMAT(ticket_header.date_created, '%m/%d/%Y') AS formatted_date_created,
+                SUM(CASE WHEN ticket_header.status = 'Open' THEN 1 ELSE 0 END) as open_count,
+                SUM(CASE WHEN ticket_header.status = 'In Progress' THEN 1 ELSE 0 END) as in_progress_count,
+                SUM(CASE WHEN ticket_header.status = 'On-hold' THEN 1 ELSE 0 END) as on_hold_count,
+                SUM(CASE WHEN ticket_header.status = 'Closed' THEN 1 ELSE 0 END) as closed_count,
+                SUM(CASE WHEN ticket_header.status = 'Cancelled' THEN 1 ELSE 0 END) as cancelled_count,
+                COUNT(ticket_header.id) as total_count
             ")
                 ->when($request->start_date && $request->end_date, function ($query) use ($request) {
                     $query->whereBetween('ticket_header.date_created', [
@@ -94,9 +96,8 @@ class ReportsController extends Controller
         } else {
             $query = TicketHeader::selectRaw("
                 CASE 
-                    WHEN CONCAT(users.lname, ' ', users.fname) IS NULL OR CONCAT(users.lname, ' ', users.fname) = '' 
-                    THEN CONCAT(team_users.lname, ' ', team_users.fname) 
-                    ELSE CONCAT(users.lname, ' ', users.fname) 
+                    WHEN users.id IS NOT NULL THEN CONCAT(users.lname, ' ', users.fname)
+                    ELSE CONCAT(team_users.lname, ' ', team_users.fname)
                 END AS support_member,
                 SUM(CASE WHEN ticket_header.status = 'Open' THEN 1 ELSE 0 END) as open_count,
                 SUM(CASE WHEN ticket_header.status = 'In Progress' THEN 1 ELSE 0 END) as in_progress_count,
@@ -107,11 +108,11 @@ class ReportsController extends Controller
             ")
                 ->join('assigned_ticket', 'ticket_header.id', '=', 'assigned_ticket.ticket_id')
                 ->leftJoin('users', 'assigned_ticket.user_id', '=', 'users.id') // Directly assigned users
-                ->join('support_member', 'assigned_ticket.team_id', '=', 'support_member.team_id') // Team assignments
-                ->leftJoin('users as team_users', 'support_member.user_id', '=', 'team_users.id') // Users in the team
+                ->leftJoin('support_member', 'assigned_ticket.team_id', '=', 'support_member.team_id') // Assigned teams
+                ->leftJoin('users as team_users', 'support_member.user_id', '=', 'team_users.id') // Users in teams
                 ->where(function ($query) {
-                    $query->whereNotNull('assigned_ticket.user_id') // Directly assigned tickets
-                        ->orWhereNotNull('assigned_ticket.team_id'); // Tickets assigned to a team
+                    $query->whereNotNull('assigned_ticket.user_id') // Direct assignment
+                        ->orWhereNotNull('assigned_ticket.team_id'); // Team-based assignment
                 })
                 ->when($request->start_date && $request->end_date, function ($query) use ($request) {
                     $query->whereBetween('ticket_header.date_created', [
@@ -119,15 +120,17 @@ class ReportsController extends Controller
                         Carbon::parse($request->end_date)->endOfDay()
                     ]);
                 })
-                ->groupBy('users.id', 'users.lname', 'users.fname', 'team_users.id', 'team_users.lname', 'team_users.fname')
+                ->groupBy('support_member')
                 ->get();
         }
+
         if ($request->ajax()) {
             return DataTables::of($query)->make(true);
         }
 
         return view('reports.index-summary');
     }
+
 
     public function indexExport(Request $request)
     {

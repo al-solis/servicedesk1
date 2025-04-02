@@ -395,6 +395,11 @@ class TicketController extends Controller
                 'team_id' => $request->team_id,
                 'created_at' => now(),
             ]);
+        } else {
+            //No selected
+            AssignedTicket::where('ticket_id', $ticket->id)
+                ->whereNotNull('team_id')
+                ->delete();
         }
 
         if (!empty($request->users)) {

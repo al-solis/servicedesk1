@@ -77,9 +77,12 @@
               ></path>              
             </svg> 
             @if (Auth::user()->usertype != 'User')
-              <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
-                {{$tickets->count()}} 
-              </div>
+              @if ($tickets->count() > 0)
+                <!-- Notification badge -->
+                <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                  {{$tickets->count()}} 
+                </div>
+              @endif 
             @endif
           </button>
           <!-- Dropdown menu -->

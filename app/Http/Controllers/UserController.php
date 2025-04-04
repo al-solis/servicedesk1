@@ -8,9 +8,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function create()
+    {
+        $users = Auth::user();
+        $departments = Department::all();
+        return view('users.create', compact('users', 'departments'));
+    }
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -171,5 +179,46 @@ class UserController extends Controller
             'status' => $user->status
         ]);
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'empid' => 'required|unique:users',
+            'lname' => 'required',
+            'fname' => 'required',
+            'mname' => 'nullable',
+            'email' => 'required|email|unique:users',
+            'usertype' => 'required',
+            'telno' => 'nullable',
+            'dept_id' => 'nullable',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        // Employee ID and Email Unique Check (Optional since it's already validated)
+        if (User::where('empid', $request->empid)->exists()) {
+            return redirect()->back()->withErrors(['empid' => 'Employee ID already registered.'])->withInput();
+        }
+
+        if (User::where('email', $request->email)->exists()) {
+            return redirect()->back()->withErrors(['email' => 'Email already registered.'])->withInput();
+        }
+
+        User::create([
+            'empid' => $request->empid,
+            'lname' => $request->lname,
+            'fname' => $request->fname,
+            'mname' => $request->mname,
+            'email' => $request->email,
+            'usertype' => $request->usertype,
+            'designation' => $request->designation,
+            'telno' => $request->telno,
+            'status' => 'Active',
+            'dept_id' => $request->dept_id,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('users.index')->with('success', 'User successfully created.');
+    }
+
 
 }

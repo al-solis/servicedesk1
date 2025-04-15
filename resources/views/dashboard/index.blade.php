@@ -2,6 +2,7 @@
 <html lang="en">  <!-- Sets language to English -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta description="Online IT Service Desk - Dashboard">
 {{-- @import('flowbite'); --}}
 @vite(['resources/css/app.css','resources/js/app.js'])
 <link rel="stylesheet" href="{{ asset('/assets/admin/css/style.css') }}">

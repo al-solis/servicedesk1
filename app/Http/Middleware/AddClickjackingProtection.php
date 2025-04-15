@@ -20,6 +20,7 @@ class AddClickjackingProtection
         $response->headers->set('X-Frame-Options', 'DENY');
         $response->headers->set('Content-Security-Policy-Report-Only', "default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'");
         //return $next($request);
+        $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         return $response;
     }
 }

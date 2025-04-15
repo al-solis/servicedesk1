@@ -1,3 +1,6 @@
+<html lang="en">  <!-- Sets language to English -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 @vite(['resources/css/app.css','resources/js/app.js'])
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
@@ -27,6 +30,7 @@
 @section('navbar-content')
 @if(auth()->check())
 <section>
+    <title>Team Tickets</title>
     <h2 class="text-2xl font-bold">{{optional($teams->first())->name}}</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 h-fill">
       

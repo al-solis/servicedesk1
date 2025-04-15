@@ -1,4 +1,6 @@
 <html lang="en">  <!-- Sets language to English -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 @vite(['resources/css/app.css','resources/js/app.js'])
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
@@ -10,6 +12,7 @@
 
 @if(auth()->check())
 <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
+    <title>Tickets</title>
     <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
         <!-- Start coding here -->
         <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">

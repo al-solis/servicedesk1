@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<html lang="en">  <!-- Sets language to English -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 {{-- @import('flowbite'); --}}
 @vite(['resources/css/app.css','resources/js/app.js'])
 <link rel="stylesheet" href="{{ asset('/assets/admin/css/style.css') }}">
@@ -12,6 +15,7 @@
 @if(auth()->check())
 <section>
     <div class="px-4 pt-6 2xl:px-0">
+      <title>Dashboard</title>
         <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
             <!-- Main widget -->
             <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">

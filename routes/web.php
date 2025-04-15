@@ -20,7 +20,8 @@ use App\Http\Controllers\TeamController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('clickjacking.protection')
+    ->name('home');
 
 Route::get('/dashboard', function () {
     return view('layouts.app', ['user' => Auth::user()]);

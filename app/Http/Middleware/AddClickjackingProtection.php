@@ -18,7 +18,7 @@ class AddClickjackingProtection
         $response = $next($request);
 
         $response->headers->set('X-Frame-Options', 'DENY');
-        $response->headers->set('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'");
+        $response->headers->set('Content-Security-Policy-Report-Only', "default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'");
         //return $next($request);
         return $response;
     }

@@ -91,8 +91,8 @@
                             @endif
                         </div>
                         <div class="hidden lg:mt-0 lg:col-span-5 lg:flex">
-                            <img src="{{asset('assets/admin/img/maintenance.svg')}}" alt="Service Desk">
-                        </div>                
+                            {!! file_get_contents(public_path('assets/admin/img/maintenance.svg')) !!}
+                          </div>
                     </div>
 
                     {{-- <main class="mt-6">

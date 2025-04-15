@@ -14,8 +14,8 @@
         <link rel="icon" href="{{ asset('assets/admin/img/wctc1.png') }}" type="image/x-icon" />
         <!-- Fonts -->
         {{-- <link rel="preconnect" href="https://fonts.bunny.net"> --}}
-        <link rel="preload" href="https://fonts.bunny.net/css?family=figtree:400,500,600" as="style">
-        <link rel="stylesheet" href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" />
+        {{-- <link rel="preload" href="https://fonts.bunny.net/css?family=figtree:400,500,600" as="style">
+        <link rel="stylesheet" href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" /> --}}
         
 
         <!-- Styles / Scripts -->

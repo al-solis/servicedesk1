@@ -64,8 +64,10 @@
                 <div class="grid gap-4 sm:gap-6 mt-2">
                     <div class="sm:col-span-2">
                         {{-- <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label> --}}
-                        <input id="article" type="hidden" name="article">
-                        <trix-editor input="article" contenteditable="false">{!! $articles->content !!}</trix-editor>
+                        {{-- <input id="article" type="hidden" name="article">
+                        <trix-editor input="article" contenteditable="false">{!! $articles->content !!}</trix-editor> --}}
+                        <input id="article" type="hidden" name="article" value="{{ $articles->content }}">
+                        <trix-editor input="article" contenteditable="false"></trix-editor>
                     </div>
                 </div>
                 <div class="flex justify-end mt-6">

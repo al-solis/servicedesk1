@@ -10,14 +10,13 @@
 </head>
 <body>   
     @include('layouts.navbar') <!-- Include the navbar -->  
-    <div class="container">
-         {{-- @include('dashboard.index') --}}
-        {{-- @include('admin.admin-main') <!-- Include the sidebar and main admin panel --> --}}
+    <div class="container">       
 
         <div class="content-area" id="content-area">  
             @yield('content') <!-- Main content will be replaced dynamically -->
         </div>
     </div> 
+    
     {{-- @include('layouts.footer') <!-- Include the footer --> --}}    
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>

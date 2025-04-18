@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 {{-- <link rel="stylesheet" href="{{ asset('/assets/admin/css/style.css') }}"> --}}
 <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
 <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
@@ -22,7 +25,7 @@
         display: none !important;
     }
 </style>
-
+</head>
 @extends('layouts.app')
 @section('navbar-content')    
     <section class="bg-white dark:bg-gray-900">
@@ -81,3 +84,4 @@
     });
     </script> --}}
 @endsection
+</html>

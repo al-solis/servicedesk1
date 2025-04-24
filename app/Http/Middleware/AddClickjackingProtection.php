@@ -19,7 +19,16 @@ class AddClickjackingProtection
 
         $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
-        $response->headers->set('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'");
+        $response->headers->set(
+            'Content-Security-Policy',
+            "default-src 'self'; 
+            script-src 'unsafe-inline'; 
+            style-src 'unsafe-inline'; 
+            object-src 'none'; 
+            base-uri 'self'; 
+            frame-ancestors 'none'; 
+            font-src 'self' https://fonts.bunny.net"
+        );
         //return $next($request);
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         return $response;

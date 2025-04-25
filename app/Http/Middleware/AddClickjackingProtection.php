@@ -21,13 +21,15 @@ class AddClickjackingProtection
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set(
             'Content-Security-Policy',
-            "default-src 'self'; 
-    script-src 'self' 'unsafe-inline' https://52.64.119.63 https://cdn.jsdelivr.net; 
-    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; 
-    object-src 'none'; 
-    base-uri 'self'; 
-    frame-ancestors 'none'; 
-    font-src 'self' https://cdn.jsdelivr.net "
+            "default-src 'self'; " .
+            "script-src 'self'; " . // Remove 'unsafe-inline' if possible
+            "style-src 'self'; " .  // Remove 'unsafe-inline' if possible
+            "img-src 'self' data:; " .
+            "font-src 'self'; " .
+            "connect-src 'self'; " .
+            "form-action 'self'; " .
+            "frame-ancestors 'none'; " .
+            "base-uri 'self';"
         );
         //return $next($request);
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');

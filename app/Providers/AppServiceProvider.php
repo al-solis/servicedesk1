@@ -31,12 +31,13 @@ class AppServiceProvider extends ServiceProvider
         // {
         //     $view->with('authUser', Auth:user());
         // });        
-        Cookie::defaults(function () {
-            return cookie()->makeDefaults()
-                ->setHttpOnly(true)
-                ->setSecure(true)
-                ->setSameSite('lax');
-        });
+
+        // Cookie::defaults(function () {
+        //     return cookie()->makeDefaults()
+        //         ->setHttpOnly(true)
+        //         ->setSecure(true)
+        //         ->setSameSite('lax');
+        // });
 
         View::composer('layouts.navbar', NavbarComposer::class);
     }

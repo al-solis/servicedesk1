@@ -20,7 +20,7 @@
 
         <!-- Styles / Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        <link rel="stylesheet" href="{{ asset('assets/admin/css/tailwind.css') }}">
+        {{-- <link rel="stylesheet" href="{{ asset('assets/admin/css/tailwind.css') }}"> --}}
 
         <link rel="preload" as="image" href="{{ asset('assets/admin/img/maintenance.svg') }}">
 

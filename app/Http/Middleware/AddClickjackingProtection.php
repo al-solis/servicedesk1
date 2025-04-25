@@ -22,12 +22,11 @@ class AddClickjackingProtection
         $response->headers->set(
             'Content-Security-Policy',
             "default-src 'self'; " .
-            "script-src 'self'; " . // Remove 'unsafe-inline' if possible
-            "style-src 'self'; " .  // Remove 'unsafe-inline' if possible
+            "script-src 'self'; " .
+            "style-src 'self' https://fonts.bunny.net; " . // Allow Bunny Fonts
+            "font-src 'self' https://fonts.bunny.net; " .  // Allow Bunny Fonts files
             "img-src 'self' data:; " .
-            "font-src 'self'; " .
             "connect-src 'self'; " .
-            "form-action 'self'; " .
             "frame-ancestors 'none'; " .
             "base-uri 'self';"
         );

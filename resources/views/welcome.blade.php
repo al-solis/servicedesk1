@@ -212,6 +212,6 @@
                 </div>
             </div>
         </div>
-        <script type="module" src="/build/assets/app.js" defer></script>
+        {{-- <script type="module" src="/build/assets/app.js" defer></script> --}}
     </body>
 </html>

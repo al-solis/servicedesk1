@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Illumante\Auth\middleware\RedirectIfAuthenticated;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illumate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cookie;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +31,12 @@ class AppServiceProvider extends ServiceProvider
         // {
         //     $view->with('authUser', Auth:user());
         // });        
+        Cookie::defaults(function () {
+            return cookie()->makeDefaults()
+                ->setHttpOnly(true)
+                ->setSecure(true)
+                ->setSameSite('lax');
+        });
 
         View::composer('layouts.navbar', NavbarComposer::class);
     }

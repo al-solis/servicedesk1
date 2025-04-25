@@ -30,21 +30,39 @@ class AddClickjackingProtection
         //     "frame-ancestors 'none'; " .
         //     "base-uri 'self';"
         // );
+
+        // $response->headers->set(
+        //     'Content-Security-Policy',
+        //     "default-src 'self'; " .
+        //     "script-src 'self' 'unsafe-inline' https://52.64.119.63; " .
+        //     "style-src 'self' 'unsafe-inline' https://fonts.bunny.net; " .
+        //     "font-src 'self' https://fonts.bunny.net; " .
+        //     "img-src 'self' data: blob:; " .
+        //     "connect-src 'self' https://52.64.119.63; " .
+        //     "form-action 'self'; " .
+        //     "frame-ancestors 'none'; " .
+        //     "base-uri 'self'; " .
+        //     "manifest-src 'self'; " .
+        //     "worker-src 'self' blob:; " .
+        //     "media-src 'self' blob:;"
+        // );
+
         $response->headers->set(
             'Content-Security-Policy',
             "default-src 'self'; " .
-            "script-src 'self' 'unsafe-inline' https://52.64.119.63; " .
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " . // Consider using nonces instead
             "style-src 'self' 'unsafe-inline' https://fonts.bunny.net; " .
             "font-src 'self' https://fonts.bunny.net; " .
             "img-src 'self' data: blob:; " .
-            "connect-src 'self' https://52.64.119.63; " .
-            "form-action 'self'; " .
+            "connect-src 'self' ws: wss:; " . // For websockets if needed
+            "frame-src 'none'; " .
             "frame-ancestors 'none'; " .
+            "object-src 'none'; " .
+            "form-action 'self'; " .
             "base-uri 'self'; " .
-            "manifest-src 'self'; " .
-            "worker-src 'self' blob:; " .
-            "media-src 'self' blob:;"
+            "upgrade-insecure-requests;"
         );
+
         //return $next($request);
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         return $response;

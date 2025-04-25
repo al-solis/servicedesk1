@@ -19,34 +19,6 @@ class AddClickjackingProtection
 
         $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
-        // $response->headers->set(
-        //     'Content-Security-Policy',
-        //     "default-src 'self'; " .
-        //     "script-src 'self'; " .
-        //     "style-src 'self' https://fonts.bunny.net; " . // Allow Bunny Fonts
-        //     "font-src 'self' https://fonts.bunny.net; " .  // Allow Bunny Fonts files
-        //     "img-src 'self' data:; " .
-        //     "connect-src 'self'; " .
-        //     "frame-ancestors 'none'; " .
-        //     "base-uri 'self';"
-        // );
-
-        // $response->headers->set(
-        //     'Content-Security-Policy',
-        //     "default-src 'self'; " .
-        //     "script-src 'self' 'unsafe-inline' https://52.64.119.63; " .
-        //     "style-src 'self' 'unsafe-inline' https://fonts.bunny.net; " .
-        //     "font-src 'self' https://fonts.bunny.net; " .
-        //     "img-src 'self' data: blob:; " .
-        //     "connect-src 'self' https://52.64.119.63; " .
-        //     "form-action 'self'; " .
-        //     "frame-ancestors 'none'; " .
-        //     "base-uri 'self'; " .
-        //     "manifest-src 'self'; " .
-        //     "worker-src 'self' blob:; " .
-        //     "media-src 'self' blob:;"
-        // );
-
         $response->headers->set(
             'Content-Security-Policy',
             "default-src 'self'; " .

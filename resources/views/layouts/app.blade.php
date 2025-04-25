@@ -18,7 +18,8 @@
     </div> 
     
     {{-- @include('layouts.footer') <!-- Include the footer --> --}}    
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts" integrity="sha384-..." crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3" integrity="sha384-..." crossorigin="anonymous"></script>
+
 </body>
 </html>

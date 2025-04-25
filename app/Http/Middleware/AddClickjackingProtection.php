@@ -54,7 +54,7 @@ class AddClickjackingProtection
             "style-src 'self' https://fonts.bunny.net; " .
             "font-src 'self' https://fonts.bunny.net; " .
             "img-src 'self' data: blob:; " .
-            "connect-src 'self' ws: wss:; " . // For websockets if needed
+            "connect-src 'self' wss://52.64.119.63; " . // For websockets if needed
             "frame-src 'none'; " .
             "frame-ancestors 'none'; " .
             "object-src 'none'; " .

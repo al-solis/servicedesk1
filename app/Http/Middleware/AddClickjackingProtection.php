@@ -50,8 +50,8 @@ class AddClickjackingProtection
         $response->headers->set(
             'Content-Security-Policy',
             "default-src 'self'; " .
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " . // Consider using nonces instead
-            "style-src 'self' 'unsafe-inline' https://fonts.bunny.net; " .
+            "script-src 'self' https://cdn.jsdelivr.net; " . // Consider using nonces instead
+            "style-src 'self' https://fonts.bunny.net; " .
             "font-src 'self' https://fonts.bunny.net; " .
             "img-src 'self' data: blob:; " .
             "connect-src 'self' ws: wss:; " . // For websockets if needed
@@ -62,6 +62,7 @@ class AddClickjackingProtection
             "base-uri 'self'; " .
             "upgrade-insecure-requests;"
         );
+
 
         //return $next($request);
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');

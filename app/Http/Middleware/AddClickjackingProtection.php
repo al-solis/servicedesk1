@@ -38,17 +38,13 @@ class AddClickjackingProtection
         );
 
         $response->headers->setCookie(
-            cookie(
-                'XSRF-TOKEN',
-                csrf_token(),
-                120,     // duration in minutes
-                '/',
-                null,
-                true,    // Secure
-                false,   // HttpOnly must be false
-                false,
-                'Strict' // SameSite
-            )
+            Cookie::create('XSRF-TOKEN', $request->session()->token())
+                ->withHttpOnly(false) // XSRF-TOKEN must NOT be HttpOnly
+                ->withSecure(true) // Send only on HTTPS
+                ->withSameSite('Strict') // Stronger CSRF protection
+                ->withPath($config['path'] ?? '/')
+                ->withDomain($config['domain'] ?? null)
+                ->withExpires(time() + 7200) // 2 hours, adjust if needed
         );
 
         //return $next($request);

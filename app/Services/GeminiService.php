@@ -15,7 +15,7 @@ class GeminiService
     {
         $this->client = new Client();
         $this->apiKey = config('services.gemini.api_key');
-        $this->apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . $this->apiKey;
+        $this->apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" . $this->apiKey;
     }
 
     public function sendMessage($message)

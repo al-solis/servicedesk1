@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
-use illuminate\Support\Str;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class RegisteredUserController extends Controller

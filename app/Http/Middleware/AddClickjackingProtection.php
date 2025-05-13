@@ -18,41 +18,41 @@ class AddClickjackingProtection
     {
         $response = $next($request);
 
-        // $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
-        // $response->headers->set('X-Content-Type-Options', 'nosniff');
-        // $response->headers->set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
-        // $response->headers->set(
-        //     'Content-Security-Policy',
-        //     "default-src 'self'; " .
-        //     "script-src 'self' https://cdn.jsdelivr.net; " . // Consider using nonces instead
-        //     "style-src 'self' https://fonts.bunny.net; " .
-        //     "font-src 'self' https://fonts.bunny.net; " .
-        //     "img-src 'self' data: blob:; " .
-        //     "connect-src 'self' wss://52.64.119.63; " . // For websockets if needed
-        //     "frame-src 'none'; " .
-        //     "frame-ancestors 'none'; " .
-        //     "object-src 'none'; " .
-        //     "form-action 'self'; " .
-        //     "base-uri 'self'; " .
-        //     "upgrade-insecure-requests;"
-        // );
+        $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
+        $response->headers->set('X-Content-Type-Options', 'nosniff');
+        $response->headers->set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+        $response->headers->set(
+            'Content-Security-Policy',
+            "default-src 'self'; " .
+            "script-src 'self' https://cdn.jsdelivr.net; " . // Consider using nonces instead
+            "style-src 'self' https://fonts.bunny.net; " .
+            "font-src 'self' https://fonts.bunny.net; " .
+            "img-src 'self' data: blob:; " .
+            "connect-src 'self' wss://52.64.119.63; " . // For websockets if needed
+            "frame-src 'none'; " .
+            "frame-ancestors 'none'; " .
+            "object-src 'none'; " .
+            "form-action 'self'; " .
+            "base-uri 'self'; " .
+            "upgrade-insecure-requests;"
+        );
 
-        // $response->headers->setCookie(
-        //     cookie(
-        //         'XSRF-TOKEN',
-        //         csrf_token(),
-        //         120,     // duration in minutes
-        //         '/',
-        //         null,
-        //         true,    // Secure
-        //         false,   // HttpOnly must be false
-        //         false,
-        //         'Strict' // SameSite
-        //     )
-        // );
+        $response->headers->setCookie(
+            cookie(
+                'XSRF-TOKEN',
+                csrf_token(),
+                120,     // duration in minutes
+                '/',
+                null,
+                true,    // Secure
+                false,   // HttpOnly must be false
+                false,
+                'Strict' // SameSite
+            )
+        );
 
-        // //return $next($request);
-        // $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+        //return $next($request);
+        $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         return $response;
     }
 }

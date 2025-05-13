@@ -41,21 +41,21 @@ class RegisteredUserController extends Controller
 
         // Query employee from Payroll database
         //uncomment this if you want to use the payroll database
-        // $employee = DB::connection('sqlsrv')->table('tblPREmployee')
-        //     ->where('strEmployeeID', $request->empid)
-        //     ->where('dtmTerminated', null)
-        //     ->first();
+        $employee = DB::connection('mysql')->table('tblPREmployee')
+            ->where('strEmployeeID', $request->empid)
+            ->where('dtmTerminated', null)
+            ->first();
 
-        // if (!$employee) {
-        //     return redirect()->back()->withErrors(['empid' => 'Employee ID not found in Payroll database.']);
-        // } else {
-        //     if (
-        //         strtoupper($employee->strLastName) != strtoupper($request->lname) ||
-        //         strtoupper($employee->strFirstName) != strtoupper($request->fname)
-        //     ) {
-        //         return redirect()->back()->withErrors(['lname' => 'Name does not match in Payroll database.']);
-        //     }
-        // }
+        if (!$employee) {
+            return redirect()->back()->withErrors(['empid' => 'Employee ID not found in Payroll database.']);
+        } else {
+            if (
+                strtoupper($employee->strLastName) != strtoupper($request->lname) ||
+                strtoupper($employee->strFirstName) != strtoupper($request->fname)
+            ) {
+                return redirect()->back()->withErrors(['lname' => 'Name does not match in Payroll database.']);
+            }
+        }
 
 
         // Check if employee ID already exists

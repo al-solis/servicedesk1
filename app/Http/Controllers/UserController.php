@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -205,9 +206,9 @@ class UserController extends Controller
 
         User::create([
             'empid' => $request->empid,
-            'lname' => $request->lname,
-            'fname' => $request->fname,
-            'mname' => $request->mname,
+            'lname' => str::title($request->lname),
+            'fname' => str::title($request->fname),
+            'mname' => str::title($request->mname),
             'email' => $request->email,
             'usertype' => $request->usertype,
             'designation' => $request->designation,

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class RegisteredUserController extends Controller
@@ -65,9 +66,9 @@ class RegisteredUserController extends Controller
 
         $user = User::create([
             'empid' => $request->empid,
-            'lname' => $request->lname,
-            'fname' => $request->fname,
-            'mname' => $request->mname,
+            'lname' => str::title($request->lname),
+            'fname' => str::title($request->fname),
+            'mname' => str::title($request->mname),
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);

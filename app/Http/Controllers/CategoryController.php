@@ -23,10 +23,11 @@ class CategoryController extends Controller
                             $query->where('name', 'like', '%' . $searchTerm . '%');
                         });
                 })
+                ->orderBy('created_at', 'desc')
                 ->paginate(10);
 
         } else {
-            $categories = TicketType::with('default_group')->paginate(10);
+            $categories = TicketType::with('default_group')->orderBy('id')->paginate(10);
         }
 
         return view("categories.index", compact("categories", "user", "supportTeam"));

@@ -128,7 +128,7 @@ class TicketController extends Controller
                     });
                 })
                 ->orderBy('date_created', 'desc')
-                ->paginate(10);
+                ->simplePaginate(10);
         }
 
         foreach ($tickets as $ticket) {

@@ -26,7 +26,7 @@ class KnowledgeBaseArticleController extends Controller
             });
         }
 
-        $articles = $articles->paginate(10);
+        $articles = $articles->orderBy('id')->paginate(10);
 
         return view('kb.index', compact('articles', 'user'));
     }

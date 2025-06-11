@@ -31,6 +31,7 @@ class SupportController extends Controller
             ->when($searchTerm, function ($query) use ($searchTerm) {
                 $query->where('name', 'like', '%' . $searchTerm . '%');
             })
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
 

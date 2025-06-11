@@ -185,7 +185,8 @@
                                           {{ strtoupper(substr($login->fname, 0, 1)) }}{{ strtoupper(substr($login->lname, 0, 1)) }}
                                       </span>
                                       @else
-                                        <img class="w-8 h-8 rounded-full" src="{{ Storage::url($login->profile_picture) }}"  alt="{{$login->lname}}">
+                                        {{-- <img class="w-8 h-8 rounded-full" src="{{ Storage::url($login->profile_picture) }}"  alt="{{$login->lname}}"> --}}
+                                        <img class="w-8 h-8 rounded-full" src="{{ asset('storage/' . $login->profile_picture) }}"  alt="{{$login->lname}}">
                                       @endif
                                       <div class="ml-3">
                                       <p class="font-medium text-sm text-gray-900 truncate dark:text-white">
@@ -220,7 +221,8 @@
                                     {{ strtoupper(substr($lastCreatedUsers->fname, 0, 1)) }}{{ strtoupper(substr($lastCreatedUsers->lname, 0, 1)) }}
                                 </span>
                                 @else
-                                  <img class="w-8 h-8 rounded-full" src="{{ Storage::url($lastCreatedUsers->profile_picture) }}"  alt="{{$lastCreatedUsers->lname}}">
+                                  {{-- <img class="w-8 h-8 rounded-full" src="{{ Storage::url($lastCreatedUsers->profile_picture) }}"  alt="{{$lastCreatedUsers->lname}}"> --}}
+                                  <img class="w-8 h-8 rounded-full" src="{{ asset('storage/' . $lastCreatedUsers->profile_picture) }}"  alt="{{$lastCreatedUsers->lname}}">
                                 @endif
                                 <div class="ml-3">
                                 <p class="font-medium text-sm text-gray-900 truncate dark:text-white">

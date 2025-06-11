@@ -42,7 +42,7 @@ class RegisteredUserController extends Controller
 
         // Query employee from Payroll database
         //uncomment this if you want to use the payroll database
-        $employee = DB::connection('mysql2')->table('tblPREmployee')
+        $employee = DB::connection('sqlsrv2')->table('tblPREmployee')
             ->where('strEmployeeID', $request->empid)
             ->where('dtmTerminated', null)
             ->first();

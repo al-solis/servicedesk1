@@ -187,7 +187,8 @@
                                 @endphp
                                 @if ($detail->user->profile_picture)
                                     <img class="w-8 h-8 rounded-full" 
-                                    src="{{ optional($detail->user)->profile_picture ? Storage::url($detail->user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}" 
+                                    {{-- src="{{ optional($detail->user)->profile_picture ? Storage::url($detail->user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}"  --}}
+                                    src="{{ optional($detail->user)->profile_picture ? asset('storage/' . $detail->user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}" 
                                     alt="User Image">
                                 @else
                                     <span class="w-8 h-8 flex justify-center items-center rounded-full text-white font-bold 

@@ -109,7 +109,8 @@
                     @if ($ticket->user->profile_picture)
                     <img
                       class="w-11 h-11 rounded-full"
-                      src="{{ Storage::url($ticket->user->profile_picture) }}"
+                      {{-- src="{{ Storage::url($ticket->user->profile_picture) }}" --}}
+                      src="{{ asset('storage/' . $ticket->user->profile_picture) }}"
                       alt="{{$ticket->user->lname}}"/>                 
                       
                     @else
@@ -605,7 +606,8 @@
                     
               @if(Auth::user()->profile_picture)
                 <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" 
-                    src="{{ Storage::url(Auth::user()->profile_picture) }}" 
+                    {{-- src="{{ Storage::url(Auth::user()->profile_picture) }}"  --}}
+                    src="{{ asset('storage/' . Auth::user()->profile_picture) }}" 
                     alt="{{ Auth::user()->lname }}">
               @else
                 <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold" 

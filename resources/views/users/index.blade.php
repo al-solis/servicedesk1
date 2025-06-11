@@ -116,7 +116,8 @@
                     
                             @if($userm->profile_picture)
                                 <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" 
-                                    src="{{ Storage::url($userm->profile_picture) }}" 
+                                    {{-- src="{{ Storage::url($userm->profile_picture) }}"  --}}
+                                    src="{{ asset('storage/' . $userm->profile_picture) }}"
                                     alt="{{ $userm->lname }}">
                             @else
                                 <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold 

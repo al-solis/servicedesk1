@@ -18,11 +18,11 @@ class ArticleController extends Controller
             ->where('status', 'Active')
             ->when($searchTerm, function ($query, $searchTerm) {
                 return $query->where('title', 'like', '%' . $searchTerm . '%')
-                ->orWhereHas('category', function ($query) use ($searchTerm) {
-                    return $query->where('description','like', '%' . $searchTerm . '%');
-                });
+                    ->orWhereHas('category', function ($query) use ($searchTerm) {
+                        return $query->where('description', 'like', '%' . $searchTerm . '%');
+                    });
             })
-            //->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
         return view('articles.article-index', compact('articles', 'user'));
     }

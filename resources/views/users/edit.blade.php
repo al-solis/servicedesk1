@@ -13,8 +13,8 @@
                 <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                     <div class="flex items-center space-x-4">
                         {{-- Profile Picture --}}
-                        <img src="{{ $users->profile_picture ? Storage::url($users->profile_picture) : asset('assets/admin/img/undraw_profile.svg')  }}" alt="Profile Picture" class="rounded-lg w-28 h-28">
-            
+                        {{-- <img src="{{ $users->profile_picture ? Storage::url($users->profile_picture) : asset('assets/admin/img/undraw_profile.svg')  }}" alt="Profile Picture" class="rounded-lg w-28 h-28"> --}}
+                        <img src="{{ $users->profile_picture ? asset('storage/' . $users->profile_picture) : asset('assets/admin/img/undraw_profile.svg')  }}" alt="Profile Picture" class="rounded-lg w-28 h-28">
                         {{-- Buttons --}}
                         <div>
                             <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Profile picture</h3>

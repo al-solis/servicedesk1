@@ -183,7 +183,8 @@
 
                                             @if ($member->user->profile_picture)
                                                 <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" 
-                                                    src="{{ Storage::url($member->user->profile_picture) }}"
+                                                    {{-- src="{{ Storage::url($member->user->profile_picture) }}" --}}
+                                                    src="{{ asset('storage/' . $member->user->profile_picture) }}"
                                                     alt="{{ $member->user->id }}">
                                             @else
                                                 {{-- src="{{ $member->user->profile_picture ? Storage::url($member->user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}"  --}}

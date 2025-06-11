@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'sqlsrv'),
 
     /*
     |--------------------------------------------------------------------------
@@ -42,8 +42,8 @@ return [
             'synchronous' => null,
         ],
 
-        'mysql' => [
-            'driver' => 'mysql',
+        'sqlsrv1' => [
+            'driver' => 'sqlsrv',
             'url' => env('DB_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
@@ -130,10 +130,58 @@ return [
             'prefix_indexes' => true,
             'options' => [
                 PDO::ATTR_CASE => PDO::CASE_NATURAL,
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             ],
-            // 'encrypt' => env('DB_ENCRYPT', 'yes'),
-            // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
+            #'encrypt' => env('DB_ENCRYPT', 'false'),
+            #'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'true'),
         ],
+
+        'sqlsrv2' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DB_URL'),
+            'host' => env('SQLSRV_HOST_PAYROLL', 'localhost'),
+            'port' => env('SQLSRV_PORT_PAYROLL', '1433'),
+            'database' => env('SQLSRV_DATABASE_PAYROLL', 'laravel'),
+            'username' => env('SQLSRV_USERNAME_PAYROLL', 'root'),
+            'password' => env('SQLSRV_PASSWORD_PAYROLL', ''),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'options' => [
+                PDO::ATTR_CASE => PDO::CASE_NATURAL,
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            ],
+            'encrypt' => env('DB_ENCRYPT', 'false'),
+            'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'true'),
+        ],
+
+        'odbc_dsn' => [
+            'driver' => 'odbc',
+            'dsn' => env('DB_DSN'),
+            'database' => env('DB_DATABASE'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'prefix' => '',
+            'options' => [
+                PDO::ATTR_CASE => PDO::CASE_NATURAL,
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            ],
+        ],
+
+        'odbc_custom' => [
+            'driver' => 'odbc',
+            'dsn' => env('DB_ODBC_CONNECTION_STRING'),
+            'database' => env('DB_DATABASE'),
+            'username' => null, // not needed because it's in the DSN string
+            'password' => null,
+            'prefix' => '',
+            'options' => [
+                PDO::ATTR_CASE => PDO::CASE_NATURAL,
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            ],
+        ],
+
+
 
     ],
 

@@ -12,6 +12,7 @@ class DepartmentController extends Controller
         $user = Auth::user();
         $searchTerm = $request->input('search');
         $department = Department::where('description', 'like', '%' . $searchTerm . '%')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view("department.index", compact("department", "user"));

@@ -21,9 +21,13 @@ return new class extends Migration {
         });
 
         DB::table('support_type')->insert([
-            ['description' => 'Hardware'],
-            ['description' => 'Software'],
-            ['description' => 'Network'],
+            ['description' => 'Hardware']
+        ]);
+        DB::table('support_type')->insert([
+            ['description' => 'Software']
+        ]);
+        DB::table('support_type')->insert([
+            ['description' => 'Network']
         ]);
     }
 

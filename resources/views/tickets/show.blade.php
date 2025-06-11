@@ -73,7 +73,8 @@
                                                 @endphp
                                                 @if ($user->profile_picture)
                                                     <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800 cursor-pointer" 
-                                                        src="{{ $user->profile_picture ? Storage::url($user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}" 
+                                                        {{-- src="{{ $user->profile_picture ? Storage::url($user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}"  --}}
+                                                        src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}" 
                                                         alt="{{ $user->id }}">
                                                 @else
                                                     <span class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold mr-2
@@ -116,7 +117,8 @@
                                 @endphp
                                 @if ($detail->user->profile_picture)
                                     <img class="w-8 h-8 rounded-full" 
-                                    src="{{ optional($detail->user)->profile_picture ? Storage::url($detail->user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}" 
+                                    {{-- src="{{ optional($detail->user)->profile_picture ? Storage::url($detail->user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}"  --}}
+                                    src="{{ optional($detail->user)->profile_picture ? asset('storage/' . $detail->user->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}" 
                                     alt="User Image">
                                 @else
                                     <span class="w-8 h-8 flex justify-center items-center rounded-full text-white font-bold 

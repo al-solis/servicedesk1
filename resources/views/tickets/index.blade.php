@@ -123,7 +123,8 @@
                                 @if($ticket->user->profile_picture)
                                     <!-- Display the profile picture if it exists -->
                                     <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" 
-                                        src="{{ Storage::url($ticket->user->profile_picture) }}" 
+                                        {{-- src="{{ Storage::url($ticket->user->profile_picture) }}"  --}}
+                                        src="{{ asset('storage/' . $ticket->user->profile_picture) }}"
                                         alt="{{ $ticket->user->lname }}">
                                 @else
                                     <!-- Display the user's initials in a colored circle if no profile picture -->
@@ -165,7 +166,8 @@
                                                 @if ($assignedUser->profile_picture)
                                                     <!-- Display profile picture -->
                                                     <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
-                                                        src="{{ Storage::url($assignedUser->profile_picture) }}" 
+                                                        {{-- src="{{ Storage::url($assignedUser->profile_picture) }}"  --}}
+                                                        src="{{ asset('storage/' . $assignedUser->profile_picture) }}"
                                                         alt="{{ $assignedUser->lname }}">
                                                 @else
                                                     <!-- Display initials in colored circle -->

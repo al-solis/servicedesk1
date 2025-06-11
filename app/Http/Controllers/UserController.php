@@ -42,9 +42,10 @@ class UserController extends Controller
                             $query->where('description', 'like', "%{$searchTerm}%");
                         });
                 })
+                ->orderBy('id')
                 ->paginate(10);
         } else {
-            $users = User::with('department')->paginate(10);
+            $users = User::with('department')->orderBy('id')->paginate(10);
         }
 
         return view('users.index', compact('users', 'user'));

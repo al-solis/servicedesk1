@@ -231,7 +231,7 @@
                 <footer class="py-16 text-center text-sm text-black dark:text-white/70">
                     <!-- Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }}) -->
                     <div class="copyright text-center my-auto">
-                        <span>Online IT Service Desk 2025</span>
+                        <span>King Eleazar Incident and Support Management System &copy; {{ date('Y') }}</span>
                     </div>
                 </footer>
             </div>

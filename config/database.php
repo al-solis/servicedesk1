@@ -132,8 +132,8 @@ return [
                 PDO::ATTR_CASE => PDO::CASE_NATURAL,
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             ],
-            #'encrypt' => env('DB_ENCRYPT', 'false'),
-            #'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'true'),
+            'encrypt' => env('DB_ENCRYPT', 'false'),
+            'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'true'),
         ],
 
         'sqlsrv2' => [

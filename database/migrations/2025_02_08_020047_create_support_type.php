@@ -21,13 +21,34 @@ return new class extends Migration {
         });
 
         DB::table('support_type')->insert([
-            ['description' => 'Hardware']
+            ['description' => 'Accounting & Finance']
         ]);
         DB::table('support_type')->insert([
-            ['description' => 'Software']
+            ['description' => 'Admin & General Services']
         ]);
         DB::table('support_type')->insert([
-            ['description' => 'Network']
+            ['description' => 'Client Services']
+        ]);
+        DB::table('support_type')->insert([
+            ['description' => 'Compliance & Legal']
+        ]);
+        DB::table('support_type')->insert([
+            ['description' => 'Human Resources (HR)']
+        ]);
+        DB::table('support_type')->insert([
+            ['description' => 'Incident & Emergency Reports']
+        ]);
+        DB::table('support_type')->insert([
+            ['description' => 'IT & Technical Support']
+        ]);
+        DB::table('support_type')->insert([
+            ['description' => 'Logistics & Supplies']
+        ]);
+        DB::table('support_type')->insert([
+            ['description' => 'Payroll & Compensation']
+        ]);
+        DB::table('support_type')->insert([
+            ['description' => 'Security Operations']
         ]);
     }
 

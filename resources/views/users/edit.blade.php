@@ -1,171 +1,206 @@
 @extends('layouts.app')
-@section('navbar-content')   
-<section class="bg-white dark:bg-gray-900">
-    <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
-        <div class="mb-4 col-span-full xl:mb-2"> 
-            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">User settings</h1>            
-        </div>
-     
-        <!-- Right Content -->
-        <div class="col-span-full xl:col-auto">
+@section('navbar-content')
+    <section class="bg-white dark:bg-gray-900">
+        <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
+            <div class="mb-4 col-span-full xl:mb-2">
+                <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">User settings</h1>
+            </div>
+
+            <!-- Right Content -->
             <div class="col-span-full xl:col-auto">
-                {{-- Profile Picture Form --}}
-                <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                    <div class="flex items-center space-x-4">
-                        {{-- Profile Picture --}}
-                        {{-- <img src="{{ $users->profile_picture ? Storage::url($users->profile_picture) : asset('assets/admin/img/undraw_profile.svg')  }}" alt="Profile Picture" class="rounded-lg w-28 h-28"> --}}
-                        <img src="{{ $users->profile_picture ? asset('storage/' . $users->profile_picture) : asset('assets/admin/img/undraw_profile.svg')  }}" alt="Profile Picture" class="rounded-lg w-28 h-28">
-                        {{-- Buttons --}}
-                        <div>
-                            <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Profile picture</h3>
-                            <div class="mb-4 text-xs text-gray-500 dark:text-gray-400">
-                                JPG, GIF or PNG. Max size of 800K
-                            </div>
-            
-                            {{-- Buttons in the same row --}}
-                            <div class="flex items-center space-x-4">
-                                {{-- Upload Form --}}
-                                <form action="{{ route('users.uploadPicture', $users->id) }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="file" name="profile_picture" id="profile_picture" class="hidden" accept="image/*" required>
-                                    <button type="button" id="uploadBtn" class="inline-flex items-center px-3 py-2 text-sm font-medium text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                        <svg class="w-4 h-4 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"></path>
-                                            <path d="M9 13h2v5a1 1 0 11-2 0v-5z"></path>
-                                        </svg>
-                                        Upload
-                                    </button>
-                                </form>
-            
-                                {{-- Delete Form --}}
-                                <form action="{{ route('users.deletePicture', $users->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="py-2 px-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                                        Delete
-                                    </button>
-                                </form>
-                            </div>
-            
-                            {{-- Success message --}}
-                            @if (session('success'))
-                                <div id="success-message" class="text-green-400 mt-2">
-                                    {{ session('success') }}
+                <div class="col-span-full xl:col-auto">
+                    {{-- Profile Picture Form --}}
+                    <div
+                        class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                        <div class="flex items-center space-x-4">
+                            {{-- Profile Picture --}}
+                            {{-- <img src="{{ $users->profile_picture ? Storage::url($users->profile_picture) : asset('assets/admin/img/undraw_profile.svg')  }}" alt="Profile Picture" class="rounded-lg w-28 h-28"> --}}
+                            <img src="{{ $users->profile_picture ? asset('storage/' . $users->profile_picture) : asset('assets/admin/img/undraw_profile.svg') }}"
+                                alt="Profile Picture" class="rounded-lg w-28 h-28">
+                            {{-- Buttons --}}
+                            <div>
+                                <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Profile picture</h3>
+                                <div class="mb-4 text-xs text-gray-500 dark:text-gray-400">
+                                    JPG, GIF or PNG. Max size of 800K
                                 </div>
 
-                                <script>
-                                    // Wait for the page to load
-                                    document.addEventListener("DOMContentLoaded", function() {
-                                        let successMessage = document.getElementById('success-message');
-                                        if (successMessage) {
-                                            setTimeout(() => {
-                                                successMessage.style.transition = "opacity 1s";
-                                                successMessage.style.opacity = "0";
-                                                setTimeout(() => successMessage.remove(), 1000); // Remove from DOM
-                                            }, 3000); // 3 seconds before fading
-                                        }
-                                    });
-                                </script>
-                            @endif
+                                {{-- Buttons in the same row --}}
+                                <div class="flex items-center space-x-4">
+                                    {{-- Upload Form --}}
+                                    <form action="{{ route('users.uploadPicture', $users->id) }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="file" name="profile_picture" id="profile_picture" class="hidden"
+                                            accept="image/*" required>
+                                        <button type="button" id="uploadBtn"
+                                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            <svg class="w-4 h-4 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z">
+                                                </path>
+                                                <path d="M9 13h2v5a1 1 0 11-2 0v-5z"></path>
+                                            </svg>
+                                            Upload
+                                        </button>
+                                    </form>
+
+                                    {{-- Delete Form --}}
+                                    <form action="{{ route('users.deletePicture', $users->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="py-2 px-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+
+                                {{-- Success message --}}
+                                @if (session('success'))
+                                    <div id="success-message" class="text-green-400 mt-2">
+                                        {{ session('success') }}
+                                    </div>
+
+                                    <script>
+                                        // Wait for the page to load
+                                        document.addEventListener("DOMContentLoaded", function() {
+                                            let successMessage = document.getElementById('success-message');
+                                            if (successMessage) {
+                                                setTimeout(() => {
+                                                    successMessage.style.transition = "opacity 1s";
+                                                    successMessage.style.opacity = "0";
+                                                    setTimeout(() => successMessage.remove(), 1000); // Remove from DOM
+                                                }, 3000); // 3 seconds before fading
+                                            }
+                                        });
+                                    </script>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <script>
-                document.getElementById('uploadBtn').addEventListener('click', function() {
-                    document.getElementById('profile_picture').click();
-                });
-            
-                document.getElementById('profile_picture').addEventListener('change', function(event) {
-                    let file = event.target.files[0];
-            
-                    if (file && file.size > 800000) { // 800KB max size
-                        alert("File size must be less than 800KB");
-                        return;
-                    }
-            
-                    this.closest('form').submit();
-                });
-            </script>
-            
-            <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                <h3 class="mb-4 text-xl font-semibold dark:text-white">Password information</h3>
-                <form action="{{ route('password.update')}}" method="POST">
-                    @csrf
-                    @method('PUT')
 
-                    <div class="grid grid-cols-6 gap-6">
-                        <div class="col-span-6 sm:col-span-3">
-                            {{-- <label for="current_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Current password</label>
+                <script>
+                    document.getElementById('uploadBtn').addEventListener('click', function() {
+                        document.getElementById('profile_picture').click();
+                    });
+
+                    document.getElementById('profile_picture').addEventListener('change', function(event) {
+                        let file = event.target.files[0];
+
+                        if (file && file.size > 800000) { // 800KB max size
+                            alert("File size must be less than 800KB");
+                            return;
+                        }
+
+                        this.closest('form').submit();
+                    });
+                </script>
+
+                <div
+                    class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                    <h3 class="mb-4 text-xl font-semibold dark:text-white">Password information</h3>
+                    <form action="{{ route('password.update') }}" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="grid grid-cols-6 gap-6">
+                            <div class="col-span-6 sm:col-span-3">
+                                {{-- <label for="current_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Current password</label>
                             <input type="password" name="current_password" id="current_password" 
                             {{-- value="{{ old('fname', $users->password) }}"  --}}
-                            {{-- class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="••••••••" required> --}}
-                            <x-input-label for="update_password_current_password" :value="__('Current Password')" />
-                            <x-text-input id="update_password_current_password" name="current_password" type="password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  autocomplete="current-password" />
-                            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
-                        </div>
-                        <div class="col-span-6 sm:col-span-3">
-                            {{-- <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New password</label>
+                                {{-- class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="••••••••" required> --}}
+                                <x-input-label for="update_password_current_password" :value="__('Current Password')" />
+                                <x-text-input id="update_password_current_password" name="current_password" type="password"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    autocomplete="current-password" />
+                                <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                {{-- <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New password</label>
                             <input data-popover-target="popover-password" data-popover-placement="bottom" type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="••••••••" required> --}}
-                            <x-input-label for="update_password_password" :value="__('New Password')" />
-                            <x-text-input id="update_password_password" name="password" type="password" data-popover-target="popover-password" data-popover-placement="bottom" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autocomplete="new-password" />
-                            <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
-                            <div data-popover id="popover-password" role="tooltip" class="absolute z-10 invisible inline-block text-sm font-light text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
-                                <div class="p-3 space-y-2">
-                                    <h3 class="font-semibold text-gray-900 dark:text-white">Must have at least 8 characters</h3>
-                                    <div class="grid grid-cols-4 gap-2">
-                                        <div class="h-1 bg-orange-300 dark:bg-orange-400"></div>
-                                        <div class="h-1 bg-orange-300 dark:bg-orange-400"></div>
-                                        <div class="h-1 bg-gray-200 dark:bg-gray-600"></div>
-                                        <div class="h-1 bg-gray-200 dark:bg-gray-600"></div>
+                                <x-input-label for="update_password_password" :value="__('New Password')" />
+                                <x-text-input id="update_password_password" name="password" type="password"
+                                    data-popover-target="popover-password" data-popover-placement="bottom"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    autocomplete="new-password" />
+                                <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
+                                <div data-popover id="popover-password" role="tooltip"
+                                    class="absolute z-10 invisible inline-block text-sm font-light text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
+                                    <div class="p-3 space-y-2">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white">Must have at least 8
+                                            characters</h3>
+                                        <div class="grid grid-cols-4 gap-2">
+                                            <div class="h-1 bg-orange-300 dark:bg-orange-400"></div>
+                                            <div class="h-1 bg-orange-300 dark:bg-orange-400"></div>
+                                            <div class="h-1 bg-gray-200 dark:bg-gray-600"></div>
+                                            <div class="h-1 bg-gray-200 dark:bg-gray-600"></div>
+                                        </div>
+                                        <p>It’s better to have:</p>
+                                        <ul>
+                                            <li class="flex items-center mb-1">
+                                                <svg class="w-4 h-4 mr-2 text-green-400 dark:text-green-500"
+                                                    aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd"
+                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                                Upper & lower case letters
+                                            </li>
+                                            <li class="flex items-center mb-1">
+                                                <svg class="w-4 h-4 mr-2 text-gray-300 dark:text-gray-400"
+                                                    aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd"
+                                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                                A symbol (#$&)
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="w-4 h-4 mr-2 text-gray-300 dark:text-gray-400"
+                                                    aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd"
+                                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                                A longer password (min. 12 chars.)
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <p>It’s better to have:</p>
-                                    <ul>
-                                        <li class="flex items-center mb-1">
-                                            <svg class="w-4 h-4 mr-2 text-green-400 dark:text-green-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                            Upper & lower case letters
-                                        </li>
-                                        <li class="flex items-center mb-1">
-                                            <svg class="w-4 h-4 mr-2 text-gray-300 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                                            A symbol (#$&)
-                                        </li>
-                                        <li class="flex items-center">
-                                            <svg class="w-4 h-4 mr-2 text-gray-300 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                                            A longer password (min. 12 chars.)
-                                        </li>
-                                    </ul>
+                                    <div data-popper-arrow></div>
+                                </div>
                             </div>
-                            <div data-popper-arrow></div>
-                            </div>
-                        </div>
-                        <div class="col-span-6 sm:col-span-3">
-                            {{-- <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
+                            <div class="col-span-6 sm:col-span-3">
+                                {{-- <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
                             <input type="text" name="confirm-password" id="confirm-password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="••••••••" required> --}}
-                            <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
-                            <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autocomplete="new-password" />
-                            <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
-                        </div>
-                        <div class="col-span-6 sm:col-full">
-                            <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">{{ __('Save all') }}</button>
-                            {{-- <x-primary-button>{{ __('Save') }}</x-primary-button> --}}
+                                <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
+                                <x-text-input id="update_password_password_confirmation" name="password_confirmation"
+                                    type="password"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    autocomplete="new-password" />
+                                <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
+                            </div>
+                            <div class="col-span-6 sm:col-full">
+                                <button
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    type="submit">{{ __('Save all') }}</button>
+                                {{-- <x-primary-button>{{ __('Save') }}</x-primary-button> --}}
 
-                            @if (session('status') === 'password-updated')
-                                <p
-                                    x-data="{ show: true }"
-                                    x-show="show"
-                                    x-transition
-                                    x-init="setTimeout(() => show = false, 2000)"
-                                    class="text-sm text-gray-600"
-                                >{{ __('Password successfully saved.') }}</p>
-                            @endif
+                                @if (session('status') === 'password-updated')
+                                    <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
+                                        class="text-sm text-gray-600">{{ __('Password successfully saved.') }}</p>
+                                @endif
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
 
-            
-            {{-- <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+
+                {{-- <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <h3 class="mb-4 text-xl font-semibold dark:text-white">Language & Time</h3>
                 <div class="mb-4">
                     <label for="settings-language" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select language</label>
@@ -196,7 +231,7 @@
                 </div>
             </div> --}}
 
-            {{-- <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                {{-- <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <div class="flow-root">
                     <h3 class="text-xl font-semibold dark:text-white">Social accounts</h3>
                     <ul class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -279,7 +314,7 @@
                 </div>
             </div> --}}
 
-            {{-- <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                {{-- <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <div class="flow-root">
                     <h3 class="text-xl font-semibold dark:text-white">Other accounts</h3>
                     <ul class="mb-6 divide-y divide-gray-200 dark:divide-gray-700">
@@ -381,110 +416,154 @@
                     </div>
                 </div>
             </div> --}}
-        </div>
-        
-        <div class="col-span-2">
-            <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                <h3 class="mb-4 text-xl font-semibold dark:text-white">General information</h3>
-                <form action="{{ route('users.update', $users->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="grid grid-cols-6 gap-6">
-                        <!-- Employee ID -->
-                        <div class="col-span-6 sm:col-span-3">
-                            <label for="empid" class="block text-sm font-medium text-gray-700">Employee ID</label>
-                            <input type="number" name="empid" id="empid" autocomplete="employee-id" 
-                                value="{{ old('empid', $users->empid) }}" 
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">                           
-                            <input type="hidden" name="empid" value="{{ $users->empid }}">                            
-                        </div>
-                    
-                        <!-- Email -->
-                        <div class="col-span-6 sm:col-span-3">
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>                            
-                            <input type="text" name="email" id="email" autocomplete="email" 
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                value="{{ old('email', $users->email) }}">                            
-                        </div>
-                    
-                        <!-- First, Middle, and Last Name -->
-                        <div class="col-span-6 sm:col-span-2">
-                            <label for="fname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
-                            <input type="text" name="fname" id="fname" value="{{ old('fname', $users->fname) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Given name" required>
-                        </div>
-                        <div class="col-span-6 sm:col-span-2">
-                            <label for="mname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Middle Name</label>
-                            <input type="text" name="mname" id="mname" value="{{ old('fname', $users->mname) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Middle name">
-                        </div>
-                        <div class="col-span-6 sm:col-span-2">
-                            <label for="lname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
-                            <input type="text" name="lname" id="lname" value="{{ old('fname', $users->lname) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Family name" required>
-                        </div>
-                    
-                        <!-- Remaining Fields -->
-                        <div class="col-span-6 sm:col-span-3">
-                            <label for="designation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Designation</label>
-                            <input type="text" name="designation" id="designation" value="{{ old('designation', $users->designation) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Developer">
-                        </div>
-                        
-                        <div class="col-span-6 sm:col-span-3">
-                            
-                            <div class="relative">
-                                <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 19 18">
-                                        <path d="M18 13.446a3.02 3.02 0 0 0-.946-1.985l-1.4-1.4a3.054 3.054 0 0 0-4.218 0l-.7.7a.983.983 0 0 1-1.39 0l-2.1-2.1a.983.983 0 0 1 0-1.389l.7-.7a2.98 2.98 0 0 0 0-4.217l-1.4-1.4a2.824 2.824 0 0 0-4.218 0c-3.619 3.619-3 8.229 1.752 12.979C6.785 16.639 9.45 18 11.912 18a7.175 7.175 0 0 0 5.139-2.325A2.9 2.9 0 0 0 18 13.446Z"/>
-                                    </svg>
-                                </div>
-                                <input type="text" id="telno" name='telno' value="{{ old('telno', $users->telno) }}" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="680-776-2062"/>
-                            </div>
-                            <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Input a phone number that matches the format.</p>
-                            {{-- <label for="telno" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone Number</label>
-                            <input type="text" name="telno" id="telno" value="{{ old('telno', $users->telno) }}" pattern="[\+]\d{1,3}[\s]\d{3}[-]\d{3}[-]\d{4}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="e.g. +(680)776 2062"> --}}
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-3">
-                            <label for="dept_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Department</label>
-                            <select id="dept_id" name="dept_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option value="">Select Department</option>
-                                @foreach ($departments as $department)
-                                <option value="{{ $department->id}}" {{ $users->dept_id == $department->id ? 'selected' : '' }}>
-                                    {{ $department->description }}
-                                </option>    
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-3">
-                            <label for="usertype" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
-                            <select id="usertype" name="usertype" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                                <option value="Administrator" {{ $users->usertype == 'Administrator' ? 'selected' : '' }}>Administrator</option>
-                                <option value="Support Team" {{ $users->usertype == 'Support Team' ? 'selected' : '' }}>Support Team</option>                                                     
-                                <option value="User" {{ $users->usertype == 'User' ? 'selected' : '' }}>User</option>
-                            </select>
-                            @if(Auth::user()->usertype != 'Administrator')
-                                <input type="hidden" name="usertype" value="{{ $users->usertype }}">
-                            @endif
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-3">
-                            <label for="status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                            <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                                <option value="Active" {{ $users->status == 'Active' ? 'selected' : '' }}>Active</option>
-                                <option value="Inactive" {{ $users->status == 'Inactive' ? 'selected' : '' }}>Inactive</option>                                                          
-                            </select>
-                        </div>                   
-                        
-                        <!-- Submit Button -->
-                        <div class="col-span-6 sm:col-full">
-                            <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Save all</button>
-                        </div>
-                    </div>                    
-                </form>
             </div>
 
-            
+            <div class="col-span-2">
+                <div
+                    class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                    <h3 class="mb-4 text-xl font-semibold dark:text-white">General information</h3>
+                    <form action="{{ route('users.update', $users->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="grid grid-cols-6 gap-6">
+                            <!-- Employee ID -->
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="empid" class="block text-sm font-medium text-gray-700">Employee ID</label>
+                                <input type="number" name="empid" id="empid" autocomplete="employee-id"
+                                    value="{{ old('empid', $users->empid) }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input type="hidden" name="empid" value="{{ $users->empid }}">
+                            </div>
 
-            {{-- <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                            <!-- Email -->
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                <input type="text" name="email" id="email" autocomplete="email"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    value="{{ old('email', $users->email) }}">
+                            </div>
+
+                            <!-- First, Middle, and Last Name -->
+                            <div class="col-span-6 sm:col-span-2">
+                                <label for="fname"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
+                                <input type="text" name="fname" id="fname"
+                                    value="{{ old('fname', $users->fname) }}"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Given name" required>
+                            </div>
+                            <div class="col-span-6 sm:col-span-2">
+                                <label for="mname"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Middle
+                                    Name</label>
+                                <input type="text" name="mname" id="mname"
+                                    value="{{ old('fname', $users->mname) }}"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Middle name">
+                            </div>
+                            <div class="col-span-6 sm:col-span-2">
+                                <label for="lname"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
+                                <input type="text" name="lname" id="lname"
+                                    value="{{ old('fname', $users->lname) }}"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Family name" required>
+                            </div>
+
+                            <!-- Remaining Fields -->
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="designation"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Designation</label>
+                                <input type="text" name="designation" id="designation"
+                                    value="{{ old('designation', $users->designation) }}"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Developer">
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="telno"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone
+                                    Number</label>
+                                <div class="relative">
+                                    <div
+                                        class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 19 18">
+                                            <path
+                                                d="M18 13.446a3.02 3.02 0 0 0-.946-1.985l-1.4-1.4a3.054 3.054 0 0 0-4.218 0l-.7.7a.983.983 0 0 1-1.39 0l-2.1-2.1a.983.983 0 0 1 0-1.389l.7-.7a2.98 2.98 0 0 0 0-4.217l-1.4-1.4a2.824 2.824 0 0 0-4.218 0c-3.619 3.619-3 8.229 1.752 12.979C6.785 16.639 9.45 18 11.912 18a7.175 7.175 0 0 0 5.139-2.325A2.9 2.9 0 0 0 18 13.446Z" />
+                                        </svg>
+                                    </div>
+                                    <input type="text" id="telno" name='telno'
+                                        value="{{ old('telno', $users->telno) }}"
+                                        aria-describedby="helper-text-explanation"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="910-712-5239" />
+                                </div>
+                                <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                    Input a phone number that matches the format.</p>
+                                {{-- <label for="telno" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone Number</label>
+                            <input type="text" name="telno" id="telno" value="{{ old('telno', $users->telno) }}" pattern="[\+]\d{1,3}[\s]\d{3}[-]\d{3}[-]\d{4}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="e.g. +(680)776 2062"> --}}
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="dept_id"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Department</label>
+                                <select id="dept_id" name="dept_id"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select Department</option>
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}"
+                                            {{ $users->dept_id == $department->id ? 'selected' : '' }}>
+                                            {{ $department->description }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="usertype"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
+                                <select id="usertype" name="usertype"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    required>
+                                    <option value="Administrator"
+                                        {{ $users->usertype == 'Administrator' ? 'selected' : '' }}>Administrator</option>
+                                    <option value="Support Team"
+                                        {{ $users->usertype == 'Support Team' ? 'selected' : '' }}>Support Team</option>
+                                    <option value="User" {{ $users->usertype == 'User' ? 'selected' : '' }}>User
+                                    </option>
+                                </select>
+                                @if (Auth::user()->usertype != 'Administrator')
+                                    <input type="hidden" name="usertype" value="{{ $users->usertype }}">
+                                @endif
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="status"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
+                                <select id="status" name="status"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    required>
+                                    <option value="Active" {{ $users->status == 'Active' ? 'selected' : '' }}>Active
+                                    </option>
+                                    <option value="Inactive" {{ $users->status == 'Inactive' ? 'selected' : '' }}>Inactive
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-span-6 sm:col-full">
+                                <button
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    type="submit">Save all</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+
+                {{-- <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <div class="flow-root">
                     <h3 class="text-xl font-semibold dark:text-white">Sessions</h3>
                     <ul class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -531,10 +610,10 @@
                 </div>
             </div> --}}
 
+            </div>
+
         </div>
-        
-    </div>
-    {{-- <div class="grid grid-cols-1 px-4 xl:grid-cols-2 xl:gap-4">
+        {{-- <div class="grid grid-cols-1 px-4 xl:grid-cols-2 xl:gap-4">
         <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800 xl:mb-0">
             <div class="flow-root">
                 <h3 class="text-xl font-semibold dark:text-white">Alerts & Notifications</h3>
@@ -647,5 +726,5 @@
         </div>
     </div> --}}
 
-</section>
+    </section>
 @endsection

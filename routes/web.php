@@ -53,7 +53,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.article-index');
     Route::get('/articles/article-show/{id}', [ArticleController::class, 'show'])->name('articles.article-show');
 
-    Route::get('dashboard/index/get-ticket-counts', [DashboardController::class, 'getTicketCounts']);
+    Route::get(
+        'dashboard/index/get-ticket-counts',
+        [DashboardController::class, 'getTicketCounts']
+    )->name('dashboard.ticket-counts');
 
     Route::resource('dashboard', DashboardController::class)
         ->except(['destroy'])

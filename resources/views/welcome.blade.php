@@ -14,14 +14,13 @@
 
     <link rel="icon" href="{{ asset('assets/admin/img/logo.PNG') }}" type="image/x-icon" />
     <!-- Fonts -->
-    {{-- <link rel="preconnect" href="https://fonts.bunny.net"> --}}
-    <link rel="preload" href="https://fonts.bunny.net/css?family=figtree:400,500,600" as="style">
-    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" />
-
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
     <!-- Styles / Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    {{-- <link rel="stylesheet" href="{{ asset('assets/admin/css/tailwind.css') }}"> --}}
+    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endif
 
     <link rel="preload" as="image" href="{{ asset('assets/admin/img/maintenance.svg') }}">
 

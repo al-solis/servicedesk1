@@ -33,14 +33,46 @@ class DashboardController extends Controller
         return view('dashboard.index', compact('tickets', 'user', 'unAssignedTickets', 'allUsers', 'users'));
     }
 
+    // public function getTicketCounts(Request $request)
+    // {
+    //     $user = Auth::user();
+    //     $range = $request->query('range');
+    //     if ($user->usertype == 'Administrator' || $user->usertype == 'Support Team') {
+    //         $query = TicketHeader::query();
+    //     } else {
+    //         $query = TicketHeader::where('user_id', $user->id);
+    //     }
+
+    //     if ($range == 'yesterday') {
+    //         $query->whereDate('date_created', Carbon::yesterday());
+    //     } elseif ($range == 'today') {
+    //         $query->whereDate('date_created', Carbon::today());
+    //     } elseif ($range == 'last7days') {
+    //         $query->whereBetween('date_created', [Carbon::now()->subDays(7), Carbon::now()]);
+    //     } elseif ($range == 'last30days') {
+    //         $query->whereBetween('date_created', [Carbon::now()->subDays(30), Carbon::now()]);
+    //     } elseif ($range == 'last90days') {
+    //         $query->whereBetween('date_created', [Carbon::now()->subDays(90), Carbon::now()]);
+    //     }
+
+    //     return response()->json([
+    //         'open' => $query->where('status', 'Open')->count(),
+    //         'inprogress' => $query->where('status', 'In Progress')->count(),
+    //         'onhold' => $query->where('status', 'On-hold')->count(),
+    //         'closed' => $query->where('status', 'Closed')->count(),
+    //         'cancelled' => $query->where('status', 'Cancelled')->count(),
+    //     ]);
+    // }
+
     public function getTicketCounts(Request $request)
     {
         $user = Auth::user();
         $range = $request->query('range');
+
         if ($user->usertype == 'Administrator' || $user->usertype == 'Support Team') {
-            $query = TicketHeader::all();
+            $query = TicketHeader::query();
         } else {
-            $query = TicketHeader::where('user_id', $user->id)->get();
+            $query = TicketHeader::where('user_id', $user->id);
         }
 
         if ($range == 'yesterday') {
@@ -55,13 +87,17 @@ class DashboardController extends Controller
             $query->whereBetween('date_created', [Carbon::now()->subDays(90), Carbon::now()]);
         }
 
+        $counts = $query
+            ->select('status', DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
         return response()->json([
-            'open' => $query->where('status', 'Open')->count(),
-            'inprogress' => $query->where('status', 'In Progress')->count(),
-            'onhold' => $query->where('status', 'On-hold')->count(),
-            'closed' => $query->where('status', 'Closed')->count(),
-            'cancelled' => $query->where('status', 'Cancelled')->count(),
+            'open' => $counts['Open'] ?? 0,
+            'inprogress' => $counts['In Progress'] ?? 0,
+            'onhold' => $counts['On-hold'] ?? 0,
+            'closed' => $counts['Closed'] ?? 0,
+            'cancelled' => $counts['Cancelled'] ?? 0,
         ]);
     }
-
 }

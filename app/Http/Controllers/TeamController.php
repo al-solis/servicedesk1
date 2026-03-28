@@ -42,4 +42,32 @@ class TeamController extends Controller
         return view('teams.index', compact('teams', 'tickets'));
     }
 
+    public function dashboard()
+    {
+        $teams = SupportTeam::with('supportMembers')
+            ->whereHas('supportMembers', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->get();
+
+        $teamIds = $teams->pluck('id')->toArray();
+
+        $tickets = DB::table('ticket_header')
+            ->leftJoin('assigned_ticket', 'ticket_header.id', '=', 'assigned_ticket.ticket_id')
+            ->join('ticket_detail', function ($join) {
+                $join->on('ticket_header.id', '=', 'ticket_detail.ticket_id')
+                    ->on('ticket_header.user_id', '=', 'ticket_detail.user_id');
+            })
+            ->join('users', 'ticket_header.user_id', '=', 'users.id')
+            ->leftJoin('support_team', 'assigned_ticket.team_id', '=', 'support_team.id')
+            ->where(function ($query) use ($teamIds) {
+                $query->whereIn('support_team.id', $teamIds)
+                    ->orWhereNull('assigned_ticket.ticket_id');
+            })
+            ->select('ticket_header.*', 'users.lname', 'users.fname', 'ticket_detail.message')
+            ->get();
+
+        return view('teams.partials.dashboard', compact('teams', 'tickets'));
+    }
+
 }

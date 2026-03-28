@@ -16,7 +16,8 @@
         <div class="bg-white border border-gray-200 rounded-lg shadow h-fill flex flex-col">
             <div class="{{ $style['bg'] }} text-white p-4 rounded-t-lg flex justify-between">
                 <h5 class="font-bold">{{ $status }}</h5>
-                <span class="bg-gray-100 {{ $style['text'] }} text-xs font-semibold px-2.5 py-0.5 rounded">
+                <span
+                    class="bg-gray-100  text-xs text-bold text-blue-900 {{ $style['text'] }} font-semibold px-2.5 py-0.5 rounded">
                     {{ $tickets->where('status', $status)->count() }}
                 </span>
             </div>

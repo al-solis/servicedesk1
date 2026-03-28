@@ -70,8 +70,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::resource('teams', TeamController::class)->except(['destroy']);
     Route::get('/teams/dashboard', [TeamController::class, 'dashboard']);
+    Route::resource('teams', TeamController::class)->except(['destroy']);
+    // Route::get('/teams/dashboard', [TeamController::class, 'dashboard']);
     // Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
     // Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
     // Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');

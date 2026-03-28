@@ -223,7 +223,7 @@
                                                     'In Progress' => 'background-color:#fff3cd; color:#664d03;',
                                                     'On-hold' => 'background-color:#ffe5d0; color:#7a3e00;',
                                                     'Resolved' => 'background-color:#d1e7dd; color:#0f5132;',
-                                                    'Closed' => 'background-color:#e2e3e5; color:#41464b;',
+                                                    'Closed' => 'background-color:#d1e7dd; color:#0f5132;',
                                                     'Cancelled' => 'background-color:#f8d7da; color:#842029;',
                                                 ];
                                             @endphp

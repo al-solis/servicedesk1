@@ -5,7 +5,7 @@
 @extends('layouts.navbar')
 @section('navbar-content')
     <section class="bg-white py-6 md:py-10 dark:bg-gray-900">
-        <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+        <div class="mx-auto max-w-screen-lg px-2 2xl:px-2 mt-8">
             <div class="lg:flex lg:items-center lg:justify-between lg:gap-4">
                 <h2 class="shrink-0 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Knowledge Base
                     Article

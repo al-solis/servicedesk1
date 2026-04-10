@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Twilio\TwiML\MessagingResponse;
 use App\Models\User;
 use App\Models\TicketHeader;
+use App\Models\TicketDetail;
 
 class TwilioController extends Controller
 {
@@ -65,14 +67,20 @@ class TwilioController extends Controller
             }
 
             $last = $ticket->details()
+                ->where('user_id', '!=', $ticket->user_id) // only show updates from support agents
                 ->latest('date_created')
                 ->first();
 
             $msg = "🎫 Ticket #{$ticket->id}\n";
+            $msg .= "Description: {$ticket->description}\n";
             $msg .= "Status: {$ticket->status}\n";
             $msg .= "Priority: {$ticket->priority}\n\n";
             $msg .= "📝 Last Update:\n";
-            $msg .= $last->message ?? 'No updates yet';
+            if ($last) {
+                $msg .= $last->user->lname . " " . $last->user->fname . " (" . Carbon::parse($last->date_created)->format('Y-m-d H:i') . "): " . $last->message;
+            } else {
+                $msg .= "No updates yet from support.";
+            }
 
             $response->message($msg);
 

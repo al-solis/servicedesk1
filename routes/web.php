@@ -17,6 +17,7 @@ use App\Http\Controllers\NavController;
 use App\Http\Middleware\ContentSecurityPolicy;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\WhatsAppController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -75,13 +76,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/teams/dashboard', [TeamController::class, 'dashboard']);
     Route::resource('teams', TeamController::class)->except(['destroy']);
-    // Route::get('/teams/dashboard', [TeamController::class, 'dashboard']);
-    // Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
-    // Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
-    // Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
-    // Route::get('/tickets/{id}/edit', [TicketController::class, 'edit'])->name('tickets.edit');
-    // Route::put('/tickets/{id}/update', [TicketController::class, 'update'])->name('tickets.update');    
-    // Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
+
+    Route::get('/whatsapp/webhook', [WhatsAppController::class, 'verify']);
+    Route::post('/whatsapp/webhook', [WhatsAppController::class, 'webhook']);
 
 });
 

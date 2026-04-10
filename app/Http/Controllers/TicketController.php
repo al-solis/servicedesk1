@@ -219,7 +219,7 @@ class TicketController extends Controller
         $request->validate([
             'subject' => 'required',
             'description' => 'required',
-            'priority' => 'required',
+            // 'priority' => 'required',
             'support_type_id' => 'required',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120', // Validate images
             'files.*' => 'mimes:pdf,doc,docx,xls,xlsx,csv,txt,zip,rar|max:20480', // Max 20MB per file
@@ -230,7 +230,7 @@ class TicketController extends Controller
         $ticket = TicketHeader::create([
             'description' => $request->subject,
             'user_id' => Auth::user()->id,
-            'priority' => $request->priority,
+            'priority' => 'Low', //$request->priority,
             'type' => $request->support_type_id,
             'status' => 'Open',
             'date_created' => now()

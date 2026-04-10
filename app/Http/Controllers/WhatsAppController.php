@@ -6,82 +6,190 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\User;
 use App\Models\TicketHeader;
+use App\Models\TicketDetail;
+use Illuminate\Support\Facades\Log;
 
 class WhatsAppController extends Controller
 {
-    // 🔐 Webhook verification (Meta requirement)
     public function verify(Request $request)
     {
-        if ($request->hub_verify_token == env('WHATSAPP_VERIFY_TOKEN')) {
-            return response($request->hub_challenge, 200);
+        $verifyToken = env('WHATSAPP_VERIFY_TOKEN');
+
+        if (
+            $request->get('hub_mode') === 'subscribe' &&
+            $request->get('hub_verify_token') === $verifyToken
+        ) {
+            return response($request->get('hub_challenge'), 200)
+                ->header('Content-Type', 'text/plain');
         }
 
-        return response('Invalid token', 403);
+        return response('Forbidden', 403);
     }
 
-    // 📩 Main webhook handler
+    // public function webhook(Request $request)
+    // {
+    //     \Log::info('WhatsApp webhook received', $request->all());
+
+    //     $data = $request->all();
+    //     $entry = $data['entry'][0]['changes'][0]['value'] ?? null;
+
+    //     if (!$entry || !isset($entry['messages'])) {
+    //         \Log::info('No message in payload');
+    //         return response()->json(['status' => 'no message']);
+    //     }
+
+    //     $msg = $entry['messages'][0];
+    //     $from = $msg['from'];
+
+    //     \Log::info('Message from: ' . $from, $msg);
+
+    //     if (isset($msg['text'])) {
+    //         $text = $msg['text']['body'];
+
+    //         \Log::info('Text received: ' . $text);
+
+    //         preg_match('/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/', $text, $matches);
+
+    //         \Log::info('Email matches', $matches);
+
+    //         if (!empty($matches)) {
+    //             $this->handleEmail($from, $matches[0]);
+    //             return response()->json(['status' => 'ok']);
+    //         }
+
+    //         $this->sendMessage($from, "👋 Send your email to view your open tickets.");
+    //         return response()->json(['status' => 'ok']);
+    //     }
+
+    //     if (isset($msg['interactive'])) {
+    //         $this->handleSelection($from, $msg);
+    //         return response()->json(['status' => 'ok']);
+    //     }
+
+    //     return response()->json(['status' => 'ok']);
+    // }
+
+
     public function webhook(Request $request)
     {
-        $data = $request->all();
+        // Log EVERYTHING that comes in
+        \Log::info('========== WEBHOOK HIT ==========');
+        \Log::info('Request method: ' . $request->method());
+        \Log::info('Request headers: ', $request->headers->all());
+        \Log::info('Request body: ', $request->all());
+        \Log::info('Raw content: ' . $request->getContent());
 
-        $entry = $data['entry'][0]['changes'][0]['value'] ?? null;
-
-        if (!$entry || !isset($entry['messages'])) {
-            return response()->json(['status' => 'no message']);
+        // Handle GET requests (verification)
+        if ($request->method() === 'GET') {
+            return $this->verify($request);
         }
 
-        $msg = $entry['messages'][0];
-        $from = $msg['from'];
+        // Handle POST requests (messages)
+        if ($request->method() === 'POST') {
+            $data = $request->all();
 
-        // TEXT MESSAGE
-        if (isset($msg['text'])) {
-            $text = $msg['text']['body'];
-
-            // 🔍 Extract email from message
-            preg_match('/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/', $text, $matches);
-
-            if (!empty($matches)) {
-                return $this->handleEmail($from, $matches[0]);
+            // Check for status updates
+            if (isset($data['entry'][0]['changes'][0]['value']['statuses'])) {
+                \Log::info('Status update received', $data['entry'][0]['changes'][0]['value']['statuses']);
+                return response()->json(['status' => 'ok']);
             }
 
-            return $this->sendMessage($from, "👋 Send your email to view tickets.");
-        }
+            $entry = $data['entry'][0]['changes'][0]['value'] ?? null;
 
-        // 📋 Handle interactive list selection
-        if (isset($msg['interactive'])) {
-            return $this->handleSelection($from, $msg);
+            if (!$entry) {
+                \Log::error('No entry found in webhook payload');
+                return response()->json(['status' => 'no entry'], 200);
+            }
+
+            if (!isset($entry['messages'])) {
+                \Log::info('No messages in payload', ['entry' => $entry]);
+                return response()->json(['status' => 'no messages'], 200);
+            }
+
+            $msg = $entry['messages'][0];
+            $from = $msg['from'];
+
+            \Log::info('Message details', [
+                'from' => $from,
+                'type' => $msg['type'] ?? 'unknown',
+                'message' => $msg
+            ]);
+
+            if (isset($msg['text'])) {
+                $text = $msg['text']['body'];
+                \Log::info('Text message received: ' . $text);
+
+                // Try to extract email
+                preg_match('/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/', $text, $matches);
+
+                if (!empty($matches)) {
+                    \Log::info('Email found: ' . $matches[0]);
+                    $this->handleEmail($from, $matches[0]);
+                } else {
+                    \Log::info('No email found, sending prompt');
+                    $this->sendMessage($from, "👋 Send your email to view your open tickets.");
+                }
+            } else {
+                \Log::info('Non-text message received', ['type' => $msg['type'] ?? 'unknown']);
+            }
         }
 
         return response()->json(['status' => 'ok']);
     }
 
-
     public function handleEmail($from, $email)
     {
+        \Log::info('handleEmail called', ['from' => $from, 'email' => $email]);
+
         $user = User::where('email', $email)->first();
 
         if (!$user) {
-            return $this->sendMessage($from, "❌ Email not found.");
+            \Log::warning('User not found for email: ' . $email);
+            $this->sendMessage($from, "❌ No account found for that email.");
+            return;
         }
 
-        // Save WhatsApp number
+        \Log::info('User found: ' . $user->id);
+
         $user->update(['mobile_no' => $from]);
 
         $tickets = TicketHeader::with('details')
             ->where('user_id', $user->id)
             ->where('status', '!=', 'Closed')
-            ->latest('date_created')
+            ->orderBy('date_created', 'desc')   // ✅ avoid latest() since timestamps are off
             ->take(10)
             ->get();
 
+        \Log::info('Tickets found: ' . $tickets->count());
+
         if ($tickets->isEmpty()) {
-            return $this->sendMessage($from, "✅ No open tickets.");
+            $this->sendMessage($from, "✅ You have no open tickets at the moment.");
+            return;
         }
 
-        return $this->sendTicketList($from, $tickets);
+        $this->sendTicketList($from, $tickets);
     }
 
-    // 📋 Send interactive ticket list
+    public function sendMessage($to, $message)
+    {
+        \Log::info('Sending message to: ' . $to, ['message' => $message]);
+
+        $response = Http::withToken(env('WHATSAPP_TOKEN'))
+            ->post("https://graph.facebook.com/v25.0/" . env('WHATSAPP_PHONE_ID') . "/messages", [
+                "messaging_product" => "whatsapp",
+                "to" => $to,
+                "type" => "text",
+                "text" => [
+                    "body" => $message
+                ]
+            ]);
+
+        \Log::info('WhatsApp API response', [
+            'status' => $response->status(),
+            'body' => $response->json()
+        ]);
+    }
+
     public function sendTicketList($to, $tickets)
     {
         $rows = [];
@@ -89,20 +197,22 @@ class WhatsAppController extends Controller
         foreach ($tickets as $t) {
             $rows[] = [
                 "id" => (string) $t->id,
-                "title" => $t->ticket_no,
+                "title" => "TCK-{$t->id}",
                 "description" => $t->status
             ];
         }
 
-        Http::withToken(env('WHATSAPP_TOKEN'))
-            ->post("https://graph.facebook.com/v19.0/" . env('WHATSAPP_PHONE_ID') . "/messages", [
+        \Log::info('Sending ticket list', ['rows' => $rows]);
+
+        $response = Http::withToken(env('WHATSAPP_TOKEN'))
+            ->post("https://graph.facebook.com/v25.0/" . env('WHATSAPP_PHONE_ID') . "/messages", [
                 "messaging_product" => "whatsapp",
                 "to" => $to,
                 "type" => "interactive",
                 "interactive" => [
                     "type" => "list",
                     "body" => [
-                        "text" => "🎫 Select your ticket"
+                        "text" => "🎫 Your open tickets — tap one to view details:"
                     ],
                     "action" => [
                         "button" => "View Tickets",
@@ -115,56 +225,50 @@ class WhatsAppController extends Controller
                     ]
                 ]
             ]);
+
+        \Log::info('WhatsApp list API response', [
+            'status' => $response->status(),
+            'body' => $response->json()
+        ]);
     }
 
-    // 🧠 Handle ticket selection
     public function handleSelection($from, $msg)
     {
-        $ticketId = $msg['interactive']['list_reply']['id'];
+        $ticketId = $msg['interactive']['list_reply']['id'] ?? null;
 
-        $ticket = TicketHeader::find($ticketId);
-
-        if (!$ticket) {
-            return $this->sendMessage($from, "❌ Ticket not found.");
+        if (!$ticketId) {
+            $this->sendMessage($from, "❌ Could not read your selection. Please try again.");
+            return;
         }
 
-        return $this->sendTicketDetails($from, $ticket);
+        $ticket = TicketHeader::with('details')->find($ticketId);
+
+        if (!$ticket) {
+            $this->sendMessage($from, "❌ Ticket not found.");
+            return;
+        }
+
+        $this->sendTicketDetails($from, $ticket);
     }
 
-    // 🔍 Send ticket details
     public function sendTicketDetails($to, $ticket)
     {
-        // Get latest activity from TicketDetail
         $lastDetail = $ticket->details()
             ->latest('date_created')
             ->first();
 
-        $lastMessage = $lastDetail ? $lastDetail->message : 'No updates yet';
-        $lastDate = $lastDetail ? $lastDetail->date_created : 'N/A';
+        $lastMessage = $lastDetail?->message ?? 'No updates yet.';
+        $lastDate = $lastDetail?->date_created ?? 'N/A';
 
-        $msg = "🎫 Ticket Details\n"
+        $msg = "🎫 *Ticket Details*\n"
             . "No: TCK-{$ticket->id}\n"
             . "Description: {$ticket->description}\n"
             . "Status: {$ticket->status}\n"
             . "Priority: {$ticket->priority}\n"
-            . "\n📝 Last Update:\n"
+            . "\n📝 *Last Update:*\n"
             . "{$lastMessage}\n"
             . "📅 {$lastDate}";
 
-        return $this->sendMessage($to, $msg);
-    }
-
-    // 📤 Send text message
-    public function sendMessage($to, $message)
-    {
-        Http::withToken(env('WHATSAPP_TOKEN'))
-            ->post("https://graph.facebook.com/v19.0/" . env('WHATSAPP_PHONE_ID') . "/messages", [
-                "messaging_product" => "whatsapp",
-                "to" => $to,
-                "type" => "text",
-                "text" => [
-                    "body" => $message
-                ]
-            ]);
+        $this->sendMessage($to, $msg);
     }
 }

@@ -412,7 +412,7 @@
             </ul>
 
             {{-- {{ preg_replace('/\D/', '', Auth::user()->phone) }} --}}
-            <ul class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
+            {{-- <ul class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
                 <a href="https://wa.me/{{ env('WHATSAPP_NUMBER') }}?text=Hello, I want to check my ticket. My email is: {{ Auth::user()->email }}"
                     target="_blank"
                     class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
@@ -424,7 +424,23 @@
                     </svg>
                     <span class="flex-1 ml-3 whitespace-nowrap">Track your tickets</span>
                 </a>
-            </ul>
+            </ul> --}}
+
+            @php
+                $message = urlencode('CHECK_TICKET:' . Auth::user()->email);
+            @endphp
+
+            <a href="https://wa.me/{{ env('TWILIO_WHATSAPP_FROM') }}?text={{ $message }}" target="_blank"
+                class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100">
+
+                <!-- ICON -->
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326z" />
+                </svg>
+
+                <span class="ml-3">Track your tickets</span>
+            </a>
         </div>
 
     </aside>

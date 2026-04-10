@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TicketHeader extends Model
 {
+    public $timestamps = false;
     protected $table = 'ticket_header';
 
     protected $fillable = [

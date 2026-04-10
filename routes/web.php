@@ -18,6 +18,12 @@ use App\Http\Middleware\ContentSecurityPolicy;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\WhatsAppController;
+use App\Http\Controllers\TwilioController;
+
+Route::get('/whatsapp/webhook', [WhatsAppController::class, 'verify']);
+Route::post('/whatsapp/webhook', [WhatsAppController::class, 'webhook']);
+Route::post('/twilio/webhook', [TwilioController::class, 'webhook'])
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 
 Route::get('/', function () {
     return view('welcome');
@@ -76,9 +82,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/teams/dashboard', [TeamController::class, 'dashboard']);
     Route::resource('teams', TeamController::class)->except(['destroy']);
-
-    Route::get('/whatsapp/webhook', [WhatsAppController::class, 'verify']);
-    Route::post('/whatsapp/webhook', [WhatsAppController::class, 'webhook']);
 
 });
 

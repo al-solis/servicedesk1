@@ -10,6 +10,7 @@ class TicketHeader extends Model
     protected $table = 'ticket_header';
 
     protected $fillable = [
+        'ticket_number',
         'description',
         'user_id',
         'priority',

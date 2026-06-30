@@ -253,7 +253,7 @@
                         <span class="flex-1 ml-3 whitespace-nowrap">Tickets</span>
                     </a>
 
-                    @if (Auth::user()->usertype != 'User')
+                    @if (!in_array(Auth::user()->usertype, ['User', 'Client']))
                         {{-- Team Queue --}}
                         <a href="{{ route('teams.index') }}"
                             class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
@@ -349,7 +349,7 @@
                         </svg>
                     </button>
                     <ul id="dropdown-KB" class="hidden py-2 space-y-2">
-                        @if (Auth::user()->usertype != 'User')
+                        @if (!in_array(Auth::user()->usertype, ['User', 'Client']))
                             <li>
                                 <a href="{{ route('kb.index') }}"
                                     class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Setup</a>
@@ -401,7 +401,7 @@
                                 class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Ticket
                                 - Summary</a>
                         </li>
-                        @if (Auth::user()->usertype != 'User')
+                        @if (!in_array(Auth::user()->usertype, ['User', 'Client']))
                             <li>
                                 <a href="{{ route('reports.index-export') }}"
                                     class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Export</a>

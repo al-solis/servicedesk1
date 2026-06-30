@@ -45,12 +45,14 @@ class CategoryController extends Controller
     {
         $request->validate([
             'description' => 'required',
+            'type_id' => 'required|in:0,1',
             'team_id' => 'nullable'
         ]);
         $ticketType = TicketType::create([
             'description' => $request->description,
+            'type' => $request->type_id,
             'default_group_id' => $request->team_id,
-            'created_ate' => now()
+            'created_at' => now()
         ]);
         return redirect()->route('categories.index')->with('success', 'Category successfully created.');
     }
@@ -59,11 +61,13 @@ class CategoryController extends Controller
     {
         $request->validate([
             'description' => 'required',
+            'type_id' => 'required|in:0,1',
             'team_id' => 'nullable'
         ]);
         $ticketType = TicketType::find($id);
         $ticketType->update([
             'description' => $request->description,
+            'type' => $request->type_id,
             'default_group_id' => $request->team_id,
             'updated_at' => now()
         ]);

@@ -5,12 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#D4D4D4">
-    <meta name="description" content="King Eleazar Incident and Support Management System">
+    <meta name="description" content="Incident and Support Management System">
     <meta name="author" content="Alfie B. Solis">
     {{-- <meta name="robots" content="noindex, nofollow"> --}}
     {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 
-    <title>King Eleazar Incident and Support Management System</title>
+    <title>Incident and Support Management System</title>
 
     <link rel="icon" href="{{ asset('assets/admin/img/logo.PNG') }}" type="image/x-icon" />
     <!-- Fonts -->
@@ -74,7 +74,7 @@
                             Incident & Support Management System</h1>
                         <p
                             class="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
-                            The <strong>King Eleazar Incident & Support Management System</strong> is a centralized,
+                            The <strong>Incident & Support Management System</strong> is a centralized,
                             organization-wide platform built to simplify and enhance the management of service requests,
                             concerns, and incident reports across all departments—including Security Operations, Human
                             Resources, Payroll, Accounting, and IT.

@@ -44,7 +44,7 @@ class TwilioController extends Controller
             $msg = "🎫 OPEN TICKETS\n\n";
 
             foreach ($tickets as $t) {
-                $msg .= "ID: {$t->id} | Description: {$t->description} | Status: {$t->status}\n";
+                $msg .= "ID: {$t->ticket_number} | Description: {$t->description} | Status: {$t->status}\n";
             }
 
             $msg .= "\nReply with ticket ID.";
@@ -57,9 +57,12 @@ class TwilioController extends Controller
         // ===============================
         // STEP 2: USER SENDS TICKET ID
         // ===============================
-        if (is_numeric($incoming)) {
+        if ($incoming) {
 
-            $ticket = TicketHeader::find($incoming);
+            // $ticket = TicketHeader::find($incoming);
+            $ticket = TicketHeader::with(['details.user'])
+                ->where('ticket_number', $incoming)
+                ->first();
 
             if (!$ticket) {
                 $response->message("❌ Ticket not found.");
@@ -71,7 +74,7 @@ class TwilioController extends Controller
                 ->latest('date_created')
                 ->first();
 
-            $msg = "🎫 Ticket #{$ticket->id}\n";
+            $msg = "🎫 Ticket #{$ticket->ticket_number}\n";
             $msg .= "Description: {$ticket->description}\n";
             $msg .= "Status: {$ticket->status}\n";
             $msg .= "Priority: {$ticket->priority}\n\n";

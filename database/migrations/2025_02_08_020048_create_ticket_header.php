@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('ticket_header', function (Blueprint $table) {
             $table->id();
+            $table->string('ticket_number')->unique();
             $table->string('description');
 
             $table->unsignedBigInteger('user_id');

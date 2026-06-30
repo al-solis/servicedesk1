@@ -33,7 +33,7 @@ class TicketController extends Controller
         }
 
         $user = Auth::user();
-        $supportTypes = TicketType::all();
+        $supportTypes = TicketType::where('type', strtolower(Auth::user()->usertype) == 'client' ? 1 : 0)->get();
 
         $searchTerm = $request->input('search');
 
@@ -115,7 +115,7 @@ class TicketController extends Controller
                 ->orderBy('date_created', 'desc')
                 ->paginate(10);
 
-        } elseif ($user->usertype == 'User') {
+        } elseif (in_array($user->usertype, ['User', 'Client'])) {
             $tickets = TicketHeader::with(['details', 'user'])
                 ->where('user_id', $user->id) // Ensure tickets belong to the logged-in user
                 ->when($searchTerm, function ($query) use ($searchTerm) {
@@ -165,7 +165,7 @@ class TicketController extends Controller
     public function create()
     {
         $user = Auth::user();
-        $supportTypes = TicketType::get();
+        $supportTypes = TicketType::where('type', strtolower(Auth::user()->usertype) == 'client' ? 1 : 0)->get();
         return view('tickets.create', compact('user', 'supportTypes'));
     }
 
@@ -176,7 +176,7 @@ class TicketController extends Controller
     {
         $user = Auth::user();
         $ticket = TicketHeader::with(['details.user'])->findOrFail($id);
-        $supportTypes = TicketType::all();
+        $supportTypes = TicketType::where('type', strtolower(Auth::user()->usertype) == 'client' ? 1 : 0)->get();
         //$ticketImage = TicketImage::where('ticket_id', $id)->get();
         $ticketFile = TicketFile::where('ticket_id', $id)->get();
 
@@ -223,11 +223,15 @@ class TicketController extends Controller
             'support_type_id' => 'required',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120', // Validate images
             'files.*' => 'mimes:pdf,doc,docx,xls,xlsx,csv,txt,zip,rar|max:20480', // Max 20MB per file
-
         ]);
 
+        $seqNo = TicketHeader::whereYear('date_created', now()->year)
+            ->whereMonth('date_created', now()->month)
+            ->count() + 1;
+        $ticketNumber = date('Ym') . '-' . str_pad($seqNo, 4, '0', STR_PAD_LEFT);
 
         $ticket = TicketHeader::create([
+            'ticket_number' => $ticketNumber,
             'description' => $request->subject,
             'user_id' => Auth::user()->id,
             'priority' => 'Low', //$request->priority,

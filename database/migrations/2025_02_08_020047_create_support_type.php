@@ -14,41 +14,41 @@ return new class extends Migration {
         Schema::create('support_type', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-
+            $table->integer('type')->default(0); // 0 for internal, 1 for external
             $table->unsignedBigInteger('default_group_id')->nullable();
             $table->foreign('default_group_id')->references('id')->on('support_team');
             $table->timestamps();
         });
 
         DB::table('support_type')->insert([
-            ['description' => 'Accounting & Finance']
+            ['description' => 'Accounting & Finance', 'type' => 0]
         ]);
         DB::table('support_type')->insert([
-            ['description' => 'Admin & General Services']
+            ['description' => 'Admin & General Services', 'type' => 0]
         ]);
         DB::table('support_type')->insert([
-            ['description' => 'Client Services']
+            ['description' => 'Client Services', 'type' => 1]
         ]);
         DB::table('support_type')->insert([
-            ['description' => 'Compliance & Legal']
+            ['description' => 'Compliance & Legal', 'type' => 0]
         ]);
         DB::table('support_type')->insert([
-            ['description' => 'Human Resources (HR)']
+            ['description' => 'Human Resources (HR)', 'type' => 0]
         ]);
         DB::table('support_type')->insert([
-            ['description' => 'Incident & Emergency Reports']
+            ['description' => 'Incident & Emergency Reports', 'type' => 0]
         ]);
         DB::table('support_type')->insert([
-            ['description' => 'IT & Technical Support']
+            ['description' => 'IT & Technical Support', 'type' => 0]
         ]);
         DB::table('support_type')->insert([
-            ['description' => 'Logistics & Supplies']
+            ['description' => 'Logistics & Supplies', 'type' => 0]
         ]);
         DB::table('support_type')->insert([
-            ['description' => 'Payroll & Compensation']
+            ['description' => 'Payroll & Compensation', 'type' => 0]
         ]);
         DB::table('support_type')->insert([
-            ['description' => 'Security Operations']
+            ['description' => 'Security Operations', 'type' => 0]
         ]);
     }
 

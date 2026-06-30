@@ -168,7 +168,7 @@
                         @endif
 
                         <!-- Allow new message only if logged-in name ≠ edited name -->
-                        @if ($ticket->user_id != Auth::user()->id or Auth::user()->usertype != 'User')
+                        @if ($ticket->user_id != Auth::user()->id or !in_array(Auth::user()->usertype, ['User', 'Client']))
                             <div class="sm:col-span-2">
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Message</label>
                                 <textarea id="message" name="message" rows="4"
@@ -177,26 +177,69 @@
                             </div>
 
                             <!-- Image Upload -->
-                            <div class="sm:col-span-2">
+                            {{-- <div class="sm:col-span-2">
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Upload
                                     Images</label>
                                 <input type="file" name="images[]" multiple accept="image/*"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div> --}}
+                            <div class="sm:col-span-2">
+                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                    Upload Images
+                                </label>
+
+                                <div class="relative">
+                                    <!-- Icon -->
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 16l4-4a3 3 0 014 0l4 4m0 0l4-4a3 3 0 014 0l4 4M3 16v2a2 2 0 002 2h14a2 2 0 002-2v-2" />
+                                        </svg>
+                                    </div>
+
+                                    <input type="file" name="images[]" multiple accept="image/*"
+                                        class="pl-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                                            focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5
+                                            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
+                                            dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
                             </div>
 
                             <!-- File Upload (PDF, Excel, etc.) -->
-                            <div class="sm:col-span-2">
+                            {{-- <div class="sm:col-span-2">
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Upload
                                     Files</label>
                                 <input type="file" name="files[]" multiple
                                     accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.zip,.rar"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div> --}}
+                            <div class="sm:col-span-2">
+                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                    Upload Files
+                                </label>
+
+                                <div class="relative">
+                                    <!-- Icon -->
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 7h10M7 11h10M7 15h6M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                                        </svg>
+                                    </div>
+
+                                    <input type="file" name="files[]" multiple
+                                        accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.zip,.rar"
+                                        class="pl-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                                            focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5
+                                            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
+                                            dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
                             </div>
                         @endif
 
                     </div>
-
-
 
                     <!-- Right Column: Support History -->
                     <div>

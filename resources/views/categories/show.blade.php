@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('navbar-content')    
+@section('navbar-content')
     <section class="bg-white dark:bg-gray-900">
         <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
             <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Category Information</h2>
@@ -7,28 +7,47 @@
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                     <div class="sm:col-span-2">
                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"></label>
-                        <textarea name="description" id="description" rows="4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                        <textarea name="description" id="description" rows="4"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Input category name" required="">{{ old('description', $ticketType->description) }}</textarea>
                     </div>
                     <div class="sm:col-span-2">
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Default Support Team</label>
-                        <select name="team_id" id="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category Type</label>
+                        <select name="type" id="type"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option value="">Select category type</option>
+                            <option value="0" {{ old('type', $ticketType->type) == '0' ? 'selected' : '' }}>
+                                Internal Client
+                            </option>
+                            <option value="1" {{ old('type', $ticketType->type) == '1' ? 'selected' : '' }}>
+                                External Client
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Default Support
+                            Team</label>
+                        <select name="team_id" id="type"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option value="">Select default support team</option>
-                            @foreach($supportTeam as $team) 
-                                <option value="{{ $team->id }}" {{ $ticketType->default_group && $ticketType->default_group->id == $team->id ? 'selected' : '' }}>
+                            @foreach ($supportTeam as $team)
+                                <option value="{{ $team->id }}"
+                                    {{ $ticketType->default_group && $ticketType->default_group->id == $team->id ? 'selected' : '' }}>
                                     {{ $team->name }}
                                 </option>
                             @endforeach
                         </select>
-                        <input type="hidden" name="team_id" value="{{ $team->id }}">
+                        <input type="hidden" name="team_id" value="{{ $team->id ?? '' }}">
                     </div>
                 </div>
                 <div class="flex justify-end mt-6">
-                    <a href="{{ route('categories.index') }}"  class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <a href="{{ route('categories.index') }}"
+                        class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         Close
                     </a>
                 </div>
             </form>
         </div>
-      </section>
+    </section>
 @endsection

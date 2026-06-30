@@ -9,6 +9,7 @@ class TicketType extends Model
     protected $table = 'support_type';
     protected $fillable = [
         'description',
+        'type',
         'default_group_id',
     ];
 

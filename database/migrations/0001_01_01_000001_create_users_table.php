@@ -13,7 +13,7 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('empid')->unique();
+            $table->string('empid')->nullable();
             $table->string('lname');
             $table->string('fname');
             $table->string('mname')->nullable();
@@ -200,6 +200,32 @@ return new class extends Migration {
             'email' => 'coo1@yahoo.com',
             'password' => Hash::make('coo1'),
             'usertype' => 'Administrator',
+            'status' => 'Active',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('users')->insert([
+            'empid' => null,
+            'lname' => 'Client',
+            'fname' => '1',
+            'mname' => '',
+            'email' => 'client1@yahoo.com',
+            'password' => Hash::make('client1'),
+            'usertype' => 'Client',
+            'status' => 'Active',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('users')->insert([
+            'empid' => null,
+            'lname' => 'Client',
+            'fname' => '2',
+            'mname' => '',
+            'email' => 'client2@yahoo.com',
+            'password' => Hash::make('client2'),
+            'usertype' => 'Client',
             'status' => 'Active',
             'created_at' => now(),
             'updated_at' => now(),

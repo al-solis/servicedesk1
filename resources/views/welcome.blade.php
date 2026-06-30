@@ -234,7 +234,7 @@
                 <footer class="py-8 text-center text-xs text-gray-500 dark:text-white/70">
                     <!-- Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }}) -->
                     <div class="copyright text-center my-auto">
-                        <span>King Eleazar Incident and Support Management System &copy; {{ date('Y') }}</span>
+                        <span>SANAI Incident and Support Management System &copy; {{ date('Y') }}</span>
                     </div>
                 </footer>
             </div>

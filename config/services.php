@@ -41,4 +41,21 @@ return [
         'api_version' => env('GEMINI_API_VERSION', 'v1beta'),
     ],
 
+    'telegram' => [
+
+        'bot_token' => env(
+            'TELEGRAM_BOT_TOKEN'
+        ),
+
+        'bot_username' => env(
+            'TELEGRAM_BOT_USERNAME',
+            'kesia_isms_bot'
+        ),
+
+        'webhook_secret' => env(
+            'TELEGRAM_WEBHOOK_SECRET'
+        ),
+
+    ],
+
 ];

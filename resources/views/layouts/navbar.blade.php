@@ -430,7 +430,8 @@
                 $message = urlencode('CHECK_TICKET:' . Auth::user()->email);
             @endphp
 
-            <a href="https://wa.me/{{ env('TWILIO_WHATSAPP_FROM') }}?text={{ $message }}" target="_blank"
+            {{-- Twilio WhatsApp link for tracking tickets --}}
+            {{-- <a href="https://wa.me/{{ env('TWILIO_WHATSAPP_FROM') }}?text={{ $message }}" target="_blank"
                 class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100">
 
                 <!-- ICON -->
@@ -440,6 +441,16 @@
                 </svg>
 
                 <span class="ml-3">Track your tickets</span>
+            </a> --}}
+
+            {{-- Telegram link for tracking tickets --}}
+            <a href="{{ route('telegram.index') }}"
+                class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M21.5 3.5L2.9 10.7c-.9.4-.9 1.2-.2 1.5l4.7 1.8 1.8 5.5c.2.6.4.8.8.8.4 0 .6-.1.9-.4l2.5-2.4 4.9 3.6c.9.5 1.6.1 1.8-.9l3.1-15c.3-1.3-.5-1.9-1.7-1.4z" />
+                </svg>
+                Telegram Integration
             </a>
         </div>
 

@@ -19,6 +19,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\TwilioController;
+use App\Http\Controllers\TelegramLinkController;
+
 
 Route::get('/whatsapp/webhook', [WhatsAppController::class, 'verify']);
 Route::post('/whatsapp/webhook', [WhatsAppController::class, 'webhook']);
@@ -82,6 +84,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/teams/dashboard', [TeamController::class, 'dashboard']);
     Route::resource('teams', TeamController::class)->except(['destroy']);
+
+    Route::get('/profile/telegram', [TelegramLinkController::class, 'index'])->name('telegram.index');
+    Route::get('/profile/telegram/connect', [TelegramLinkController::class, 'generate'])->name('telegram.connect');
+    Route::post('/profile/telegram/disconnect', [TelegramLinkController::class, 'disconnect'])->name('telegram.disconnect');
 
 });
 

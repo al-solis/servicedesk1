@@ -70,5 +70,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(TicketImage::class, 'user_id', 'id');
     }
+
+    public function telegramAccount()
+    {
+        return $this->hasOne(TelegramAccount::class);
+    }
 }
 

@@ -10,6 +10,11 @@ use Illumante\Auth\middleware\RedirectIfAuthenticated;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illumate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cookie;
+use App\Models\TicketDetail;
+use App\Models\TicketHeader;
+
+use App\Observers\TicketDetailObserver;
+use App\Observers\TicketHeaderObserver;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -39,8 +44,9 @@ class AppServiceProvider extends ServiceProvider
         //         ->setSameSite('lax');
         // });
 
+
         View::composer('layouts.navbar', NavbarComposer::class);
+        TicketHeader::observe(TicketHeaderObserver::class);
+        TicketDetail::observe(TicketDetailObserver::class);
     }
-
-
 }

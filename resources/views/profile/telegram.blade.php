@@ -82,7 +82,7 @@
 
                         <p class="text-sm text-gray-600 mb-6">
                             Connect your ISMS account to
-                            <strong>@kesia_isms_bot</strong> to receive:
+                            <strong>{{ '@' . ENV('TELEGRAM_BOT_USERNAME') }}</strong> to receive:
                         </p>
 
 

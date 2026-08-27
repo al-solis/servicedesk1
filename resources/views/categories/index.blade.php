@@ -66,7 +66,7 @@
                                         <td class="px-4 py-3 w-[100px]">{{ $category->id }}</td>
                                         <td class="px-4 py-3 w-[300px]">{{ $category->description }}</td>
                                         <td class="px-4 py-3 w-[150px]">
-                                            {{ $category->type === '0' ? 'Internal Client' : 'External Client' }}</td>
+                                            {{ $category->type === '1' ? 'External Client' : 'Internal Client' }}</td>
                                         <td class="px-4 py-3 w-[200px]">
                                             {{ $category->default_group ? $category->default_group->name : '' }}</td>
                                         <td class="px-4 py-3 w-[120px] text-center">

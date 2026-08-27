@@ -222,7 +222,7 @@ class TicketController extends Controller
             // 'priority' => 'required',
             'support_type_id' => 'required',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120', // Validate images
-            'files.*' => 'mimes:pdf,doc,docx,xls,xlsx,csv,txt,zip,rar|max:20480', // Max 20MB per file
+            'files.*' => 'mimes:pdf,doc,docx,xls,xlsx,csv,txt,zip,rar|max:5120', // Max 5MB per file
         ]);
 
         $seqNo = TicketHeader::whereYear('date_created', now()->year)

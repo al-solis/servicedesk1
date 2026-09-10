@@ -5,74 +5,59 @@ namespace App\Http\Controllers;
 use App\Models\TelegramAccount;
 use App\Models\TelegramLinkToken;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class TelegramLinkController extends Controller
 {
-    /**
-     * Display Telegram integration page.
-     */
     public function index()
     {
-        $telegramAccount =
-            auth()->user()->telegramAccount;
+        $telegramAccount = auth()->user()->telegramAccount;
 
-        return view(
-            'profile.telegram',
-            compact('telegramAccount')
-        );
+        return view('profile.telegram', compact('telegramAccount'));
     }
 
-    /**
-     * Generate Telegram linking URL.
-     */
     public function generate()
     {
         $user = auth()->user();
 
-        /*
-         * Delete previous unused tokens.
-         */
-        TelegramLinkToken::where(
-            'user_id',
-            $user->id
-        )
-            ->whereNull('used_at')
-            ->delete();
+        DB::transaction(function () use ($user, &$token) {
+            // Invalidate any prior unused tokens
+            TelegramLinkToken::where('user_id', $user->id)
+                ->whereNull('used_at')
+                ->delete();
 
-        $token = Str::random(48);
+            $token = Str::random(48);
 
-        TelegramLinkToken::create([
-            'user_id' => $user->id,
-            'token' => $token,
-            'expires_at' => now()->addMinutes(10),
-        ]);
+            TelegramLinkToken::create([
+                'user_id' => $user->id,
+                'token' => $token,
+                'expires_at' => now()->addMinutes(10),
+            ]);
+        });
 
-        $botUsername =
-            config('services.telegram.bot_username');
+        $botUsername = config('services.telegram.bot_username');
 
-        $url =
-            'https://t.me/' .
-            $botUsername .
-            '?start=' .
-            $token;
-
-        return redirect()->away($url);
+        return redirect()->away(
+            'https://t.me/' . $botUsername . '?start=' . $token
+        );
     }
 
-    /**
-     * Disconnect Telegram account.
-     */
     public function disconnect()
     {
-        $account =
-            auth()->user()->telegramAccount;
+        $user = auth()->user();
 
-        if ($account) {
-            $account->update([
-                'status' => 'Blocked',
-            ]);
-        }
+        DB::transaction(function () use ($user) {
+            // 1. Mark the account as blocked (keep history)
+            $account = TelegramAccount::where('user_id', $user->id)->first();
+
+            if ($account) {
+                $account->update(['status' => 'Blocked']);
+            }
+
+            // 2. Clear any pending link tokens (used or unused)
+            TelegramLinkToken::where('user_id', $user->id)->delete();
+        });
 
         return back()->with(
             'success',

@@ -48,7 +48,11 @@
                             <div>
                                 <strong>Telegram:</strong>
                                 @if ($telegramAccount->telegram_username)
-                                    @{{ $telegramAccount - > telegram_username }}
+                                    {{-- @{{ $telegramAccount - > telegram_username }} --}}
+                                    <a href="https://t.me/{{ $telegramAccount->telegram_username }}" target="_blank"
+                                        class="text-blue-600 hover:underline">
+                                        {{ '@' . $telegramAccount->telegram_username }}
+                                    </a>
                                 @else
                                     {{ $telegramAccount->telegram_first_name }}
                                 @endif
@@ -75,10 +79,12 @@
                 @else
                     <div class="p-5 rounded-lg border
                             border-gray-200 bg-gray-50">
-                        <h3 class="text-lg font-semibold
-                               text-gray-900 mb-2">
-                            Connect Telegram
-                        </h3>
+                        @if ($telegramAccount && $telegramAccount->status === 'Blocked')
+                            <div class="mb-4 p-3 rounded bg-yellow-50 text-sm text-yellow-800">
+                                Your Telegram account was previously disconnected.
+                                You can reconnect anytime.
+                            </div>
+                        @endif
 
                         <p class="text-sm text-gray-600 mb-6">
                             Connect your ISMS account to

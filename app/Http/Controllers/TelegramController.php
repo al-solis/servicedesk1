@@ -379,10 +379,8 @@ class TelegramController extends Controller
     /**
      * Get user's tickets.
      */
-    protected function sendMyTickets(
-        $chatId,
-        int $userId
-    ): void {
+    protected function sendMyTickets($chatId, int $userId): void
+    {
 
         /*
          * SECURITY:
@@ -406,8 +404,7 @@ class TelegramController extends Controller
             return;
         }
 
-        $message =
-            "📋 <b>My Tickets</b>\n\n";
+        $message = "📋 <b>My Tickets</b>\n\n";
 
         $keyboard = [];
 

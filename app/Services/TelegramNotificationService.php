@@ -4,12 +4,21 @@ namespace App\Services;
 
 use App\Models\TicketHeader;
 use App\Models\TelegramAccount;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class TelegramNotificationService
 {
     public function __construct(
         protected TelegramService $telegram
     ) {
+    }
+
+    protected function formatDate($date): string
+    {
+        return $date
+            ? Carbon::parse($date)->format('M d, Y h:i A')
+            : 'N/A';
     }
 
     /**
@@ -20,10 +29,7 @@ class TelegramNotificationService
         ?string $oldStatus = null
     ): void {
 
-        $account = TelegramAccount::where(
-            'user_id',
-            $ticket->user_id
-        )
+        $account = TelegramAccount::where('user_id', $ticket->user_id)
             ->where('status', 'Active')
             ->first();
 
@@ -33,39 +39,18 @@ class TelegramNotificationService
 
         $message =
             "🔔 <b>ISMS Ticket Update</b>\n\n" .
-
-            "🎫 Ticket: <b>" .
-            e($ticket->ticket_number) .
-            "</b>\n\n" .
-
-            "📝 " .
-            e($ticket->description) .
-            "\n\n";
+            "🎫 Ticket: <b>" . e($ticket->ticket_number) . "</b>\n\n" .
+            "📝 " . e($ticket->description) . "\n\n";
 
         if ($oldStatus) {
-
-            $message .=
-                "Status: <b>" .
-                e($oldStatus) .
-                "</b> → <b>" .
-                e($ticket->status) .
-                "</b>\n";
+            $message .= "Status: <b>" . e($oldStatus) . "</b> → <b>" . e($ticket->status) . "</b>\n";
         } else {
-
-            $message .=
-                "Status: <b>" .
-                e($ticket->status) .
-                "</b>\n";
+            $message .= "Status: <b>" . e($ticket->status) . "</b>\n";
         }
 
-        $message .=
-            "Priority: <b>" .
-            e($ticket->priority) .
-            "</b>\n\n" .
-
-            "Use <b>/ticket " .
-            e($ticket->ticket_number) .
-            "</b> to view the ticket.";
+        $message .= "Priority: <b>" . e($ticket->priority) . "</b>\n\n" .
+            "📅 Created: " . e($this->formatDate($ticket->date_created)) . "\n\n" .
+            "Use <b>/ticket " . e($ticket->ticket_number) . "</b> to view the ticket.";
 
         $this->telegram->sendMessage(
             $account->telegram_user_id,
@@ -106,7 +91,8 @@ class TelegramNotificationService
             "📝 " . e(\Illuminate\Support\Str::limit($ticket->description, 120)) . "\n" .
             "📌 Status: <b>" . e($ticket->status) . "</b>\n" .
             "⚡ Priority: <b>" . e($ticket->priority) . "</b>\n\n" .
-            "You will receive updates as your ticket progresses.";
+            "📅 Created: " . e($this->formatDate($ticket->date_created));
+        "You will receive updates as your ticket progresses.";
 
         $this->telegram->sendMessage(
             $account->telegram_user_id,
@@ -125,12 +111,8 @@ class TelegramNotificationService
     /**
      * Notify ticket owner that a support reply was added.
      */
-    public function notifyNewReply(
-        TicketHeader $ticket,
-        string $message,
-        ?int $detailUserId = null
-    ): void {
-
+    public function notifyNewReply(TicketHeader $ticket, string $message, ?int $detailUserId = null): void
+    {
         /*
          * Don't notify the requester about their own message.
          */
@@ -141,10 +123,7 @@ class TelegramNotificationService
             return;
         }
 
-        $account = TelegramAccount::where(
-            'user_id',
-            $ticket->user_id
-        )
+        $account = TelegramAccount::where('user_id', $ticket->user_id)
             ->where('status', 'Active')
             ->first();
 
@@ -155,9 +134,8 @@ class TelegramNotificationService
         $messageText =
             "💬 <b>New Reply to Your Ticket</b>\n\n" .
 
-            "🎫 Ticket: <b>" .
-            e($ticket->ticket_number) .
-            "</b>\n\n" .
+            "🎫 Ticket: <b>" . e($ticket->ticket_number) . "</b>\n\n" .
+            "📅 Created: " . e($this->formatDate($ticket->date_created)) . "\n\n" .
 
             e($message);
 
@@ -179,10 +157,8 @@ class TelegramNotificationService
     /**
      * Notify ticket owner that ticket was closed.
      */
-    public function notifyTicketClosed(
-        TicketHeader $ticket
-    ): void {
-
+    public function notifyTicketClosed(TicketHeader $ticket): void
+    {
         $account = TelegramAccount::where(
             'user_id',
             $ticket->user_id
@@ -197,9 +173,9 @@ class TelegramNotificationService
         $message =
             "🔒 <b>Ticket Closed</b>\n\n" .
 
-            "🎫 Ticket: <b>" .
-            e($ticket->ticket_number) .
-            "</b>\n\n" .
+            "🎫 Ticket: <b>" . e($ticket->ticket_number) . "</b>\n\n" .
+            "📅 Created: " . e($this->formatDate($ticket->date_created)) . "\n" .
+            "🔒 Closed: " . e($this->formatDate($ticket->date_closed)) . "\n\n" .
 
             "Your support request has been closed.\n\n" .
 
@@ -220,10 +196,8 @@ class TelegramNotificationService
         );
     }
 
-    public function notifySupportTeamNewTicket(
-        TicketHeader $ticket,
-        $userIds
-    ): void {
+    public function notifySupportTeamNewTicket(TicketHeader $ticket, $userIds): void
+    {
         $accounts = TelegramAccount::whereIn('user_id', $userIds)
             ->where('status', 'Active')
             ->get();
@@ -233,8 +207,9 @@ class TelegramNotificationService
                 "🆕 <b>New Ticket Assigned to Your Team</b>\n\n" .
                 "🎫 Ticket: <b>" . e($ticket->ticket_number) . "</b>\n" .
                 "👤 From: " . e(optional($ticket->user)->fname . ' ' . optional($ticket->user)->lname) . "\n" .
-                "📝 " . e(\Illuminate\Support\Str::limit($ticket->description, 120)) . "\n" .
-                "⚡ Priority: <b>" . e($ticket->priority) . "</b>";
+                "📝 " . e(Str::limit($ticket->description, 120)) . "\n" .
+                "⚡ Priority: <b>" . e($ticket->priority) . "</b>" .
+                "📅 Created: " . e($this->formatDate($ticket->date_created)) . "\n";
 
             $this->telegram->sendMessage(
                 $account->telegram_user_id,

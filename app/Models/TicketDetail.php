@@ -15,6 +15,10 @@ class TicketDetail extends Model
         'user_id'
     ];
 
+    protected $casts = [
+        'date_created' => 'datetime',
+    ];
+
     public function ticket()
     {
         return $this->belongsTo(TicketHeader::class, 'ticket_id', 'id');

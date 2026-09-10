@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 
 class TelegramController extends Controller
 {
@@ -21,7 +22,9 @@ class TelegramController extends Controller
 
     protected function formatDate($date): string
     {
-        return $date ? $date->format('M d, Y h:i A') : 'N/A';
+        return $date
+            ? Carbon::parse($date)->format('M d, Y h:i A')
+            : 'N/A';
     }
     /**
      * Telegram webhook endpoint.
@@ -160,9 +163,7 @@ class TelegramController extends Controller
         /*
          * /help
          */
-        if (
-            strtolower($text) === '/help'
-        ) {
+        if (strtolower($text) === '/help') {
             $this->sendHelp($chatId);
             return;
         }
@@ -480,13 +481,11 @@ class TelegramController extends Controller
             "📌 Status: <b>" . e($ticket->status) . "</b>\n" .
             "⚡ Priority: <b>" . e($ticket->priority) . "</b>\n" .
 
-            "📅 Created: " . optional($this->formatDate($ticket->date_created));
+            "📅 Created: " . $this->formatDate($ticket->date_created);
 
         if ($ticket->date_closed) {
 
-            $message .= "\n🔒 Closed: " . optional(
-                $this->formatDate($ticket->date_closed)
-            );
+            $message .= "\n🔒 Closed: " . $this->formatDate($ticket->date_closed);
         }
 
         $keyboard = [
@@ -656,56 +655,47 @@ class TelegramController extends Controller
     /**
      * Display ticket conversation.
      */
-    protected function sendConversation(
-        $chatId,
-        TicketHeader $ticket
-    ): void {
+    protected function sendConversation($chatId, TicketHeader $ticket): void
+    {
+        $details = TicketDetail::where('ticket_id', $ticket->id)
+            ->orderBy('date_created')
+            ->limit(20)
+            ->get();
 
-        $details =
-            TicketDetail::where(
-                'ticket_id',
-                $ticket->id
-            )
-                ->orderBy(
-                    'date_created'
-                )
-                ->limit(20)
-                ->get();
-
-        $message =
-            "💬 <b>Conversation</b>\n\n" .
-
-            "🎫 <b>" .
-            e($ticket->ticket_number) .
-            "</b>\n\n";
+        $header = "💬 <b>Conversation</b>\n\n"
+            . "🎫 <b>" . e($ticket->ticket_number) . "</b>\n\n";
 
         if ($details->isEmpty()) {
-
-            $message .=
-                "No conversation messages yet.";
-
-        } else {
-
-            foreach ($details as $detail) {
-
-                $message .= "━━━━━━━━━━━━━━\n" . e($detail->message) . "\n" .
-
-                    "📅 " . optional($this->formatDate($detail->date_created)) . "\n\n";
-            }
+            $this->telegram->sendMessage(
+                $chatId,
+                $header . "No conversation messages yet.",
+                [[['text' => '🎫 Ticket', 'callback_data' => 'ticket:' . $ticket->id]]]
+            );
+            return;
         }
 
-        $this->telegram->sendMessage(
-            $chatId,
-            $message,
-            [
-                [
-                    [
-                        'text' => '🎫 Ticket',
-                        'callback_data' =>
-                            'ticket:' . $ticket->id,
-                    ],
-                ],
-            ]
-        );
+        $buffer = $header;
+        $maxLen = 3800;   // leave headroom for HTML tags
+
+        foreach ($details as $detail) {
+            $chunk = "━━━━━━━━━━━━━━\n"
+                . e(Str::limit($detail->message, 500)) . "\n"
+                . "📅 " . $this->formatDate($detail->date_created) . "\n\n";
+
+            if (strlen($buffer . $chunk) > $maxLen) {
+                $this->telegram->sendMessage($chatId, $buffer);
+                $buffer = '';
+            }
+
+            $buffer .= $chunk;
+        }
+
+        if (trim($buffer) !== '') {
+            $this->telegram->sendMessage(
+                $chatId,
+                $buffer,
+                [[['text' => '🎫 Ticket', 'callback_data' => 'ticket:' . $ticket->id]]]
+            );
+        }
     }
 }

@@ -85,7 +85,7 @@ class TelegramNotificationService
             "🎫 <b>Ticket Created</b>\n\n" .
             "Your support ticket has been created successfully.\n\n" .
             "🎫 Ticket: <b>" . e($ticket->ticket_number) . "</b>\n" .
-            "📝 " . e(\Illuminate\Support\Str::limit($ticket->description, 120)) . "\n" .
+            "📝 " . e(Str::limit($ticket->description, 120)) . "\n" .
             "📌 Status: <b>" . e($ticket->status) . "</b>\n" .
             "⚡ Priority: <b>" . e($ticket->priority) . "</b>\n\n" .
             "📅 Created: " . e($this->formatDate($ticket->date_created));

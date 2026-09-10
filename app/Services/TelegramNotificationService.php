@@ -37,7 +37,7 @@ class TelegramNotificationService
         $message =
             "🔔 <b>ISMS Ticket Update</b>\n\n" .
             "🎫 Ticket: <b>" . e($ticket->ticket_number) . "</b>\n\n" .
-            "📝 " . e($ticket->description) . "\n\n";
+            "📝 " . e($ticket->description, 120) . "\n\n";
 
         if ($oldStatus) {
             $message .= "Status: <b>" . e($oldStatus) . "</b> → <b>" . e($ticket->status) . "</b>\n";

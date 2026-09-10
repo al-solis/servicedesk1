@@ -10,6 +10,7 @@ use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class TelegramController extends Controller
 {
@@ -18,6 +19,10 @@ class TelegramController extends Controller
     ) {
     }
 
+    protected function formatDate($date): string
+    {
+        return $date ? $date->format('M d, Y h:i A') : 'N/A';
+    }
     /**
      * Telegram webhook endpoint.
      */
@@ -133,17 +138,10 @@ class TelegramController extends Controller
         /*
          * Get linked account.
          */
-        $account =
-            TelegramAccount::with('user')
-                ->where(
-                    'telegram_user_id',
-                    $telegramUserId
-                )
-                ->where(
-                    'status',
-                    'Active'
-                )
-                ->first();
+        $account = TelegramAccount::with('user')
+            ->where('telegram_user_id', $telegramUserId)
+            ->where('status', 'Active')
+            ->first();
 
         if (!$account) {
 
@@ -194,18 +192,15 @@ class TelegramController extends Controller
                 $matches
             )
         ) {
-            $ticketNumber =
-                trim($matches[1]);
+            $ticketNumber = trim($matches[1]);
 
             $this->sendTicket(
                 $chatId,
                 $account->user_id,
                 $ticketNumber
             );
-
             return;
         }
-
         /*
          * Unknown command.
          */
@@ -215,27 +210,15 @@ class TelegramController extends Controller
     /**
      * Handle account linking.
      */
-    protected function handleStart(
-        $chatId,
-        string $telegramUserId,
-        ?string $token,
-        array $message
-    ): void {
-
+    protected function handleStart($chatId, string $telegramUserId, ?string $token, array $message): void
+    {
         /*
          * Normal /start without linking token.
          */
         if (!$token) {
-            $account =
-                TelegramAccount::where(
-                    'telegram_user_id',
-                    $telegramUserId
-                )
-                    ->where(
-                        'status',
-                        'Active'
-                    )
-                    ->first();
+            $account = TelegramAccount::where('telegram_user_id', $telegramUserId)
+                ->where('status', 'Active')
+                ->first();
 
             if ($account) {
                 $this->sendMenu($chatId);
@@ -257,16 +240,9 @@ class TelegramController extends Controller
          * Find valid linking token.
          */
         $linkToken =
-            TelegramLinkToken::where(
-                'token',
-                $token
-            )
+            TelegramLinkToken::where('token', $token)
                 ->whereNull('used_at')
-                ->where(
-                    'expires_at',
-                    '>',
-                    now()
-                )
+                ->where('expires_at', '>', now())
                 ->first();
 
         if (!$linkToken) {
@@ -284,27 +260,18 @@ class TelegramController extends Controller
         /*
          * Telegram user information.
          */
-        $from =
-            $message['from'] ?? [];
+        $from = $message['from'] ?? [];
 
         /*
          * One Telegram account cannot belong
          * to multiple ISMS users.
          */
         $existing =
-            TelegramAccount::where(
-                'telegram_user_id',
-                $telegramUserId
-            )
-                ->where(
-                    'user_id',
-                    '!=',
-                    $linkToken->user_id
-                )
+            TelegramAccount::where('telegram_user_id', $telegramUserId)
+                ->where('user_id', '!=', $linkToken->user_id)
                 ->first();
 
         if ($existing) {
-
             $this->telegram->sendMessage(
                 $chatId,
                 "❌ This Telegram account is already " .
@@ -423,13 +390,8 @@ class TelegramController extends Controller
          * Only tickets owned by this user.
          */
         $tickets =
-            TicketHeader::where(
-                'user_id',
-                $userId
-            )
-                ->orderByDesc(
-                    'date_created'
-                )
+            TicketHeader::where('user_id', $userId)
+                ->orderByDesc('date_created')
                 ->limit(10)
                 ->get();
 
@@ -451,22 +413,11 @@ class TelegramController extends Controller
 
         foreach ($tickets as $ticket) {
 
-            $message .=
-                "🎫 <b>" .
-                e($ticket->ticket_number) .
-                "</b>\n" .
+            $message .= "🎫 <b>" . e($ticket->ticket_number) . "</b>\n" .
 
-                e(
-                    \Illuminate\Support\Str::limit(
-                        $ticket->description,
-                        80
-                    )
-                ) .
-                "\n" .
+                e(Str::limit($ticket->description, 120)) . "\n" .
 
-                "Status: <b>" .
-                e($ticket->status) .
-                "</b>\n\n";
+                "Status: <b>" . e($ticket->status) . "</b>\n\n";
 
             $keyboard[] = [
                 [
@@ -480,22 +431,14 @@ class TelegramController extends Controller
                 ],
             ];
         }
-
-        $this->telegram->sendMessage(
-            $chatId,
-            $message,
-            $keyboard
-        );
+        $this->telegram->sendMessage($chatId, $message, $keyboard);
     }
 
     /**
      * Get a specific ticket.
      */
-    protected function sendTicket(
-        $chatId,
-        int $userId,
-        string $ticketNumber
-    ): void {
+    protected function sendTicket($chatId, int $userId, string $ticketNumber): void
+    {
 
         /*
          * CRITICAL SECURITY CHECK.
@@ -504,16 +447,9 @@ class TelegramController extends Controller
          * authenticated Telegram user's
          * ISMS account.
          */
-        $ticket =
-            TicketHeader::where(
-                'ticket_number',
-                $ticketNumber
-            )
-                ->where(
-                    'user_id',
-                    $userId
-                )
-                ->first();
+        $ticket = TicketHeader::where('ticket_number', $ticketNumber)
+            ->where('user_id', $userId)
+            ->first();
 
         if (!$ticket) {
 
@@ -537,44 +473,23 @@ class TelegramController extends Controller
     /**
      * Display ticket details.
      */
-    protected function sendTicketDetails(
-        $chatId,
-        TicketHeader $ticket
-    ): void {
-
+    protected function sendTicketDetails($chatId, TicketHeader $ticket): void
+    {
         $message =
-            "🎫 <b>" .
-            e($ticket->ticket_number) .
-            "</b>\n\n" .
+            "🎫 <b>" . e($ticket->ticket_number) . "</b>\n\n" .
 
-            "📝 <b>Description</b>\n" .
-            e($ticket->description) .
-            "\n\n" .
+            "📝 <b>Description</b>\n" . e($ticket->description) . "\n\n" .
 
-            "📌 Status: <b>" .
-            e($ticket->status) .
-            "</b>\n" .
+            "📌 Status: <b>" . e($ticket->status) . "</b>\n" .
+            "⚡ Priority: <b>" . e($ticket->priority) . "</b>\n" .
 
-            "⚡ Priority: <b>" .
-            e($ticket->priority) .
-            "</b>\n" .
-
-            "📅 Created: " .
-            optional(
-                $ticket->date_created
-            )->format(
-                    'M d, Y h:i A'
-                );
+            "📅 Created: " . optional($this->formatDate($ticket->date_created));
 
         if ($ticket->date_closed) {
 
-            $message .=
-                "\n🔒 Closed: " .
-                optional(
-                    $ticket->date_closed
-                )->format(
-                        'M d, Y h:i A'
-                    );
+            $message .= "\n🔒 Closed: " . optional(
+                $this->formatDate($ticket->date_closed)
+            );
         }
 
         $keyboard = [
@@ -604,66 +519,38 @@ class TelegramController extends Controller
     /**
      * Handle inline keyboard.
      */
-    protected function handleCallbackQuery(
-        array $callback
-    ): void {
+    protected function handleCallbackQuery(array $callback): void
+    {
 
-        $callbackId =
-            $callback['id'];
+        $callbackId = $callback['id'];
 
-        $chatId =
-            $callback['message']['chat']['id']
-            ?? null;
+        $chatId = $callback['message']['chat']['id'] ?? null;
 
-        $telegramUserId =
-            (string) (
-                $callback['from']['id']
-                ?? ''
-            );
+        $telegramUserId = (string) (
+            $callback['from']['id']
+            ?? '');
 
-        $data =
-            $callback['data'] ?? '';
+        $data = $callback['data'] ?? '';
 
         /*
          * Find Telegram account.
          */
-        $account =
-            TelegramAccount::where(
-                'telegram_user_id',
-                $telegramUserId
-            )
-                ->where(
-                    'status',
-                    'Active'
-                )
-                ->first();
+        $account = TelegramAccount::where('telegram_user_id', $telegramUserId)
+            ->where('status', 'Active')
+            ->first();
 
         if (!$account) {
-
-            $this->telegram
-                ->answerCallbackQuery(
-                    $callbackId,
-                    'Account not connected.'
-                );
-
+            $this->telegram->answerCallbackQuery($callbackId, 'Account not connected.');
             return;
         }
 
-        $this->telegram
-            ->answerCallbackQuery(
-                $callbackId
-            );
+        $this->telegram->answerCallbackQuery($callbackId);
 
         /*
          * My tickets.
          */
         if ($data === 'my_tickets') {
-
-            $this->sendMyTickets(
-                $chatId,
-                $account->user_id
-            );
-
+            $this->sendMyTickets($chatId, $account->user_id);
             return;
         }
 
@@ -804,21 +691,9 @@ class TelegramController extends Controller
 
             foreach ($details as $detail) {
 
-                $message .=
-                    "━━━━━━━━━━━━━━\n" .
+                $message .= "━━━━━━━━━━━━━━\n" . e($detail->message) . "\n" .
 
-                    e(
-                        $detail->message
-                    ) .
-                    "\n" .
-
-                    "📅 " .
-                    optional(
-                        $detail->date_created
-                    )->format(
-                            'M d, Y h:i A'
-                        ) .
-                    "\n\n";
+                    "📅 " . optional($this->formatDate($detail->date_created)) . "\n\n";
             }
         }
 

@@ -73,10 +73,8 @@ class TelegramService
     /**
      * Answer callback query.
      */
-    public function answerCallbackQuery(
-        string $callbackQueryId,
-        ?string $text = null
-    ) {
+    public function answerCallbackQuery(string $callbackQueryId, ?string $text = null)
+    {
         $data = [
             'callback_query_id' => $callbackQueryId,
         ];

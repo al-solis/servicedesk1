@@ -89,6 +89,39 @@ class TelegramNotificationService
         );
     }
 
+    public function notifyTicketCreated(TicketHeader $ticket): void
+    {
+        $account = TelegramAccount::where('user_id', $ticket->user_id)
+            ->where('status', 'Active')
+            ->first();
+
+        if (!$account) {
+            return;
+        }
+
+        $message =
+            "🎫 <b>Ticket Created</b>\n\n" .
+            "Your support ticket has been created successfully.\n\n" .
+            "🎫 Ticket: <b>" . e($ticket->ticket_number) . "</b>\n" .
+            "📝 " . e(\Illuminate\Support\Str::limit($ticket->description, 120)) . "\n" .
+            "📌 Status: <b>" . e($ticket->status) . "</b>\n" .
+            "⚡ Priority: <b>" . e($ticket->priority) . "</b>\n\n" .
+            "You will receive updates as your ticket progresses.";
+
+        $this->telegram->sendMessage(
+            $account->telegram_user_id,
+            $message,
+            [
+                [
+                    [
+                        'text' => '🎫 View Ticket',
+                        'callback_data' => 'ticket:' . $ticket->id,
+                    ],
+                ],
+            ]
+        );
+    }
+
     /**
      * Notify ticket owner that a support reply was added.
      */
@@ -185,5 +218,36 @@ class TelegramNotificationService
                 ],
             ]
         );
+    }
+
+    public function notifySupportTeamNewTicket(
+        TicketHeader $ticket,
+        $userIds
+    ): void {
+        $accounts = TelegramAccount::whereIn('user_id', $userIds)
+            ->where('status', 'Active')
+            ->get();
+
+        foreach ($accounts as $account) {
+            $message =
+                "🆕 <b>New Ticket Assigned to Your Team</b>\n\n" .
+                "🎫 Ticket: <b>" . e($ticket->ticket_number) . "</b>\n" .
+                "👤 From: " . e(optional($ticket->user)->fname . ' ' . optional($ticket->user)->lname) . "\n" .
+                "📝 " . e(\Illuminate\Support\Str::limit($ticket->description, 120)) . "\n" .
+                "⚡ Priority: <b>" . e($ticket->priority) . "</b>";
+
+            $this->telegram->sendMessage(
+                $account->telegram_user_id,
+                $message,
+                [
+                    [
+                        [
+                            'text' => '🎫 View Ticket',
+                            'callback_data' => 'ticket:' . $ticket->id,
+                        ],
+                    ],
+                ]
+            );
+        }
     }
 }

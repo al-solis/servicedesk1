@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use App\Services\TelegramNotificationService;
 use App\Models\TicketHeader;
 use App\Models\TicketDetail;
 use App\Models\TicketType;
@@ -26,6 +27,12 @@ class TicketController extends Controller
     /**
      * Display a list of tickets.
      */
+
+    public function __construct(
+        protected TelegramNotificationService $telegramNotify
+    ) {
+    }
+
     public function index(Request $request)
     {
         if (!Auth::check()) {
@@ -257,18 +264,6 @@ class TicketController extends Controller
             ]);
         }
 
-        // if ($request->hasFile('images')) {
-        //     foreach ($request->file('images') as $image) {
-        //         $path = $image->store('ticket_images', 'public');
-
-        //         TicketImage::create([
-        //             'ticket_id' => $ticket->id,
-        //             'user_id' => Auth::user()->id,
-        //             'img_path' => $path,
-        //         ]);
-        //     }
-        // }
-
         // Save Images
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
@@ -297,6 +292,16 @@ class TicketController extends Controller
             }
         }
 
+        $this->telegramNotify->notifyTicketCreated($ticket);
+
+        $defaultTeam = TicketType::find($request->support_type_id)?->default_group_id;
+
+        if ($defaultTeam) {
+            $supportUserIds = SupportMember::where('team_id', $defaultTeam)
+                ->pluck('user_id');
+
+            $this->telegramNotify->notifySupportTeamNewTicket($ticket, $supportUserIds);
+        }
         return redirect()->route('tickets.index')->with('success', 'Ticket created successfully.');
     }
 
@@ -345,6 +350,7 @@ class TicketController extends Controller
         ]);
 
         $ticket = TicketHeader::findOrFail($id);
+        $oldStatus = $ticket->status;
         $currentUser = Auth::user();
 
         if ($ticket->user_id != $currentUser->id || in_array($currentUser->usertype, ['Administrator', 'Support Team'])) {
@@ -355,6 +361,12 @@ class TicketController extends Controller
                     'user_id' => $currentUser->id,
                     'date_created' => now()
                 ]);
+
+                $this->telegramNotify->notifyNewReply(
+                    $ticket,
+                    $request->message,
+                    $currentUser->id
+                );
             }
         } else {
             if (!empty($request->message)) {
@@ -388,6 +400,14 @@ class TicketController extends Controller
             'status' => $request->status,
             'updated_at' => now()
         ]);
+
+        if ($oldStatus !== $ticket->status) {
+            if (strtolower($ticket->status) === 'closed') {
+                $this->telegramNotify->notifyTicketClosed($ticket);
+            } else {
+                $this->telegramNotify->notifyTicketStatusChanged($ticket, $oldStatus);
+            }
+        }
 
         if (!empty($request->team_id)) {
             AssignedTicket::where('ticket_id', $ticket->id)

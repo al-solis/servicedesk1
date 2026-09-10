@@ -73,7 +73,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('department', DepartmentController::class)->except(['destroy']);
 
-    Route::get('ai/chat', [ChatbotController::class, 'showChat'])->name('ai.chat');
+    Route::get('ai/chat', [ChatbotController::class, 'showChat'])->name('ai.showchat');
     Route::post('ai/chat', [ChatbotController::class, 'chat'])->name('ai.chat');
 
     Route::get('reports/index-detail', [ReportsController::class, 'indexDetail'])->name('reports.index-detail');

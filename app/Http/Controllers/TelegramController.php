@@ -415,7 +415,7 @@ class TelegramController extends Controller
 
             $message .= "🎫 <b>" . e($ticket->ticket_number) . "</b>\n" .
 
-                e(Str::limit($ticket->description, 120)) . "\n" .
+                e($ticket->description) . "\n" .
 
                 "Status: <b>" . e($ticket->status) . "</b>\n\n";
 

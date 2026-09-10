@@ -20,6 +20,11 @@ class TicketHeader extends Model
         'date_closed',
     ];
 
+    protected $casts = [
+        'date_created' => 'datetime',
+        'date_closed' => 'datetime',
+    ];
+
     public function details()
     {
         return $this->hasMany(TicketDetail::class, 'ticket_id', 'id');

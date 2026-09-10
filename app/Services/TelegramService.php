@@ -23,10 +23,8 @@ class TelegramService
     /**
      * Call Telegram Bot API.
      */
-    public function call(
-        string $method,
-        array $data = []
-    ) {
+    public function call(string $method, array $data = [])
+    {
         $response = Http::timeout(15)
             ->post(
                 $this->apiUrl . '/' . $method,
@@ -51,11 +49,8 @@ class TelegramService
     /**
      * Send a Telegram message.
      */
-    public function sendMessage(
-        string|int $chatId,
-        string $message,
-        ?array $keyboard = null
-    ) {
+    public function sendMessage(string|int $chatId, string $message, ?array $keyboard = null)
+    {
         $data = [
             'chat_id' => $chatId,
             'text' => $message,

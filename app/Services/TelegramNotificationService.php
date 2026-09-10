@@ -16,11 +16,8 @@ class TelegramNotificationService
 
     protected function formatDate($date): string
     {
-        return $date
-            ? Carbon::parse($date)->format('M d, Y h:i A')
-            : 'N/A';
+        return $date ? $date->format('M d, Y h:i A') : 'N/A';
     }
-
     /**
      * Send notification to ticket owner.
      */

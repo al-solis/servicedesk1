@@ -103,43 +103,41 @@
                         </div>
                     </div>
 
-                    <div class="overflow-x-auto" style="min-height: 650px;">
-                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <div class="overflow-x-auto" style="min-height: 350px;">
+                        <table class="w-full text-xs text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" class="px-4 py-3 w-[50px]">ID</th>
-                                    <th scope="col" class="px-4 py-3 w-[250px]">Requested By</th>
-                                    <th scope="col" class="px-4 py-3 w-[300px]">Subject</th>
-                                    <th scope="col" class="px-4 py-3 w-[100px]">Priority</th>
-                                    <th scope="col" class="px-4 py-3 w-[200px]">Assigned to</th>
-                                    <th scope="col" class="px-4 py-3 w-[150px]">Created</th>
-                                    <th scope="col" class="px-4 py-3 w-[120px] text-center">Status</th>
-                                    <th scope="col" class="px-4 py-3">
+                                    <th scope="col" class="px-3 py-2 w-[50px]">ID</th>
+                                    <th scope="col" class="px-3 py-2 w-[250px]">Requested By</th>
+                                    <th scope="col" class="px-3 py-2 w-[300px]">Subject</th>
+                                    <th scope="col" class="px-3 py-2 w-[100px]">Priority</th>
+                                    <th scope="col" class="px-3 py-2 w-[200px]">Assigned to</th>
+                                    <th scope="col" class="px-3 py-2 w-[150px]">Created</th>
+                                    <th scope="col" class="px-3 py-2 w-[120px] text-center">Status</th>
+                                    <th scope="col" class="px-3 py-2">
                                         <span class="sr-only">Actions</span>
                                     </th>
                                 </tr>
                             </thead>
 
-                            </thead>
-                            <tbody class="min-h-[200px]">
+                            <tbody class="min-h-[120px]">
                                 @foreach ($tickets as $ticket)
-                                    <tr class="border-b dark:border-gray-700">
-                                        <td class="px-4 py-3 w-[50px]">{{ $ticket->id }}</td>
-                                        <td class="px-4 py-3 w-[250px] flex items-center">
+                                    <tr class="border-b dark:border-gray-700 h-[36px]">
+                                        <td class="px-3 py-2 w-[50px]">{{ $ticket->id }}</td>
+                                        <td class="px-3 py-2 w-[250px] flex items-center">
                                             @php
                                                 $userColor = '#' . substr(md5($ticket->user->id), 0, 6);
                                             @endphp
                                             @if ($ticket->user->profile_picture)
                                                 <!-- Display the profile picture if it exists -->
-                                                <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
-                                                    {{-- src="{{ Storage::url($ticket->user->profile_picture) }}"  --}}
+                                                <img class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
                                                     src="{{ asset('storage/' . $ticket->user->profile_picture) }}"
                                                     alt="{{ $ticket->user->lname }}">
                                             @else
                                                 <!-- Display the user's initials in a colored circle if no profile picture -->
                                                 <span
-                                                    class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold mr-2 
-                                        user-color"
+                                                    class="w-7 h-7 flex justify-center items-center rounded-full text-white font-bold text-xs mr-2 
+                                user-color"
                                                     style="--user-color: {{ $userColor }};">
                                                     {{ strtoupper(substr($ticket->user->fname, 0, 1)) }}{{ strtoupper(substr($ticket->user->lname, 0, 1)) }}
                                                 </span>
@@ -148,23 +146,22 @@
                                             <!-- Display the user's full name -->
                                             <span class="ml-2 text-gray-900 dark:text-white">
                                                 {{ $ticket->user->lname }}, {{ $ticket->user->fname }}
-                                                {{-- {{ strtoupper(substr($ticket->user->mname, 0, 1)) }}. --}}
                                             </span>
                                         </td>
-                                        <td class="px-4 py-3 w-[300px]">{{ $ticket->description }}</td>
-                                        <td class="px-4 py-3 w-[100px] text-center">
+                                        <td class="px-3 py-2 w-[300px]">{{ $ticket->description }}</td>
+                                        <td class="px-3 py-2 w-[100px] text-center">
                                             <span
-                                                class="inline-flex justify-center items-center w-[70px] h-[14px] px-4 py-2 rounded-md font-semibold text-xs
-                                    @if ($ticket->priority == 'High') animate-pulse @endif"
+                                                class="inline-flex justify-center items-center w-[60px] h-[12px] px-3 py-1.5 rounded-md font-semibold text-[10px]
+                                                    @if ($ticket->priority == 'High') animate-pulse @endif"
                                                 style="background-color: 
-                                    @if ($ticket->priority == 'Low') #d4edda; color: #155724;
-                                    @elseif($ticket->priority == 'Medium') #fff3cd; color: #856404 ;
-                                    @elseif($ticket->priority == 'High') #f8d7da; color: #721c24; @endif">
+                                                    @if ($ticket->priority == 'Low') #d4edda; color: #155724;
+                                                    @elseif($ticket->priority == 'Medium') #fff3cd; color: #856404 ;
+                                                    @elseif($ticket->priority == 'High') #f8d7da; color: #721c24; @endif">
                                                 {{ $ticket->priority }}
                                             </span>
                                         </td>
 
-                                        <td class="px-4 py-3 w-[200px] flex -space-x-6 rtl:space-x-reverse">
+                                        <td class="px-3 py-2 w-[200px] flex -space-x-6 rtl:space-x-reverse">
                                             @if ($ticket->assignedUsers && $ticket->assignedUsers->count() > 0)
                                                 @foreach ($ticket->assignedUsers as $assignedUser)
                                                     <div class="relative group">
@@ -176,30 +173,24 @@
                                                         <div class="flex items-center space-x-2">
                                                             @if ($assignedUser->profile_picture)
                                                                 <!-- Display profile picture -->
-                                                                <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800"
-                                                                    {{-- src="{{ Storage::url($assignedUser->profile_picture) }}"  --}}
+                                                                <img class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
                                                                     src="{{ asset('storage/' . $assignedUser->profile_picture) }}"
                                                                     alt="{{ $assignedUser->lname }}">
                                                             @else
                                                                 <!-- Display initials in colored circle -->
                                                                 <span
-                                                                    class="w-10 h-10 flex justify-center items-center rounded-full text-white font-bold 
-                                                        user-color"
+                                                                    class="w-7 h-7 flex justify-center items-center rounded-full text-white font-bold text-xs 
+                                                user-color"
                                                                     style="--user-color: {{ $userColor }};">
                                                                     {{ strtoupper(substr($assignedUser->fname, 0, 1)) }}
                                                                     {{ strtoupper(substr($assignedUser->lname, 0, 1)) }}
                                                                 </span>
                                                             @endif
 
-                                                            <!-- Display name -->
-                                                            {{-- <span class="text-gray-900 dark:text-white">
-                                                    {{ $assignedUser->lname }}, {{ $assignedUser->fname }} {{ strtoupper(substr($assignedUser->mname, 0, 1)) }}.
-                                                </span> --}}
                                                             <!-- Popover -->
                                                             <div
                                                                 class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block w-auto px-3 py-2 text-sm text-white bg-gray-500 rounded-lg shadow-lg whitespace-nowrap">
                                                                 {{ $assignedUser->lname }}, {{ $assignedUser->fname }}
-                                                                {{-- {{substr($assignedUser->mname, 0,1)}} --}}
                                                                 <div
                                                                     class="absolute left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-500 rotate-45 bottom-[-4px]">
                                                                 </div>
@@ -207,16 +198,12 @@
                                                         </div>
                                                     </div>
                                                 @endforeach
-                                            @else
-                                                {{-- <span class="text-gray-400 dark:text-gray-600 text-sm">Unassigned</span> --}}
                                             @endif
                                         </td>
 
-
-
-                                        <td class="px-4 py-3 w-[180px]">
+                                        <td class="px-3 py-2 w-[180px]">
                                             {{ \Carbon\Carbon::parse($ticket->date_created)->format('d M Y') }}</td>
-                                        <td class="px-4 py-3 w-[120px] text-center">
+                                        <td class="px-3 py-2 w-[120px] text-center">
                                             @php
                                                 $statusColors = [
                                                     'Open' => 'background-color:#cfe2ff; color:#084298;',
@@ -228,18 +215,18 @@
                                                 ];
                                             @endphp
                                             <span
-                                                class="inline-flex justify-center items-center w-[93px] h-[14px] px-4 py-2 rounded-md font-semibold text-xs"
+                                                class="inline-flex justify-center items-center w-[80px] h-[12px] px-2 py-1.5 rounded-md font-semibold text-[10px]"
                                                 style="{{ $statusColors[$ticket->status] ?? 'background-color:#d1d5db; color:#1f2937;' }};">
                                                 {{ $ticket->status }}
                                             </span>
                                         </td>
-                                        <td class="px-4 py-3 w-[120px] text-center justify-end">
+                                        <td class="px-3 py-2 w-[120px] text-center justify-end">
                                             <div class="relative inline-block">
                                                 <button id="dropdown-btn-{{ $ticket->id }}"
                                                     data-dropdown-toggle="dropdown-menu-{{ $ticket->id }}"
                                                     class="inline-flex items-center p-0.5 text-sm font-medium text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                                                     type="button" aria-label="Actions">
-                                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
+                                                    <svg class="w-4 h-4" aria-hidden="true" fill="currentColor"
                                                         viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                         <path
                                                             d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
@@ -249,33 +236,21 @@
                                                 <!-- Dropdown Menu -->
                                                 <div id="dropdown-menu-{{ $ticket->id }}"
                                                     class="hidden absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg divide-y divide-gray-100 dark:bg-gray-700 dark:divide-gray-600 z-50">
-                                                    <ul class="py-1 text-sm text-gray-700 dark:text-gray-200">
+                                                    <ul class="py-1 text-[10px] text-gray-700 dark:text-gray-200">
                                                         <li>
                                                             <a href="{{ route('tickets.show', $ticket->id) }}"
-                                                                class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Show</a>
+                                                                class="block py-1 px-3 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Show</a>
                                                         </li>
                                                         <li>
                                                             <a href="{{ route('tickets.edit', $ticket->id) }}"
-                                                                class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
+                                                                class="block py-1 px-3 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
                                                         </li>
                                                     </ul>
-                                                    {{-- <ul class="py-1 text-sm text-gray-700 dark:text-gray-200">
-                                            <li>
-                                                <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                                style="{{ $user->usertype == 'User' ? 'pointer-events: none;' : '' }}">
-                                                Assign
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="py-1">
-                                            <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" style="pointer-events: none">Delete</a>
-                                        </div> --}}
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
                                 @endforeach
-
                             </tbody>
                         </table>
                     </div>

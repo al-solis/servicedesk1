@@ -362,11 +362,11 @@ class TicketController extends Controller
                     'date_created' => now()
                 ]);
 
-                $this->telegramNotify->notifyNewReply(
-                    $ticket,
-                    $request->message,
-                    $currentUser->id
-                );
+                // $this->telegramNotify->notifyNewReply(
+                //     $ticket,
+                //     $request->message,
+                //     $currentUser->id
+                // );
             }
         } else {
             if (!empty($request->message)) {
@@ -401,13 +401,13 @@ class TicketController extends Controller
             'updated_at' => now()
         ]);
 
-        if ($oldStatus !== $ticket->status) {
-            if (strtolower($ticket->status) === 'closed') {
-                $this->telegramNotify->notifyTicketClosed($ticket);
-            } else {
-                $this->telegramNotify->notifyTicketStatusChanged($ticket, $oldStatus);
-            }
-        }
+        // if ($oldStatus !== $ticket->status) {
+        //     if (strtolower($ticket->status) === 'closed') {
+        //         $this->telegramNotify->notifyTicketClosed($ticket);
+        //     } else {
+        //         $this->telegramNotify->notifyTicketStatusChanged($ticket, $oldStatus);
+        //     }
+        // }
 
         if (!empty($request->team_id)) {
             AssignedTicket::where('ticket_id', $ticket->id)

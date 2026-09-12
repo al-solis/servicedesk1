@@ -57,6 +57,7 @@ class TelegramLinkController extends Controller
 
             // 2. Clear any pending link tokens (used or unused)
             TelegramLinkToken::where('user_id', $user->id)->delete();
+            TelegramAccount::where('user_id', $user->id)->delete();
         });
 
         return back()->with(

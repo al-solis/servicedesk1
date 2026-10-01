@@ -337,15 +337,17 @@
                             @csrf
                             <div class="grid gap-2 mb-4 sm:grid-cols-2">
                                 <div>
-                                    <label
-                                        class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Subject</label>
+                                    <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Subject
+                                        <span style="color: red;">*</span>
+                                    </label>
                                     <input type="text" name="subject" id="subject"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                         placeholder="e.g. Customer complaint" required>
                                 </div>
                                 <div class="sm:col-span-2">
-                                    <label
-                                        class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                                    <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Description
+                                        <span style="color: red;">*</span>
+                                    </label>
                                     <textarea id="description" name="description" rows="3"
                                         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                         placeholder="Please provide more details about the issue..." required></textarea>
@@ -417,11 +419,13 @@
                                 {{-- class="flex-1 min-w-[90px] md:min-w-[90px]" --}}
                                 <div class="sm:col-span-2">
                                     <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Support
-                                        Type</label>
+                                        Type
+                                        <span style="color: red;">*</span>
+                                    </label>
                                     <select name="support_type_id"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                         required>
-                                        <option value="">Select Support Type</option>
+                                        <option value="" selected disabled>Select Support Type</option>
                                         @foreach ($supportTypes as $type)
                                             <option value="{{ $type->id }}">{{ $type->description }}</option>
                                         @endforeach

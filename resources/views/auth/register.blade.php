@@ -18,7 +18,7 @@
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <!-- Client ID -->
                 <div>
-                    <x-input-label for="empid" :value="__('Client ID')" />
+                    <x-input-label for="empid" :value="__('Employee/ Client ID')" />
                     <x-text-input id="empid" class="mt-1 block w-full" type="number" name="empid"
                         :value="old('empid')" required autofocus autocomplete="off" />
                     <x-input-error :messages="$errors->get('empid')" class="mt-2" />

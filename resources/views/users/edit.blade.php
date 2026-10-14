@@ -506,6 +506,15 @@
                             </div>
 
                             <div class="col-span-6 sm:col-span-3">
+                                <label for="company"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company</label>
+                                <input type="text" name="company" id="company"
+                                    value="{{ old('company', $users->company) }}"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Company Name">
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
                                 <label for="dept_id"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Department</label>
                                 <select id="dept_id" name="dept_id"

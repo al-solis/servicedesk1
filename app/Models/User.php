@@ -30,7 +30,7 @@ class User extends Authenticatable
         'profile_picture',
         'dept_id',
         'status',
-
+        'company',
     ];
 
     /**

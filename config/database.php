@@ -137,11 +137,11 @@ return [
         ],
 
         'sqlsrv2' => [
-            'driver' => 'sqlsrv',
+            'driver' => env('SQLSRV_CONNECTION_PAYROLL', 'pgsql'),
             'url' => env('DB_URL'),
             'host' => env('SQLSRV_HOST_PAYROLL', 'localhost'),
             'port' => env('SQLSRV_PORT_PAYROLL', '1433'),
-            'database' => env('SQLSRV_DATABASE_PAYROLL', 'laravel'),
+            'database' => env('SQLSRV_DATABASE_PAYROLL', 'payroll'),
             'username' => env('SQLSRV_USERNAME_PAYROLL', 'root'),
             'password' => env('SQLSRV_PASSWORD_PAYROLL', ''),
             'charset' => env('DB_CHARSET', 'utf8'),

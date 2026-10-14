@@ -36,32 +36,39 @@ class RegisteredUserController extends Controller
             'lname' => ['required', 'string', 'max:255'],
             'fname' => ['required', 'string', 'max:255'],
             'mname' => ['nullable', 'string', 'max:255'],
+            'company' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         // Query employee from Payroll database
         //uncomment this if you want to use the payroll database
-        $employee = DB::connection('sqlsrv2')->table('tblPREmployee')
-            ->where('strEmployeeID', $request->empid)
-            ->where('dtmTerminated', null)
+        $employee = DB::connection('sqlsrv2')->table('employees')
+            ->where('employee_code', $request->empid)
+            ->where('termination_date', null)
             ->first();
 
         if (!$employee) {
-            return redirect()->back()->withErrors(['empid' => 'Employee ID not found in Payroll database.']);
+            return back()
+                ->withInput($request->except('password', 'password_confirmation'))
+                ->withErrors(['empid' => 'Employee ID not found in Payroll database.']);
         } else {
             if (
-                strtoupper($employee->strLastName) != strtoupper($request->lname) ||
-                strtoupper($employee->strFirstName) != strtoupper($request->fname)
+                strtoupper($employee->last_name) != strtoupper($request->lname) ||
+                strtoupper($employee->first_name) != strtoupper($request->fname)
             ) {
-                return redirect()->back()->withErrors(['lname' => 'Name does not match in Payroll database.']);
+                return back()
+                    ->withInput($request->except('password', 'password_confirmation'))
+                    ->withErrors(['lname' => 'Name does not match in Payroll database.']);
             }
         }
 
 
         // Check if employee ID already exists
         if (User::where('empid', $request->empid)->exists()) {
-            return redirect()->back()->withErrors(['empid' => 'Employee ID already registered.']);
+            return back()
+                ->withInput($request->except('password', 'password_confirmation'))
+                ->withErrors(['empid' => 'Employee ID already registered.']);
         }
 
         $user = User::create([
@@ -69,15 +76,21 @@ class RegisteredUserController extends Controller
             'lname' => Str::title($request->lname),
             'fname' => Str::title($request->fname),
             'mname' => Str::title($request->mname),
+            'company' => $request->company ?? null,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'status' => 'Inactive',
         ]);
 
         event(new Registered($user));
 
-        Auth::login($user);
+        //Auth::login($user);
 
         //return redirect(route('dashboard', absolute: false));
-        return redirect()->intended(route('dashboard'));
+        //return redirect()->intended(route('dashboard'));
+        return redirect()->route('login')->with(
+            'status',
+            'Registration successful. Your account is pending activation. You can log in once it has been activated.'
+        );
     }
 }

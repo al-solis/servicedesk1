@@ -62,12 +62,12 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'empid' => 'required',
-            'lname' => 'required',
-            'fname' => 'required',
-            'mname' => 'nullable',
+            'empid' => 'required|unique:users,empid,' . $id,
+            'lname' => 'required |max:50',
+            'fname' => 'required|max:50',
+            'mname' => 'nullable|max:50',
             'company' => 'nullable',
-            'email' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
             'usertype' => 'required',
             'status' => 'required',
             'telno' => 'nullable',
@@ -188,9 +188,9 @@ class UserController extends Controller
     {
         $request->validate([
             'empid' => 'required|unique:users',
-            'lname' => 'required',
-            'fname' => 'required',
-            'mname' => 'nullable',
+            'lname' => 'required |max:50',
+            'fname' => 'required|max:50',
+            'mname' => 'nullable|max:50',
             'company' => 'nullable',
             'email' => 'required|email|unique:users',
             'usertype' => 'required',

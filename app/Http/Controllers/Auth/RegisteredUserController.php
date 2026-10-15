@@ -32,12 +32,12 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'empid' => ['required', 'integer'],
-            'lname' => ['required', 'string', 'max:255'],
-            'fname' => ['required', 'string', 'max:255'],
-            'mname' => ['nullable', 'string', 'max:255'],
+            'empid' => ['required', 'string', 'max:20'],
+            'lname' => ['required', 'string', 'max:50'],
+            'fname' => ['required', 'string', 'max:50'],
+            'mname' => ['nullable', 'string', 'max:50'],
             'company' => ['nullable', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:50', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -51,7 +51,7 @@ class RegisteredUserController extends Controller
         if (!$employee) {
             return back()
                 ->withInput($request->except('password', 'password_confirmation'))
-                ->withErrors(['empid' => 'Employee ID not found in Payroll database.']);
+                ->withErrors(['empid' => 'Employee ID not found in Employee master.']);
         } else {
             if (
                 strtoupper($employee->last_name) != strtoupper($request->lname) ||
@@ -59,7 +59,7 @@ class RegisteredUserController extends Controller
             ) {
                 return back()
                     ->withInput($request->except('password', 'password_confirmation'))
-                    ->withErrors(['lname' => 'Name does not match in Payroll database.']);
+                    ->withErrors(['lname' => 'Name does not match in Employee master.']);
             }
         }
 

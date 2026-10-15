@@ -15,11 +15,11 @@
                 Client details
             </legend>
 
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 <!-- Client ID -->
                 <div>
                     <x-input-label for="empid" :value="__('Employee/ Client ID')" />
-                    <x-text-input id="empid" class="mt-1 block w-full" type="number" name="empid"
+                    <x-text-input id="empid" class="mt-1 block w-full" type="text" maxlength="20" name="empid"
                         :value="old('empid')" required autofocus autocomplete="off" />
                     <x-input-error :messages="$errors->get('empid')" class="mt-2" />
                 </div>
@@ -40,11 +40,11 @@
                 Your name
             </legend>
 
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 <!-- Last Name -->
                 <div>
                     <x-input-label for="lname" :value="__('Last Name')" />
-                    <x-text-input id="lname" class="mt-1 block w-full" type="text" name="lname"
+                    <x-text-input id="lname" class="mt-1 block w-full" type="text" maxlength="50" name="lname"
                         :value="old('lname')" required autocomplete="family-name" />
                     <x-input-error :messages="$errors->get('lname')" class="mt-2" />
                 </div>
@@ -52,7 +52,7 @@
                 <!-- First Name -->
                 <div>
                     <x-input-label for="fname" :value="__('First Name')" />
-                    <x-text-input id="fname" class="mt-1 block w-full" type="text" name="fname"
+                    <x-text-input id="fname" class="mt-1 block w-full" type="text" maxlength="50" name="fname"
                         :value="old('fname')" required autocomplete="given-name" />
                     <x-input-error :messages="$errors->get('fname')" class="mt-2" />
                 </div>
@@ -60,7 +60,7 @@
                 <!-- Middle Name -->
                 <div class="sm:col-span-2">
                     <x-input-label for="mname" :value="__('Middle Name')" />
-                    <x-text-input id="mname" class="mt-1 block w-full" type="text" name="mname"
+                    <x-text-input id="mname" class="mt-1 block w-full" type="text" maxlength="50" name="mname"
                         :value="old('mname')" autocomplete="additional-name" />
                     <x-input-error :messages="$errors->get('mname')" class="mt-2" />
                 </div>
@@ -73,7 +73,7 @@
                 Account
             </legend>
 
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 <!-- Email Address -->
                 <div class="sm:col-span-2">
                     <x-input-label for="email" :value="__('Email')" />

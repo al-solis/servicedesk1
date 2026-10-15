@@ -18,7 +18,8 @@
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="empid" class="block text-sm font-medium text-gray-700">Employee/ Client
                                     ID</label>
-                                <input type="number" name="empid" id="empid" autocomplete="employee-id"
+                                <input type="text" name="empid" id="empid" maxlength="20"
+                                    autocomplete="employee-id"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     required>
                             </div>
@@ -26,7 +27,7 @@
                             <!-- Email -->
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                                <input type="text" name="email" id="email" autocomplete="email"
+                                <input type="text" name="email" id="email" maxlength="50" autocomplete="email"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     required>
                             </div>
@@ -35,21 +36,21 @@
                             <div class="col-span-6 sm:col-span-2">
                                 <label for="fname"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
-                                <input type="text" name="fname" id="fname"
+                                <input type="text" name="fname" id="fname" maxlength="50"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="First name" required>
                             </div>
                             <div class="col-span-6 sm:col-span-2">
                                 <label for="mname"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Middle Name</label>
-                                <input type="text" name="mname" id="mname"
+                                <input type="text" name="mname" id="mname" maxlength="50"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Middle name">
                             </div>
                             <div class="col-span-6 sm:col-span-2">
                                 <label for="lname"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
-                                <input type="text" name="lname" id="lname"
+                                <input type="text" name="lname" id="lname" maxlength="50"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Last name" required>
                             </div>

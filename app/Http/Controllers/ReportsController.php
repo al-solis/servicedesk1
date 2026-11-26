@@ -77,78 +77,63 @@ class ReportsController extends Controller
         if ($user->usertype == 'User') {
             $query = TicketHeader::where('ticket_header.user_id', $user->id)
                 ->selectRaw("
-                DATE_FORMAT(ticket_header.date_created, '%m/%d/%Y') AS formatted_date_created,
-                SUM(CASE WHEN ticket_header.status = 'Open' THEN 1 ELSE 0 END) as open_count,
-                SUM(CASE WHEN ticket_header.status = 'In Progress' THEN 1 ELSE 0 END) as in_progress_count,
-                SUM(CASE WHEN ticket_header.status = 'On-hold' THEN 1 ELSE 0 END) as on_hold_count,
-                SUM(CASE WHEN ticket_header.status = 'Closed' THEN 1 ELSE 0 END) as closed_count,
-                SUM(CASE WHEN ticket_header.status = 'Cancelled' THEN 1 ELSE 0 END) as cancelled_count,
-                COUNT(ticket_header.id) as total_count
-            ")
-                ->when($request->start_date && $request->end_date, function ($query) use ($request) {
-                    $query->whereBetween('ticket_header.date_created', [
+            SUM(CASE WHEN ticket_header.status = 'Open' THEN 1 ELSE 0 END) as open_count,
+            SUM(CASE WHEN ticket_header.status = 'In Progress' THEN 1 ELSE 0 END) as in_progress_count,
+            SUM(CASE WHEN ticket_header.status = 'On-hold' THEN 1 ELSE 0 END) as on_hold_count,
+            SUM(CASE WHEN ticket_header.status = 'Closed' THEN 1 ELSE 0 END) as closed_count,
+            SUM(CASE WHEN ticket_header.status = 'Cancelled' THEN 1 ELSE 0 END) as cancelled_count,
+            COUNT(ticket_header.id) as total_count
+        ")
+                ->selectRaw('DATE(ticket_header.date_created) as report_date')  // works in MySQL, PG, MSSQL
+                ->when($request->start_date && $request->end_date, function ($q) use ($request) {
+                    $q->whereBetween('ticket_header.date_created', [
                         Carbon::parse($request->start_date)->startOfDay(),
                         Carbon::parse($request->end_date)->endOfDay()
                     ]);
                 })
-                ->groupBy('formatted_date_created')
-                ->get();
+                ->groupByRaw('DATE(ticket_header.date_created)')
+                ->orderByRaw('DATE(ticket_header.date_created)')
+                ->get()
+                ->map(function ($row) {
+                    // format date in PHP instead of SQL
+                    $row->formatted_date_created = Carbon::parse($row->report_date)->format('m/d/Y');
+                    return $row;
+                });
         } else {
-            // $query = TicketHeader::selectRaw("
-            //     CASE 
-            //         WHEN users.id IS NOT NULL THEN CONCAT(users.lname, ' ', users.fname)
-            //         ELSE CONCAT(team_users.lname, ' ', team_users.fname)
-            //     END AS support_member,
-            //     SUM(CASE WHEN ticket_header.status = 'Open' THEN 1 ELSE 0 END) as open_count,
-            //     SUM(CASE WHEN ticket_header.status = 'In Progress' THEN 1 ELSE 0 END) as in_progress_count,
-            //     SUM(CASE WHEN ticket_header.status = 'On-hold' THEN 1 ELSE 0 END) as on_hold_count,
-            //     SUM(CASE WHEN ticket_header.status = 'Closed' THEN 1 ELSE 0 END) as closed_count,
-            //     SUM(CASE WHEN ticket_header.status = 'Cancelled' THEN 1 ELSE 0 END) as cancelled_count,
-            //     COUNT(ticket_header.id) as total_count
-            // ")
-            //     ->join('assigned_ticket', 'ticket_header.id', '=', 'assigned_ticket.ticket_id')
-            //     ->leftJoin('users', 'assigned_ticket.user_id', '=', 'users.id') // Directly assigned users
-            //     ->leftJoin('support_member', 'assigned_ticket.team_id', '=', 'support_member.team_id') // Assigned teams
-            //     ->leftJoin('users as team_users', 'support_member.user_id', '=', 'team_users.id') // Users in teams
-            //     ->where(function ($query) {
-            //         $query->whereNotNull('assigned_ticket.user_id') // Direct assignment
-            //             ->orWhereNotNull('assigned_ticket.team_id'); // Team-based assignment
-            //     })
-            //     ->when($request->start_date && $request->end_date, function ($query) use ($request) {
-            //         $query->whereBetween('ticket_header.date_created', [
-            //             Carbon::parse($request->start_date)->startOfDay(),
-            //             Carbon::parse($request->end_date)->endOfDay()
-            //         ]);
-            //     })
-            //     ->groupBy('support_member')
-            //     ->get();
-
             $query = TicketHeader::selectRaw("
-    CASE 
-        WHEN users.id IS NOT NULL THEN CONCAT(users.lname, ' ', users.fname)
-        ELSE CONCAT(team_users.lname, ' ', team_users.fname)
-    END AS support_member,
-    SUM(CASE WHEN ticket_header.status = 'Open' THEN 1 ELSE 0 END) as open_count,
-    SUM(CASE WHEN ticket_header.status = 'In Progress' THEN 1 ELSE 0 END) as in_progress_count,
-    SUM(CASE WHEN ticket_header.status = 'On-hold' THEN 1 ELSE 0 END) as on_hold_count,
-    SUM(CASE WHEN ticket_header.status = 'Closed' THEN 1 ELSE 0 END) as closed_count,
-    SUM(CASE WHEN ticket_header.status = 'Cancelled' THEN 1 ELSE 0 END) as cancelled_count,
-    COUNT(ticket_header.id) as total_count
-")
+        SUM(CASE WHEN ticket_header.status = 'Open' THEN 1 ELSE 0 END) as open_count,
+        SUM(CASE WHEN ticket_header.status = 'In Progress' THEN 1 ELSE 0 END) as in_progress_count,
+        SUM(CASE WHEN ticket_header.status = 'On-hold' THEN 1 ELSE 0 END) as on_hold_count,
+        SUM(CASE WHEN ticket_header.status = 'Closed' THEN 1 ELSE 0 END) as closed_count,
+        SUM(CASE WHEN ticket_header.status = 'Cancelled' THEN 1 ELSE 0 END) as cancelled_count,
+        COUNT(ticket_header.id) as total_count
+    ")
+                ->selectRaw("
+        COALESCE(
+            CONCAT(users.lname, ' ', users.fname),
+            CONCAT(team_users.lname, ' ', team_users.fname)
+        ) as support_member
+    ")
                 ->join('assigned_ticket', 'ticket_header.id', '=', 'assigned_ticket.ticket_id')
                 ->leftJoin('users', 'assigned_ticket.user_id', '=', 'users.id')
                 ->leftJoin('support_member', 'assigned_ticket.team_id', '=', 'support_member.team_id')
                 ->leftJoin('users as team_users', 'support_member.user_id', '=', 'team_users.id')
-                ->where(function ($query) {
-                    $query->whereNotNull('assigned_ticket.user_id')
+                ->where(function ($q) {
+                    $q->whereNotNull('assigned_ticket.user_id')
                         ->orWhereNotNull('assigned_ticket.team_id');
                 })
+                ->when($request->start_date && $request->end_date, function ($q) use ($request) {
+                    $q->whereBetween('ticket_header.date_created', [
+                        Carbon::parse($request->start_date)->startOfDay(),
+                        Carbon::parse($request->end_date)->endOfDay()
+                    ]);
+                })
                 ->groupByRaw("
-    CASE 
-        WHEN users.id IS NOT NULL THEN CONCAT(users.lname, ' ', users.fname)
-        ELSE CONCAT(team_users.lname, ' ', team_users.fname)
-    END
-")
+        COALESCE(
+            CONCAT(users.lname, ' ', users.fname),
+            CONCAT(team_users.lname, ' ', team_users.fname)
+        )
+    ")
                 ->get();
         }
 

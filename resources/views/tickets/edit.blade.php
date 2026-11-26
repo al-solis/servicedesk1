@@ -13,6 +13,17 @@
             <form action="{{ route('tickets.update', $ticket->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+
+                @if ($errors->any())
+                    <div class="p-3 mb-3 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-700 dark:text-red-400"
+                        role="alert">
+                        <ul class="list-disc list-inside">
+                            @foreach (collect($errors->all())->unique() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Left Column: Ticket Info -->
                     <div class="space-y-2 ml-2">
@@ -204,6 +215,8 @@
                                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
                                             dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 </div>
+                                <p class="text-xs text-gray-500 mt-1">Allowed types: .jpeg, .png, .jpg, .gif. Max 10MB
+                                    per file.</p>
                             </div>
 
                             <!-- File Upload (PDF, Excel, etc.) -->
@@ -236,6 +249,10 @@
                                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
                                             dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 </div>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    Allowed types: .pdf, .doc, .docx, .xls, .xlsx, .csv, .txt, .zip, .rar. Max 10MB per
+                                    file.
+                                </p>
                             </div>
                         @endif
 
@@ -438,6 +455,8 @@
                 document.getElementById('imageModal').classList.add('hidden');
             }
         </script>
+
+        @include('tickets.partials.upload-validation')
     @else
         <p>Please <a href="{{ route('login') }}">login</a> to access tickets.</p>
     @endif

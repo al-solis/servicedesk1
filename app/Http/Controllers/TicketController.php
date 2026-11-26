@@ -33,6 +33,30 @@ class TicketController extends Controller
     ) {
     }
 
+    private function uploadRules(): array
+    {
+        return [
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240',
+            'files' => 'nullable|array',
+            'files.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,csv,txt,zip,rar|max:10240',
+        ];
+    }
+
+    private function uploadMessages(): array
+    {
+        return [
+            'images.*.image' => 'Only image files are allowed in Upload Images.',
+            'images.*.mimes' => 'Images must be .jpeg, .jpg, .png or .gif.',
+            'images.*.max' => 'Each image must not be larger than 10 MB.',
+            'images.*.uploaded' => 'An image failed to upload. It may be larger than the 10 MB limit.',
+
+            'files.*.mimes' => 'Files must be .pdf, .doc, .docx, .xls, .xlsx, .csv, .txt, .zip or .rar.',
+            'files.*.max' => 'Each file must not be larger than 10 MB.',
+            'files.*.uploaded' => 'A file failed to upload. It may be larger than the 10 MB limit.',
+        ];
+    }
+
     public function index(Request $request)
     {
         if (!Auth::check()) {
@@ -223,14 +247,11 @@ class TicketController extends Controller
         // return $request->input();
         //dd($request->all());
 
-        $request->validate([
+        $request->validate(array_merge([
             'subject' => 'required',
             'description' => 'required',
-            // 'priority' => 'required',
             'support_type_id' => 'required',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120', // Validate images
-            'files.*' => 'mimes:pdf,doc,docx,xls,xlsx,csv,txt,zip,rar|max:5120', // Max 5MB per file
-        ]);
+        ], $this->uploadRules()), $this->uploadMessages());
 
         $seqNo = TicketHeader::whereYear('date_created', now()->year)
             ->whereMonth('date_created', now()->month)
@@ -341,13 +362,13 @@ class TicketController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $request->validate(array_merge([
             'description' => 'required',
             'priority' => 'required',
             'type' => 'required',
             'status' => 'required',
-            'user_id' => 'nullable|array'
-        ]);
+            'user_id' => 'nullable|array',
+        ], $this->uploadRules()), $this->uploadMessages());
 
         $ticket = TicketHeader::findOrFail($id);
         $oldStatus = $ticket->status;
@@ -498,4 +519,5 @@ class TicketController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Image deleted successfully.']);
     }
+
 }

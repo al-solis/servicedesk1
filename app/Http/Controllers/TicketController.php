@@ -37,9 +37,9 @@ class TicketController extends Controller
     {
         return [
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:30720',
             'files' => 'nullable|array',
-            'files.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,csv,txt,zip,rar|max:10240',
+            'files.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,csv,txt,zip,rar|max:30720',
         ];
     }
 
@@ -48,12 +48,12 @@ class TicketController extends Controller
         return [
             'images.*.image' => 'Only image files are allowed in Upload Images.',
             'images.*.mimes' => 'Images must be .jpeg, .jpg, .png or .gif.',
-            'images.*.max' => 'Each image must not be larger than 10 MB.',
-            'images.*.uploaded' => 'An image failed to upload. It may be larger than the 10 MB limit.',
+            'images.*.max' => 'Each image must not be larger than 15 MB.',
+            'images.*.uploaded' => 'An image failed to upload. It may be larger than the 15 MB limit.',
 
             'files.*.mimes' => 'Files must be .pdf, .doc, .docx, .xls, .xlsx, .csv, .txt, .zip or .rar.',
-            'files.*.max' => 'Each file must not be larger than 10 MB.',
-            'files.*.uploaded' => 'A file failed to upload. It may be larger than the 10 MB limit.',
+            'files.*.max' => 'Each file must not be larger than 15 MB.',
+            'files.*.uploaded' => 'A file failed to upload. It may be larger than the 15 MB limit.',
         ];
     }
 

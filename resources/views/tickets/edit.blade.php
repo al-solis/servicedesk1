@@ -215,8 +215,8 @@
                                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
                                             dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 </div>
-                                <p class="text-xs text-gray-500 mt-1">Allowed types: .jpeg, .png, .jpg, .gif. Max 10MB
-                                    per file.</p>
+                                <p class="text-xs text-gray-500 mt-1">Allowed types: .jpeg, .png, .jpg, .gif. Max 30MB
+                                    per ticket.</p>
                             </div>
 
                             <!-- File Upload (PDF, Excel, etc.) -->
@@ -250,8 +250,8 @@
                                             dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 </div>
                                 <p class="text-xs text-gray-500 mt-1">
-                                    Allowed types: .pdf, .doc, .docx, .xls, .xlsx, .csv, .txt, .zip, .rar. Max 10MB per
-                                    file.
+                                    Allowed types: .pdf, .doc, .docx, .xls, .xlsx, .csv, .txt, .zip, .rar. Max 30MB per
+                                    ticket.
                                 </p>
                             </div>
                         @endif
